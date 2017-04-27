@@ -1,5 +1,8 @@
 # Projeto-Semprarrolar
-Projeto da cadeira PROG do MIEIC 
+
+##Projeto da cadeira PROG do MIEIC 
 
 
-Hortalicasasd asd asdasd a
+Trabalho realizado por Fábio Oliveira & Pedro Franco
+
+@@2017
