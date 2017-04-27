@@ -1,9 +1,12 @@
 // Alterar as variaveis GlobalWidth e GlobalHeight para o valor pretendido
 // Se nao pretender alterar o tamanho da janela alterar a variavel ChangeWindowSize para 0
 
+#include <iostream>
+#include <string>
+#include "ui_utilities.h"
 
-int GlobalWidth = 130; // 120 ate 240
-int GlobalHeight = 30; // 30 ate 63
+//int GlobalWidth = 130; // 120 ate 240
+//int GlobalHeight = 30; // 30 ate 63
 bool ChangeWindowSize = 1;
 
 #ifdef _WIN32
@@ -12,8 +15,6 @@ bool ChangeWindowSize = 1;
 
 void ClearScreen()
 {
-	SetWindow(GlobalWidth, GlobalHeight);
-
 	HANDLE                     hStdOut;
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 	DWORD                      count;
@@ -93,25 +94,23 @@ void ClearScreen()
 
 	void ClearScreen()
 	{
-		SetWindow(GlobalWidth, GlobalHeight);
-		{
-			std::cout << "\033[2J\033[1;1H";
-			std::cout << "\033[2J\033[1;1H";
-		}
+		std::cout << "\033[2J\033[1;1H";
+		std::cout << "\033[2J\033[1;1H";
+	}
 
-		bool SetWindow(int width, int height)
+	bool SetWindow(int width, int height)
+	{
+		if (ChangeWindowSize)
 		{
-			if (ChangeWindowSize)
-			{
-				std::string res = "\e[8;";
-				res += to_string(height);
-				res += ";";
-				res += to_string(width);
-				res += "t";
-				std::cout << res;
+			std::string res = "\e[8;";
+			res += std::to_string(height);
+			res += ";";
+			res += std::to_string(width);
+			res += "t";
+			std::cout << res;
 
-			}
-			return true;
 		}
+		return true;
+	}
 
 #endif
