@@ -11,7 +11,7 @@ void swap(T &a, T &b)
 }
 
 // Remove spaces at the beginning and at the end of a string
-void TrimString(std::string &input)
+void trimstring(std::string &input)
 {
 	while (input[0] == ' ')
 		input.erase(input.begin());
