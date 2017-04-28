@@ -1,22 +1,25 @@
 #ifndef __DRIVER_INCLUDED__
 #define __DRIVER_INCLUDED__
 
-#include <iostream>
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <vector>
+#include "utilities.h"
+
+using namespace std;
 
 class driver{
 
 public:
 	unsigned int ID;
-	std::string name;
-	unsigned int MaxHousShift;
+	string name;
+	unsigned int MaxHoursShift;
 	unsigned int MaxHoursWeek;
-	unsigned int MinHoursBetwwenShifts;
+	unsigned int MinHoursBetwenShifts;
 
-	static void LoadDrivers(std::string);
-	static bool SaveDrivers(std::string);
+	static bool LoadDrivers(string, vector<driver>&);
+	static void SaveDrivers(string, vector<driver>&);
 
 };
 
