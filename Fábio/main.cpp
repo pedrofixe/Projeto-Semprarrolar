@@ -180,39 +180,39 @@ void displayMainScreen() {
 	cin.ignore(50,'\n');
 	switch (opcao){
 		case '1':
-			ClearScreen();
-			SleepExecution(400);
-			displayGerirCondutoresLinhasMenu();
-			break;
+		ClearScreen();
+		SleepExecution(400);
+		displayGerirCondutoresLinhasMenu();
+		break;
 		case '2':
-			ClearScreen();
-			SleepExecution(400);
-			displayTabelasHorarios();
-			break;
+		ClearScreen();
+		SleepExecution(400);
+		displayTabelasHorarios();
+		break;
 		case '3':
-			ClearScreen();
-			SleepExecution(400);
-			displayFindLinhasDaParagem();
-			break;
+		ClearScreen();
+		SleepExecution(400);
+		displayFindLinhasDaParagem();
+		break;
 		case '4':
-			ClearScreen();
-			SleepExecution(400);
-			displayCalcularViagem();
-			break;
+		ClearScreen();
+		SleepExecution(400);
+		displayCalcularViagem();
+		break;
 		case '5':
-			ClearScreen();
-			SleepExecution(400);
-			displayCalcularNrCondutoresLinha();
-			break;
+		ClearScreen();
+		SleepExecution(400);
+		displayCalcularNrCondutoresLinha();
+		break;
 		case 'S': case 's':
-			SleepExecution(800);
-			return;
+		SleepExecution(800);
+		return;
 		default:
-			cout << "Nao inseriste uma opcao valida...";
-			SleepExecution(1500);
-			ClearScreen();
-			displayMainScreen();
-			break;
+		cout << "Nao inseriste uma opcao valida...";
+		SleepExecution(1500);
+		ClearScreen();
+		displayMainScreen();
+		break;
 	}
 }
 
@@ -231,46 +231,46 @@ void displayGerirCondutoresLinhasMenu() {
 	cout << "Opcao: "; cin >> opcao;
 	switch (opcao) {
 		case '1':
-			SleepExecution(200);
-			ClearScreen();
-			displayAddCondutorMenu();
-			break;
+		SleepExecution(200);
+		ClearScreen();
+		displayAddCondutorMenu();
+		break;
 		case '2':
-			SleepExecution(200);
-			ClearScreen();
-			displayMainEditCondutorMenu();
-			break;
+		SleepExecution(200);
+		ClearScreen();
+		displayMainEditCondutorMenu();
+		break;
 		case '3':
-			SleepExecution(200);
-			ClearScreen();
-			displayRemoveCondutorMenu();
-			break;
+		SleepExecution(200);
+		ClearScreen();
+		displayRemoveCondutorMenu();
+		break;
 		case '4':
-			SleepExecution(200);
-			ClearScreen();
-			displayAddLinhaMenu();
-			break;
+		SleepExecution(200);
+		ClearScreen();
+		displayAddLinhaMenu();
+		break;
 		case '5':
-			SleepExecution(200);
-			ClearScreen();
-			displayMainEditLinhasMenu();
-			break;
+		SleepExecution(200);
+		ClearScreen();
+		displayMainEditLinhasMenu();
+		break;
 		case '6':
-			SleepExecution(200);
-			ClearScreen();
-			displayRemoveLinhaMenu();
-			break;
+		SleepExecution(200);
+		ClearScreen();
+		displayRemoveLinhaMenu();
+		break;
 		case 'V': case 'v':
-			SleepExecution(200);
-			ClearScreen();
-			displayMainScreen();
-			break;
+		SleepExecution(200);
+		ClearScreen();
+		displayMainScreen();
+		break;
 		default:
-			cout << "Nao inseriste uma opcao valida!" << endl;
-			SleepExecution(2000);
-			ClearScreen();
-			displayGerirCondutoresLinhasMenu();
-			break;
+		cout << "Nao inseriste uma opcao valida!" << endl;
+		SleepExecution(2000);
+		ClearScreen();
+		displayGerirCondutoresLinhasMenu();
+		break;
 	}
 }
 
@@ -592,21 +592,21 @@ void displayTabelasHorarios() {
 	cout << "Opcao: "; cin >> opcao;
 	switch (opcao) {
 		case '1':
-			SleepExecution(200);
-			ClearScreen();
-			VisHorarioParagem();
-			break;
+		SleepExecution(200);
+		ClearScreen();
+		VisHorarioParagem();
+		break;
 		case '2':
-			SleepExecution(200);
-			ClearScreen();
-			VisHorarioLinha();
-			break;
-	case 'V': case 'v':
+		SleepExecution(200);
+		ClearScreen();
+		VisHorarioLinha();
+		break;
+		case 'V': case 'v':
 		SleepExecution(200);
 		ClearScreen();
 		displayMainScreen();
 		break;
-	default:
+		default:
 		cout << "Nao inseriste uma opcao valida!" << endl;
 		SleepExecution(2000);
 		ClearScreen();
@@ -839,21 +839,21 @@ void ImprimirHorariosLinha(const vector<Paragem>& vec_paragens, const vector <te
 
 			if (!(i == vec_paragens.size() - 1)) {  //isto 'e, se a iteracao ainda nao chegou 'a ultima paragem
 				minutosLinha += tempoViagem[i];
-				if (minutosLinha >= 60) {
-					horasLinha += minutosLinha / 60;
-					minutosLinha %= 60;
-				}
+			if (minutosLinha >= 60) {
+				horasLinha += minutosLinha / 60;
+				minutosLinha %= 60;
 			}
 		}
-
-		minutosTurno += freq;
-		if (minutosTurno >= 60) {
-			horasTurno += minutosTurno / 60;
-			minutosTurno %= 60;
-		}
-		SleepExecution(20);
-		cout << endl;
 	}
+
+	minutosTurno += freq;
+	if (minutosTurno >= 60) {
+		horasTurno += minutosTurno / 60;
+		minutosTurno %= 60;
+	}
+	SleepExecution(20);
+	cout << endl;
+}
 }
 
 void displayFindLinhasDaParagem() {
