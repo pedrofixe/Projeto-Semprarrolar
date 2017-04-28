@@ -1,59 +1,35 @@
 #include <iostream>
 #include <string>
-#include "ui_utilities.h"
+#include <vector>
+//#include "ui_utilities.h"
+#include "driver.h"
+#include "utilities.h"
 
 using namespace std;
 
 #define LINES_FILENAME "linhas"
 #define DRIVERS_FILENAME "condutores"
 
-template <class T>
-
-//Swap the value of two integers
-void swap(T &a, T &b)
-{
-	T temp = a;
-	a = b;
-	b = temp;
-}
-
-// Remove spaces at the beginning and at the end of a string
-void TrimString(string &input)
-{
-	while (input[0] == ' ')
-		input.erase(input.begin());
-
-	while (input.back() == ' ')
-		input.erase(input.end() - 1);
-}
-
-// Caluclates the length of a string
-int intsize(int input)
-{
-	int res = 0;
-
-	while (input)
-	{
-		res++;
-		input /= 10;
-	}
-
-	return res;
-}
-
-
 
 
 int main()
 {
 
-	ui_utilities::SetWindow(120,30);
+	vector<driver> horta;
 
-	std::cout << "Hortaliças incoming ...";
+	driver::LoadDrivers(DRIVERS_FILENAME, horta);
 
-	ui_utilities::ClearScreen();
+	driver temp;
 
+	temp.ID = 1234;
+	temp.name = "coisas 2e";
+	temp.MaxHoursShift = 69;
+	temp.MaxHoursWeek = 420;
+	temp.MinHoursBetwenShifts = 5;
+	horta.insert(horta.end(), temp);
 
-	std::cout << "\n\n";
+	driver::SaveDrivers(DRIVERS_FILENAME, horta);
+
+	cout << "\n\n";
 	return 0;
 }
