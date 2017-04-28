@@ -3,7 +3,7 @@
 template <class T>
 
 //Swap the value of two integers
-void swap(T &a, T &b)
+void utilities::swap(T &a, T &b)
 {
 	T temp = a;
 	a = b;
@@ -11,7 +11,7 @@ void swap(T &a, T &b)
 }
 
 // Remove spaces at the beginning and at the end of a string
-void trimstring(std::string &input)
+void utilities::trimstring(std::string &input)
 {
 	while (input[0] == ' ')
 		input.erase(input.begin());
@@ -21,7 +21,7 @@ void trimstring(std::string &input)
 }
 
 // Caluclates the length of a string
-int intsize(int input)
+int utilities::intsize(int input)
 {
 	int res = 0;
 
