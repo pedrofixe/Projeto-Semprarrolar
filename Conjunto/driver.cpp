@@ -48,7 +48,11 @@ void driver::SaveDrivers(string filename, vector<driver> &DriverSet) {
 	ofstream drivers_file(filename);
 
 	for (const driver &tempdriver : DriverSet) {
-		drivers_file << tempdriver.ID << " ; " << tempdriver.name << " ; " << tempdriver.MaxHoursShift << " ; " << tempdriver.MaxHoursWeek << " ; " << tempdriver.MinHoursBetwenShifts << endl;
+		drivers_file << tempdriver.ID << " ; " << tempdriver.name << " ; " << tempdriver.MaxHoursShift << " ; " << tempdriver.MaxHoursWeek << " ; " << tempdriver.MinHoursBetwenShifts;
+		
+		// Only write a newline if it's not the last driver
+		if (tempdriver.ID != DriverSet.back().ID)
+			drivers_file << "\n";
 	}
 	drivers_file.close();
 }
