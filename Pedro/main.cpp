@@ -11,8 +11,15 @@ using namespace std;
 void ClearScreen();
 bool SetWindow(int,int);
 
-int GlobalWidth = 119;
-int GlobalHeight = 27;
+// Alterar as variaveis GlobalWidth e GlobalHeight para o valor pretendido
+// Se nao pretender alterar o tamanho da janela alterar a variavel ChangeWindowSize para 0
+
+void ClearScreen();
+bool SetWindow(int, int);
+
+int GlobalWidth = 200; // 120 ate 240
+int GlobalHeight = 30; // 30 ate 63
+bool ChangeWindowSize = 0;
 
 #ifdef _WIN32
 
@@ -57,46 +64,48 @@ void ClearScreen()
 	SetConsoleCursorPosition(hStdOut, homeCoords);
 }
 
-
 bool SetWindow(int Width, int Height)
 {
-	_COORD coord;
-	coord.X = Width;
-	coord.Y = Height;
-
-	_SMALL_RECT Rect;
-	Rect.Top = 0;
-	Rect.Left = 0;
-	Rect.Bottom = Height - 1;
-	Rect.Right = Width - 1;
-
-	// Get handle of the standard output 
-	HANDLE Handle = GetStdHandle(STD_OUTPUT_HANDLE);
-	if (Handle == NULL)
+	if (ChangeWindowSize)
 	{
-		cout << "Failure in getting the handle\n" << GetLastError();
-		return FALSE;
-	}
+		_COORD coord;
+		coord.X = Width;
+		coord.Y = Height;
 
-	// Set screen buffer size to that specified in coord 
-	if (!SetConsoleScreenBufferSize(Handle, coord))
-	{
-		cout << "Failure in setting buffer size\n" << GetLastError();
-		return FALSE;
-	}
+		_SMALL_RECT Rect;
+		Rect.Top = 0;
+		Rect.Left = 0;
+		Rect.Bottom = Height - 1;
+		Rect.Right = Width - 1;
 
-	// Set the window size to that specified in Rect 
-	if (!SetConsoleWindowInfo(Handle, TRUE, &Rect))
-	{
-		cout << "Failure in setting window size\n" << GetLastError();
-		return FALSE;
-	}
+		// Get handle of the standard output 
+		HANDLE Handle = GetStdHandle(STD_OUTPUT_HANDLE);
+		if (Handle == NULL)
+		{
+			cout << "Failure in getting the handle\n" << GetLastError();
+			return FALSE;
+		}
 
+		// Set screen buffer size to that specified in coord 
+		if (!SetConsoleScreenBufferSize(Handle, coord))
+		{
+			cout << "Failure in setting buffer size\n" << GetLastError();
+			return FALSE;
+		}
+
+		// Set the window size to that specified in Rect 
+		if (!SetConsoleWindowInfo(Handle, TRUE, &Rect))
+		{
+			cout << "Failure in setting window size\n" << GetLastError();
+			return FALSE;
+		}
+	}
 	return TRUE;
+
 }
 
-
 #else
+
 
 void ClearScreen()
 {
@@ -104,20 +113,25 @@ void ClearScreen()
 
 	std::cout << "\033[2J\033[1;1H";
 	std::cout << "\033[2J\033[1;1H";
-}
+	}
 
 bool SetWindow(int width, int height)
 {
-	string res = "\e[8;";
-	res += to_string(height);
-	res += ";";
-	res += to_string(width);
-	res += "t";
-	cout << res;
+	if (ChangeWindowSize)
+	{
+		string res = "\e[8;";
+		res += to_string(height);
+		res += ";";
+		res += to_string(width);
+		res += "t";
+		cout << res;
+
+	}
 	return true;
 }
 
 #endif
+
 
 // Estruturas do programa :-)
 /*struct paragem

@@ -17,8 +17,8 @@
 // A funcao abs() também é util para tornar o codigo mais legivel 
 #include <cmath>
 
-#define DB_LINHAS		 "linhas.txt"
-#define DB_MOTORISTAS	 "motoristas.txt"
+#define DB_LINHAS		 "linhas"
+#define DB_MOTORISTAS	 "condutores"
 
 // Como os autocarros nao operam 24/7 é realista definir uma hora de inicio e outra de fim.
 #define HORARIO_INICIO 8
