@@ -14,12 +14,12 @@ class Driver{
 public:
 	void SetID(const string&);
 	void SetName(const string&);
-	void SetMaxHoursShift(const int&);
-	void SetMaxHoursWeek(const int&);
-	void SetMinHoursRest(const int&);
+	void SetMaxHoursShift(const unsigned int&);
+	void SetMaxHoursWeek(const unsigned int&);
+	void SetMinHoursRest(const unsigned int&);
 
 private:
-	unsigned int ID;
+	string ID;
 	string name;
 	unsigned int maxhoursshift;
 	unsigned int maxhoursweek;

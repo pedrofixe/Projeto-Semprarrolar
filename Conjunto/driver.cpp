@@ -69,17 +69,17 @@ void Driver::SetName(const string& input)
 	this->name = input;
 }
 
-void Driver::SetMaxHoursShift(const int& input)
+void Driver::SetMaxHoursShift(const unsigned int& input)
 {
 	this->maxhoursshift = input;
 }
 
-void Driver::SetMaxHoursWeek(const int& input)
+void Driver::SetMaxHoursWeek(const unsigned int& input)
 {
 	this->maxhoursweek = input;
 }
 
-void Driver::SetMinHoursRest(const int& input)
+void Driver::SetMinHoursRest(const unsigned int& input)
 {
 	this->minhoursrest = input;
 }

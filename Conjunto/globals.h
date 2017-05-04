@@ -2,14 +2,18 @@
 #define __GLOBALS_INCLUDED__
 
 #include <vector>
+#include <string>
 #include "line.h"
 #include "driver.h"
+#include "bus_stop.h"
+
+using namespace std;
 
 class LinesClass {
 	public:
 		void AddBusLine(Line&);
 		void RemoveBusLine(Line&);
-		bool LoadFromFile();
+		bool LoadFromFile(const string&);
 		void SaveToFile() const;
 		void PrintLinesNames() const;
 		bool LineExists() const;
@@ -23,7 +27,7 @@ class DriversClass {
 	public:
 		void AddDriver(Driver&);
 		void RemoveDriver(Driver&);
-		bool LoadFromFile();
+		bool LoadFromFile(const string&);
 		void SaveToFile() const;
 		void ListDrivers() const;	
 		bool DriverExists(string&) const;

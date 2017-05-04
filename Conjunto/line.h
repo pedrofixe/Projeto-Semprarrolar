@@ -14,9 +14,9 @@ class Line {
 	public:
 		void ShowSchedule() const;
 		void SetID(const string&);
-		void SetFreq(const int&);
+		void SetFreq(const unsigned int&);
 		void SetBus_Stops(const vector<Bus_Stop>&);
-		void SetTimeBetweenStops(const vector<int>&);
+		void SetTimeBetweenStops(const vector<unsigned int>&);
 
 	private:
 		string ID;

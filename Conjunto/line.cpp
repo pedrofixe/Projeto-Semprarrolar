@@ -99,22 +99,22 @@
 // }
 
 
-void Line::EditID(const string& input)
+void Line::SetID(const string& input)
 {
-	this.ID = input;
+	this->ID = input;
 }
 
-void Line::EditFreq(const int& input)
+void Line::SetFreq(const unsigned int& input)
 {
-	this.freq = input;
+	this->freq = input;
 }
 
-void Line::EditBus_Stops(const vector<Bus_Stop>& input)
+void Line::SetBus_Stops(const vector<Bus_Stop>& input)
 {
-	this.bus_stops = input;
+	this->bus_stops = input;
 }
 
-void SetTimeBetweenStops(const vector<int>& input)
+void Line::SetTimeBetweenStops(const vector<unsigned int>& input)
 {
-	this.timebetweenstops = input;
+	this->timebetweenstops = input;
 }
