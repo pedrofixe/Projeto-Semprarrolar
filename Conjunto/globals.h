@@ -11,10 +11,13 @@ using namespace std;
 
 class LinesClass {
 	public:
-		void AddBusLine(Line&);
-		void RemoveBusLine(Line&);
+		void AddBusLine(const Line&);
+		bool RemoveBusLine(const Line&);
+		bool RemoveBusLine(const unsigned int&);
+
 		bool LoadFromFile(const string&);
-		void SaveToFile() const;
+		void SaveToFile(const string&);
+
 		void PrintLinesNames() const;
 		bool LineExists() const;
 		const vector<Line>& GetLines() const; // n sei se vai ser usado
@@ -27,8 +30,10 @@ class DriversClass {
 	public:
 		void AddDriver(Driver&);
 		void RemoveDriver(Driver&);
+
 		bool LoadFromFile(const string&);
 		void SaveToFile() const;
+
 		void ListDrivers() const;	
 		bool DriverExists(string&) const;
 		const vector<Driver>& GetDrivers() const; // n sei se vai ser usado

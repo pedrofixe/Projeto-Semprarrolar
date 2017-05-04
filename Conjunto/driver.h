@@ -18,6 +18,12 @@ public:
 	void SetMaxHoursWeek(const unsigned int&);
 	void SetMinHoursRest(const unsigned int&);
 
+	string GetID();
+	string GetName();
+	unsigned int GetMaxHoursShift();
+	unsigned int GetMaxHoursWeek();
+	unsigned int GetMinHoursRest();
+
 private:
 	string ID;
 	string name;

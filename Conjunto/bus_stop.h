@@ -9,7 +9,10 @@ class Bus_Stop {
 
 public:
 	void ShowSchedule() const;
+
 	void SetName(const string&);
+
+	string GetName();
 
 private:
 	std::string name;

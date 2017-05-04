@@ -18,6 +18,12 @@ class Line {
 		void SetBus_Stops(const vector<Bus_Stop>&);
 		void SetTimeBetweenStops(const vector<unsigned int>&);
 
+		string GetID();
+		unsigned int GetFreq();
+		vector<Bus_Stop> GetBus_Stops();
+		vector<unsigned int> GetTimeBetweenStops();
+
+
 	private:
 		string ID;
 		unsigned int freq;
