@@ -10,16 +10,18 @@
 
 using namespace std;
 
-class line{
-
-public:
-	unsigned int ID;
-	unsigned int freq;
-	vector<bus_stop> stops;
-	vector<int> timebetweenstops;
-
-	static bool LoadLines(string, vector<line>&);
-	static void SaveLines(string, vector<line>&);
+class Line {
+	public:
+		void ShowSchedule() const;
+		void EditID();
+		void EditFreq();
+		void EditBus_Stops();
+		void EditTimeBetweenStops();
+	private:
+		string ID;
+		unsigned int freq;
+		vector<Bus_Stop> Bus_Stops;
+		vector<unsigned int> timeBetweenStops;
 
 };
 
