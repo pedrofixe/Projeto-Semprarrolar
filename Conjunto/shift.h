@@ -19,9 +19,9 @@ class Shift {
 		unsigned int day;
 		unsigned int startHour;
 		unsigned int endHour;
-		const Driver* Driver;
-		const Bus* Bus;
-		const Line* Line;
+		const Driver* driver;
+		const Bus* bus;
+		const Line* line;
 };
 
 

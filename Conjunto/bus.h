@@ -1,16 +1,15 @@
-#ifndef __UI_UTILITIES_INCLUDED__
-#define __UI_UTILITIES_INCLUDED__
+#ifndef __BUS_INCLUDED__
+#define __BUS_INCLUDED__
 
-#include <iostream>
-#include <string>
-#include <sstream>
+#include "line.h"
+#include "driver.h"
 
-class ui_utilities{
+class Bus {
 
-public:
-	
-	static void ClearScreen();
-	static bool SetWindow(int, int);
+	public:
+		
+	private:
+		const Line* line;
 
 };
 

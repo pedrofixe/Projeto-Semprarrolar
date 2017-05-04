@@ -1,13 +1,13 @@
 #include "shift.h"
 
-Shift::Shift(unsigned int day, unsigned int startHour, unsigned int endHour, const Driver* Driver, const Bus* Bus, const Line* Line)
+Shift::Shift(unsigned int day, unsigned int startHour, unsigned int endHour, const Driver* argDriver, const Bus* argBus, const Line* argLine)
 {
 	this->day = day;
 	this->startHour = startHour;
 	this->endHour = endHour;
-	this->Driver = Driver;
-	this->Bus = Bus;
-	this->Line = Line;
+	this->driver = argDriver;
+	this->bus = argBus;
+	this->line = argLine;
 }
 
 unsigned int Shift::GetStartHour()
@@ -28,15 +28,15 @@ unsigned int Shift::GetDuration()
 
 const Driver& Shift::GetDriver()
 {
-	return *(this->Driver);
+	return *(this->driver);
 }
 
 const Bus& Shift::GetBus()
 {
-	return *(this->Bus);
+	return *(this->bus);
 }
 
 const Line& Shift::GetLine()
 {
-	return *(this->Line);
+	return *(this->line);
 }
