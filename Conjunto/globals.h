@@ -32,7 +32,7 @@ class DriversClass {
 		vector<Driver> Drivers;
 };
 
-class BusStopsClass {
+class Bus_StopsClass {
 	public:
 
 	private:
@@ -41,6 +41,6 @@ class BusStopsClass {
 
 static LinesClass	 Lines;
 static DriversClass	 Drivers;
-static BusStopsClass BusStops;
+static Bus_StopsClass Bus_Stops;
 
 #endif
