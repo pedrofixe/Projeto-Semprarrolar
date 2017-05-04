@@ -11,7 +11,7 @@ void utilities::swap(T &a, T &b)
 }
 
 // Remove spaces at the beginning and at the end of a string
-void utilities::trimstring(std::string &input)
+void utilities::trimString(std::string &input)
 {
 	while (input[0] == ' ')
 		input.erase(input.begin());
@@ -21,7 +21,7 @@ void utilities::trimstring(std::string &input)
 }
 
 // Caluclates the length of a string
-int utilities::intsize(int input)
+int utilities::intSize(int input)
 {
 	int res = 0;
 

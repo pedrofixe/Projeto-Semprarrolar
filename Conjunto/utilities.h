@@ -5,14 +5,13 @@
 
 using namespace std;
 
-class utilities{
+namespace utilities{
 
-public:
 	template <class T>
 
-	static void swap(T&, T&);
-	static void trimstring(string&);
-	static int intsize(int);
+	void swap(T&, T&);
+	void trimString(string&);
+	int intSize(int);
 };
 
 
