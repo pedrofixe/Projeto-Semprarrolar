@@ -3,9 +3,15 @@
 
 #include <string>
 
-class bus_stop {
+using namespace std;
+
+class Bus_Stop {
 
 public:
+	void ShowSchedule() const;
+	void SetName(const string&)
+
+private:
 	std::string name;
 
 };

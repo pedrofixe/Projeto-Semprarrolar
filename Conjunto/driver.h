@@ -9,17 +9,22 @@
 
 using namespace std;
 
-class driver{
+class Driver{
 
 public:
+	void SetID(const string&);
+	void SetName(const string&);
+	void SetMaxHoursShift(const int&);
+	void SetMaxHoursWeek(const int&);
+	void SetMinHoursRest(const int&);
+
+private:
 	unsigned int ID;
 	string name;
-	unsigned int MaxHoursShift;
-	unsigned int MaxHoursWeek;
-	unsigned int MinHoursBetwenShifts;
+	unsigned int maxhoursshift;
+	unsigned int maxhoursweek;
+	unsigned int minhoursrest;
 
-	static bool LoadDrivers(string, vector<driver>&);
-	static void SaveDrivers(string, vector<driver>&);
 
 };
 
