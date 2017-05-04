@@ -28,7 +28,7 @@ class Line {
 		string ID;
 		unsigned int freq;
 		vector<Bus_Stop> bus_stops;
-		vector<unsigned int> timebetweenstops;
+		vector<unsigned int> timeBetweenStops;
 
 };
 

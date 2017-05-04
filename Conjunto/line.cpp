@@ -137,5 +137,5 @@ vector<Bus_Stop> Line::GetBus_Stops()
 
 vector<unsigned int> Line::GetTimeBetweenStops()
 {
-	return this->timebetweenstops;
+	return this->timeBetweenStops;
 }
