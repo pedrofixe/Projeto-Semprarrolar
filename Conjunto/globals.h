@@ -9,7 +9,7 @@ class LinesClass {
 	public:
 		void AddBusLine(Line&);
 		void RemoveBusLine(Line&);
-		void LoadFromFile();
+		bool LoadFromFile();
 		void SaveToFile() const;
 		void PrintLinesNames() const;
 		bool LineExists() const;
@@ -23,7 +23,7 @@ class DriversClass {
 	public:
 		void AddDriver(Driver&);
 		void RemoveDriver(Driver&);
-		void LoadFromFile();
+		bool LoadFromFile();
 		void SaveToFile() const;
 		void ListDrivers() const;	
 		bool DriverExists(string&) const;
