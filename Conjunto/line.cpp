@@ -116,7 +116,7 @@ void Line::SetBus_Stops(const vector<Bus_Stop>& input)
 
 void Line::SetTimeBetweenStops(const vector<unsigned int>& input)
 {
-	this->timebetweenstops = input;
+	this->timeBetweenStops = input;
 }
 
 
