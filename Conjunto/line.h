@@ -13,15 +13,16 @@ using namespace std;
 class Line {
 	public:
 		void ShowSchedule() const;
-		void EditID();
-		void EditFreq();
-		void EditBus_Stops();
-		void EditTimeBetweenStops();
+		void SetID(const string&);
+		void SetFreq(const int&);
+		void SetBus_Stops(const vector<Bus_Stop>&);
+		void SetTimeBetweenStops(const vector<int>&);
+
 	private:
 		string ID;
 		unsigned int freq;
-		vector<Bus_Stop> Bus_Stops;
-		vector<unsigned int> timeBetweenStops;
+		vector<Bus_Stop> bus_stops;
+		vector<unsigned int> timebetweenstops;
 
 };
 
