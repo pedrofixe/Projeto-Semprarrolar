@@ -2,20 +2,30 @@
 #define __BUS_STOP_INCLUDED__
 
 #include <string>
+#include <vector>
+#include <algorithm>
+#include "line.h"
 
 using namespace std;
 
 class Bus_Stop {
 
-public:
-	void ShowSchedule() const;
+	public:
 
-	void SetName(const string&);
+		const string& GetName() const;
+		unsigned int GetLinesCount() const;
+		const vector<Line*>& GetLines() const;
+		void RemoveLineFromStop(const Line*);
+		void AddLine(Line*);
 
-	string GetName();
+		void ShowSchedule() const; // falta implementar
 
-private:
-	std::string name;
+		// Constructor:
+		Bus_Stop(const string& argBus_StopName) : name(argBus_StopName) { };
+
+	private:
+		const string name;
+		vector<Line*> linesAtStop;
 
 };
 

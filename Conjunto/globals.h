@@ -5,7 +5,6 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
-#include <unordered_map>
 #include "line.h"
 #include "driver.h"
 #include "bus_stop.h"
@@ -36,7 +35,7 @@ class DriversClass {
 		bool RemoveDriverByID(const string&);
 
 		bool LoadFromFile(const string&);
-		void SaveToFile() const;
+		void SaveToFile(const string&) const;
 
 		void ListDrivers() const;	
 		bool DriverExists(const string&) const;
@@ -47,9 +46,14 @@ class DriversClass {
 
 class Bus_StopsClass {
 	public:
-
+		void AddLineToBusStop(Line* ptr_Line, const string& Bus_Stop_Name);
+		void RemoveLineFromBusStop(Line* ptr_Line, const string& Bus_Stop_Name);
+		void RemoveLineFromALLBus_Stops(Line* ptr_Line);
+		Bus_Stop* FindBus_StopByName(const string&);
+		void PrintAllBus_Stops_Names() const;
+		void RemoveBusStop(const string&);
 	private:
-		unordered_map<Bus_Stop, vector<Line*> > hashmap;
+		vector<Bus_Stop> vecBusStops;
 };
 
 static LinesClass	 Lines;

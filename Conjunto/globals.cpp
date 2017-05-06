@@ -52,7 +52,6 @@ bool LinesClass::LoadFromFile(const string& filename)
 		Line templine;
 		string newtempstr;
 		vector<Bus_Stop> stop_vector;
-		Bus_Stop tempstop;
 		vector<unsigned int> time_vector;
 
 
@@ -75,7 +74,7 @@ bool LinesClass::LoadFromFile(const string& filename)
 		while (getline(Bus_Stop_stream, tempstr, ','))
 		{
 			utilities::trimString(tempstr);
-			tempstop.SetName(tempstr);
+			Bus_Stop tempstop(tempstr);
 			stop_vector.push_back(tempstop);
 
 		}
@@ -193,14 +192,55 @@ bool DriversClass::RemoveDriverByID(const string& argDriverID)
 	return false;
 }
 
-bool DriversClass::LoadFromFile(const string &)
+bool DriversClass::LoadFromFile(const string& fileName)
 {
-	return false;
+	ifstream hFile_Drivers(fileName);
+	if (hFile_Drivers.fail()) {
+		hFile_Drivers.close();
+		return false;
+	}
+
+	// READ FILE LINES
+	string motorista_string;
+	while (getline(hFile_Drivers, motorista_string)) {
+		// PROCESS LINE
+		istringstream ss_line(motorista_string);
+		Driver newDriver;
+		string Temp;
+		// READ DRIVER ID
+		getline(ss_line, Temp, ';');
+		utilities::trimString(Temp);
+		newDriver.SetID(Temp);
+		// READ DRIVER NAME
+		getline(ss_line, Temp, ';');
+		utilities::trimString(Temp);
+		newDriver.SetName(Temp);
+		// READ MAX NR OF HOURS PER SHIFT 
+		getline(ss_line, Temp, ';');
+		utilities::trimString(Temp);
+		newDriver.SetMaxHoursShift( stoi(Temp) );
+		// READ MAX WEEKLY LOAD (WORKING HOURS)
+		getline(ss_line, Temp, ';');
+		utilities::trimString(Temp);
+		newDriver.SetMaxHoursWeek( stoi(Temp) );
+		// READ MIN NUMBER OF REST HOURS BETWEEN SHIFTS
+		getline(ss_line, Temp, '\n');
+		utilities::trimString(Temp);
+		newDriver.SetMinHoursRest( stoi(Temp) );
+
+		drivers.push_back(newDriver); // add to intern vector
+	}
+	hFile_Drivers.close();
+	return true;
 }
 
-void DriversClass::SaveToFile() const
+void DriversClass::SaveToFile(const string& fileName) const
 {
-
+	ofstream hFile_Drivers(fileName);
+	for (const Driver &driver : drivers) {
+		hFile_Drivers << driver.GetID() << " ; " << driver.GetName() << " ; " << driver.GetMaxHoursShift() << " ; " << driver.GetMaxHoursWeek << " ; " << driver.GetMinHoursRest() << endl;
+	}
+	hFile_Drivers.close();
 }
 
 void DriversClass::ListDrivers() const
@@ -218,4 +258,76 @@ bool DriversClass::DriverExists(const string& argIdentifier) const
 		if (driver.GetID() == argIdentifier)	return true;
 	}
 	return false;
+}
+
+const vector<Driver>& DriversClass::GetDrivers() const
+{
+	return drivers;
+}
+
+
+// -- BUS STOPS CLASS -- \\
+
+void Bus_StopsClass::AddLineToBusStop(Line * ptr_Line, const string & arg_Bus_Stop_Name)
+{
+	for (auto& Bus_Stop : vecBusStops) {
+		if (Bus_Stop.GetName() == arg_Bus_Stop_Name) {
+			Bus_Stop.AddLine(ptr_Line);
+			return;
+		}
+	}
+	// Else.. Create new bus stop
+	Bus_Stop newBusStop(arg_Bus_Stop_Name);
+	newBusStop.AddLine(ptr_Line);
+	vecBusStops.push_back(newBusStop);
+}
+
+void Bus_StopsClass::RemoveLineFromBusStop(Line * ptr_Line, const string & arg_Bus_Stop_Name)
+{
+	Bus_Stop* ptr_BusStop = FindBus_StopByName(arg_Bus_Stop_Name);
+	if (ptr_BusStop->GetLinesCount() > 1) {
+		ptr_BusStop->RemoveLineFromStop(ptr_Line);
+	}
+	else { // delete bus stop if no bus stops there
+		RemoveBusStop(arg_Bus_Stop_Name);
+	}
+}
+
+void Bus_StopsClass::RemoveLineFromALLBus_Stops(Line * ptr_Line)
+{
+	for (auto& bus_stop : vecBusStops) {
+		bus_stop.RemoveLineFromStop(ptr_Line); // will only remove the line if it is present on that bus stop
+	}
+}
+
+Bus_Stop * Bus_StopsClass::FindBus_StopByName(const string & arg_Bus_Stop_Name)
+{
+	for (auto& bus_stop : vecBusStops) {
+		if (bus_stop.GetName() == arg_Bus_Stop_Name) {
+			return &bus_stop;
+		}
+	}
+	return nullptr;
+}
+
+void Bus_StopsClass::PrintAllBus_Stops_Names() const
+{
+	bool firstIteration = true;
+	for (auto& bus_stop : vecBusStops) {
+		if (firstIteration) {
+			(firstIteration = false);
+		}
+		else (cout << ",");
+		cout << " " << bus_stop.GetName();
+	}
+}
+
+void Bus_StopsClass::RemoveBusStop(const string & arg_Bus_Stop_Name)
+{
+	for (auto iterator = vecBusStops.cbegin(); iterator != vecBusStops.cend(); iterator++) {
+		if (iterator->GetName() == arg_Bus_Stop_Name) { // found
+			vecBusStops.erase(iterator);
+			return;
+		}
+	}
 }
