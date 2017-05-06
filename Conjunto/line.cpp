@@ -120,22 +120,22 @@ void Line::SetTimeBetweenStops(const vector<unsigned int>& input)
 }
 
 
-string Line::GetID()
+string Line::GetID() const
 {
 	return ID;
 }
 
-unsigned int Line::GetFreq()
+unsigned int Line::GetFreq() const
 {
 	return freq;
 }
 
-vector<Bus_Stop> Line::GetBus_Stops()
+vector<Bus_Stop> Line::GetBus_Stops() const
 {
 	return bus_stops;
 }
 
-vector<unsigned int> Line::GetTimeBetweenStops()
+vector<unsigned int> Line::GetTimeBetweenStops() const
 {
 	return timeBetweenStops;
 }

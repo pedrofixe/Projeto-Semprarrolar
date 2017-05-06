@@ -3,6 +3,9 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
+#include <iomanip>
+#include <unordered_map>
 #include "line.h"
 #include "driver.h"
 #include "bus_stop.h"
@@ -13,39 +16,40 @@ class LinesClass {
 	public:
 		void AddBusLine(const Line&);
 		bool RemoveBusLine(const Line&);
-		bool RemoveBusLine(const unsigned int&);
+		bool RemoveBusLineByID(const string& Identifier);
 
 		bool LoadFromFile(const string&);
-		void SaveToFile(const string&);
+		void SaveToFile(const string&) const;
 
 		void PrintLinesNames() const;
-		bool LineExists() const;
+		bool LineExists(const string& lineIdentifier) const;
 		const vector<Line>& GetLines() const; // n sei se vai ser usado
 	private:
-		vector<Line> Lines;
+		vector<Line> lines;
 
 };
 
 class DriversClass {
 	public:
-		void AddDriver(Driver&);
-		void RemoveDriver(Driver&);
+		bool AddDriver(const Driver&);
+		bool RemoveDriver(const Driver&);
+		bool RemoveDriverByID(const string&);
 
 		bool LoadFromFile(const string&);
 		void SaveToFile() const;
 
 		void ListDrivers() const;	
-		bool DriverExists(string&) const;
+		bool DriverExists(const string&) const;
 		const vector<Driver>& GetDrivers() const; // n sei se vai ser usado
 	private:
-		vector<Driver> Drivers;
+		vector<Driver> drivers;
 };
 
 class Bus_StopsClass {
 	public:
 
 	private:
-		// implementar wrapper sobre hashmap
+		unordered_map<Bus_Stop, vector<Line*> > hashmap;
 };
 
 static LinesClass	 Lines;

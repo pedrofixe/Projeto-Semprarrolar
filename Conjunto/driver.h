@@ -18,11 +18,11 @@ public:
 	void SetMaxHoursWeek(const unsigned int&);
 	void SetMinHoursRest(const unsigned int&);
 
-	string GetID();
-	string GetName();
-	unsigned int GetMaxHoursShift();
-	unsigned int GetMaxHoursWeek();
-	unsigned int GetMinHoursRest();
+	string GetID() const;
+	string GetName() const;
+	unsigned int GetMaxHoursShift() const;
+	unsigned int GetMaxHoursWeek() const;
+	unsigned int GetMinHoursRest() const;
 
 private:
 	string ID;

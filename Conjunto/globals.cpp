@@ -1,17 +1,19 @@
 #include "globals.h"
 
+// -- LINES CLASS -- \\
+
 void LinesClass::AddBusLine(const Line& inputLine)
 {
-	Lines.insert(inputLine);
+	lines.push_back(inputLine);
 }
 
 bool LinesClass::RemoveBusLine(const Line& inputLine)
 {
-	for (int i = 0; i < Lines.size(); ++i)
+	for (int i = 0; i < lines.size(); ++i)
 	{
 		if (Lines[i].GetID() == inputLine.GetID())
 		{
-			Lines.erase(Lines.begin() + i);
+			lines.erase(lines.begin() + i);
 			return true;
 		}
 	}
@@ -19,12 +21,13 @@ bool LinesClass::RemoveBusLine(const Line& inputLine)
 	return false;
 }
 
-bool LinesClass::RemoveBusLine(const unsigned int& input)
+bool LinesClass::RemoveBusLineByID(const string& argIdentifier)
 {
-	if (input < Lines.size())
-	{
-		Lines.erase(Lines.begin() + input);
-		return true;
+	for (auto iterator = lines.cbegin(); iterator != lines.cend(); iterator++) {
+		if (iterator->GetID == argIdentifier) { // found
+			lines.erase(iterator);
+			return true;
+		}
 	}
 
 	return false;
@@ -92,20 +95,20 @@ bool LinesClass::LoadFromFile(const string& filename)
 		}
 		templine.SetTimeBetweenStops(time_vector);
 
-		Lines.push_back(templine); // Add templine to global line vector
+		lines.push_back(templine); // Add templine to global line vector
 	}
 	lines_file.close();
 	return true;
 }
 
 
-void LinesClass::SaveToFile(const string& filename) {
+void LinesClass::SaveToFile(const string& filename) const {
 	ofstream lines_file(filename);
 
 	vector<Bus_Stop> stop_vector;
 	vector<unsigned int> timebetweenstops;
 
-	for (const line &templine : Lines) {
+	for (const Line &templine : lines) {
 		lines_file <<  templine.GetID() << " ; " << templine.GetFreq() << " ; ";
 
 		stop_vector = templine.GetBus_Stops();
@@ -127,10 +130,92 @@ void LinesClass::SaveToFile(const string& filename) {
 		}
 
 		// Only write a newline if it's not the last line
-		if (templine.GetID() != Lines.back().GetID())
+		if (templine.GetID() != lines.back().GetID())
 			lines_file << "\n";
 	}
 
 	lines_file.close();
 }
 
+bool LinesClass::LineExists(const string & argIdentifier) const
+{
+	for (const auto& line : lines) {
+		if (line.GetID() == argIdentifier)	return true;
+	}
+	return false;
+}
+
+void LinesClass::PrintLinesNames() const
+{
+	bool firstIteration = true;
+	for (const Line &line : lines) {
+		if (firstIteration) {
+			(firstIteration = false);
+		}
+		else (std::cout << ",");
+		std::cout << " " << line.GetID();
+	}
+}
+
+const vector<Line>& LinesClass::GetLines() const
+{
+	return lines;
+}
+
+// -- DRIVERS CLASS -- \\
+
+bool DriversClass::AddDriver(const Driver& argDriver)
+{
+	drivers.push_back(argDriver);
+}
+
+bool DriversClass::RemoveDriver(const Driver& argDriver)
+{
+	for (auto iterator = drivers.cbegin(); iterator != drivers.cend(); iterator++) {
+		if (iterator->GetID() == argDriver.GetID) { // found
+			drivers.erase(iterator);
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool DriversClass::RemoveDriverByID(const string& argDriverID)
+{
+	for (auto iterator = drivers.cbegin(); iterator != drivers.cend(); iterator++) {
+		if (iterator->GetID() == argDriverID) { // found
+			drivers.erase(iterator);
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool DriversClass::LoadFromFile(const string &)
+{
+	return false;
+}
+
+void DriversClass::SaveToFile() const
+{
+
+}
+
+void DriversClass::ListDrivers() const
+{
+	cout << setw(2) << "" << setw(15) << left << "Identifier" << setw(30) << "Name" << setw(25) << "Hours per Shift" << setw(25) << "Weekly Load" << setw(20) << "Rest Hours" << endl;
+	for (const Driver &driver : drivers) {
+		cout << setw(2) << "" << setw(15) << driver.GetID() << setw(30) << driver.GetName() << setw(25) << driver.GetMaxHoursShift() << setw(25) << driver.GetMaxHoursWeek() << setw(20) << driver.GetMinHoursRest() << endl;
+	}
+	cout << right;
+}
+
+bool DriversClass::DriverExists(const string& argIdentifier) const
+{
+	for (const auto& driver : drivers) {
+		if (driver.GetID() == argIdentifier)	return true;
+	}
+	return false;
+}
