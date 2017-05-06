@@ -101,41 +101,41 @@
 
 void Line::SetID(const string& input)
 {
-	this->ID = input;
+	ID = input;
 }
 
 void Line::SetFreq(const unsigned int& input)
 {
-	this->freq = input;
+	freq = input;
 }
 
 void Line::SetBus_Stops(const vector<Bus_Stop>& input)
 {
-	this->bus_stops = input;
+	bus_stops = input;
 }
 
 void Line::SetTimeBetweenStops(const vector<unsigned int>& input)
 {
-	this->timeBetweenStops = input;
+	timeBetweenStops = input;
 }
 
 
 string Line::GetID()
 {
-	return this->ID;
+	return ID;
 }
 
 unsigned int Line::GetFreq()
 {
-	return this->freq;
+	return freq;
 }
 
 vector<Bus_Stop> Line::GetBus_Stops()
 {
-	return this->bus_stops;
+	return bus_stops;
 }
 
 vector<unsigned int> Line::GetTimeBetweenStops()
 {
-	return this->timeBetweenStops;
+	return timeBetweenStops;
 }

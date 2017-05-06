@@ -1,42 +1,42 @@
 #include "shift.h"
 
-Shift::Shift(unsigned int day, unsigned int startHour, unsigned int endHour, const Driver* argDriver, const Bus* argBus, const Line* argLine)
+Shift::Shift(unsigned int argDay, unsigned int argStartHour, unsigned int argEndHour, const Driver* argDriver, const Bus* argBus, const Line* argLine)
 {
-	this->day = day;
-	this->startHour = startHour;
-	this->endHour = endHour;
-	this->driver = argDriver;
-	this->bus = argBus;
-	this->line = argLine;
+	day = argDay;
+	startHour = argStartHour;
+	endHour = argEndHour;
+	driver = argDriver;
+	bus = argBus;
+	line = argLine;
 }
 
 unsigned int Shift::GetStartHour()
 {
-	return this->startHour;
+	return startHour;
 }
 
 
 unsigned int Shift::GetEndHour()
 {
-	return this->endHour;
+	return endHour;
 }
 
 unsigned int Shift::GetDuration()
 {
-	return (this->endHour - this->startHour);
+	return endHour - startHour;
 }
 
 const Driver& Shift::GetDriver()
 {
-	return *(this->driver);
+	return *driver;
 }
 
 const Bus& Shift::GetBus()
 {
-	return *(this->bus);
+	return *bus;
 }
 
 const Line& Shift::GetLine()
 {
-	return *(this->line);
+	return *line;
 }

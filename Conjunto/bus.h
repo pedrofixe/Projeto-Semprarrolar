@@ -3,14 +3,21 @@
 
 #include "line.h"
 #include "driver.h"
+#include "shift.h"
 
 class Bus {
 
 	public:
-		
+		bool AddShift(const Shift&);
+		const vector<Shift*>& GetShifts();
+		Line GetLine();
+		Driver GetDriver();
+		unsigned int GetOrderNum();
 	private:
-		const Line* line;
-
+		Line* line;
+		unsigned int orderNum;
+		Driver* driver;
+		vector<Shift*> shifts;
 };
 
 
