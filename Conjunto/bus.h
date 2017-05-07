@@ -8,11 +8,11 @@
 class Bus {
 
 	public:
-		bool AddShift(const Shift&);
-		const vector<Shift*>& GetShifts();
+		bool AddShift(const Shift&); // estes 2 metodos parecem um bocado inuteis considerando o resto da arquitetura mas e' o que esta indicado no pdf
+		const vector<Shift*>& GetShifts(); // 
 		Line GetLine();
 		Driver GetDriver();
-		unsigned int GetOrderNum();
+		Bus(Line*, unsigned int orderNum, Driver*); // incompleto
 	private:
 		Line* line;
 		unsigned int orderNum;

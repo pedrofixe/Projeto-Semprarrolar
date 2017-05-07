@@ -5,9 +5,11 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
+#include <set>
 #include "line.h"
 #include "driver.h"
 #include "bus_stop.h"
+#include "shift.h"
 
 using namespace std;
 
@@ -56,8 +58,19 @@ class Bus_StopsClass {
 		vector<Bus_Stop> vecBusStops;
 };
 
+class Shifts_InterfaceClass {
+public:
+	void InsertShift(const Shift&);
+	const set<Shift>& GetShifts() const;
+	void ListShifts() const;
+private:
+	set<Shift> setShifts;
+	string DayNumberToString(const unsigned int&) const;
+};
+
 static LinesClass	 Lines;
 static DriversClass	 Drivers;
-static Bus_StopsClass Bus_Stops;
+static Bus_StopsClass	Bus_Stops;
+static Shifts_InterfaceClass Shifts_Interface;
 
 #endif

@@ -16,6 +16,7 @@ void Bus_Stop::RemoveLineFromStop(const Line *ptr_Line )
 	if (iterator != linesAtStop.cend()) { // found
 		linesAtStop.erase(iterator);
 	}
+	//if it doesn't exist do nothing
 }
 
 const vector<Line*>& Bus_Stop::GetLines() const
@@ -25,5 +26,10 @@ const vector<Line*>& Bus_Stop::GetLines() const
 
 void Bus_Stop::AddLine(Line * ptr_Line)
 {
-	linesAtStop.push_back(ptr_Line)
+	linesAtStop.push_back(ptr_Line);
+}
+
+void Bus_Stop::ShowSchedule() const
+{
+
 }

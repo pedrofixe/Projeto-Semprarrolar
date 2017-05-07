@@ -331,3 +331,33 @@ void Bus_StopsClass::RemoveBusStop(const string & arg_Bus_Stop_Name)
 		}
 	}
 }
+
+
+
+// -- SHIFTS_INTERFACE CLASS -- \\
+
+void Shifts_InterfaceClass::InsertShift(const Shift &argShift)
+{
+	setShifts.insert(argShift);
+}
+
+const set<Shift>& Shifts_InterfaceClass::GetShifts() const
+{
+	return setShifts;
+}
+
+void Shifts_InterfaceClass::ListShifts() const
+{
+	cout << setw(2) << "" << setw(12) << left << "Day" << setw(15) << "Start Hour" << setw(15) << "End Hour" << setw(10) << "Line" << setw(30) << "Driver" << setw(10) << "Bus" << endl;
+	for (const Shift &shift : setShifts) {
+		string dayName = DayNumberToString(shift.GetDay());
+		cout << setw(2) << "" << setw(12) << left << dayName << setw(15) << shift.GetStartHour() + ":00" << setw(15) << shift.GetEndHour() + ":00" << setw(10) << shift.GetLine().GetID() << setw(30) << "[" + shift.GetDriver().GetID() + "]" +shift.GetDriver().GetName() << setw(10) << shift.GetBus().GetOrderNum() << endl;
+	}
+	cout << right;
+}
+
+string Shifts_InterfaceClass::DayNumberToString(const unsigned int &num) const
+{
+	static string daysArray[] = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+	return daysArray[num];
+}
