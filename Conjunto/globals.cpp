@@ -11,7 +11,7 @@ bool LinesClass::RemoveBusLine(const Line& inputLine)
 {
 	for (int i = 0; i < lines.size(); ++i)
 	{
-		if (Lines[i].GetID() == inputLine.GetID())
+		if (lines[i].GetID() == inputLine.GetID())
 		{
 			lines.erase(lines.begin() + i);
 			return true;
@@ -260,6 +260,16 @@ bool DriversClass::DriverExists(const string& argIdentifier) const
 	return false;
 }
 
+Driver * DriversClass::FindDriver(const string & DriverID)
+{
+	for (auto& driver : drivers) {
+		if (driver.GetID() == DriverID) {
+			return &driver;
+		}
+	}
+	return nullptr;
+}
+
 const vector<Driver>& DriversClass::GetDrivers() const
 {
 	return drivers;
@@ -332,13 +342,127 @@ void Bus_StopsClass::RemoveBusStop(const string & arg_Bus_Stop_Name)
 	}
 }
 
+// -- BUSES CLASS -- \\
 
+bool Buses_Class::LoadFromFile(const string& filename)
+{
+	ifstream buses_file(filename);
+
+	if (buses_file.fail())
+	{
+		buses_file.close();
+		return false;
+	}
+
+	// Load lines
+	string tempstr;
+	while (getline(buses_file, tempstr)) {
+		utilities::trimString(tempstr); 
+		mapBusesIDs.insert(make_pair(tempstr, set<Shift>()));
+	}
+	buses_file.close();
+	return true;
+}
+
+void Buses_Class::SaveToFile(const string& filename) const
+{
+	ofstream buses_file(filename);
+	for (const auto& bus_pair : mapBusesIDs) {
+		buses_file << bus_pair.first << endl;
+	}
+	buses_file.close();
+}
+
+void Buses_Class::PrintBuses() const
+{
+	cout << "  ";
+	for (const auto& bus_pair : mapBusesIDs) {
+		cout << bus_pair.first << endl;
+	}
+}
+
+bool Buses_Class::InsertBus(const string & BusID)
+{
+	if (mapBusesIDs.insert(make_pair(BusID, set<Shift>())).second) { // element was inserted with success
+		return true;
+	}
+	return false;
+}
+
+bool Buses_Class::RemoveBus(const string & BusID)
+{
+	auto iterator = mapBusesIDs.find(BusID);
+	if (iterator != mapBusesIDs.end()) {
+		mapBusesIDs.erase(iterator);
+		return true;
+	}
+	return false;
+}
+
+const set<Shift>& Buses_Class::GetShifts(const string & BusID) const
+{
+	auto iterator = mapBusesIDs.find(BusID);
+	if (iterator != mapBusesIDs.end()) {
+		return iterator->second;
+	}
+	return set<Shift>(); // return empty set if the busID passed as argument isnt associated with a bus
+
+}
+
+bool Buses_Class::BusExists(const string & BusID)
+{
+	auto iterator = mapBusesIDs.find(BusID);
+	if (iterator != mapBusesIDs.end()) {
+		return true;
+	}
+	return false;
+}
+
+bool Buses_Class::CanAddShift(const string & BusID, const Shift& argShift) const
+{
+	auto iterator = mapBusesIDs.find(BusID);
+	if (iterator != mapBusesIDs.end()) {
+		for (const auto& bus_Shift : iterator->second) {
+			if (bus_Shift.GetDay() == argShift.GetDay() && ( argShift.GetStartHour() >= bus_Shift.GetStartHour() && argShift.GetStartHour() < bus_Shift.GetEndHour()) ) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+void Buses_Class::AddShift(const string & BusID, const Shift &argShift)
+{
+	auto iterator = mapBusesIDs.find(BusID);
+	if (iterator != mapBusesIDs.end()) {
+		iterator->second.insert(argShift);
+	}
+}
+
+void Buses_Class::RemoveShift(const string & BusID, const Shift& argShift)
+{
+	auto iterator = mapBusesIDs.find(BusID);
+	if (iterator != mapBusesIDs.end()) {
+		auto iteratorToShift = iterator->second.find(argShift);
+		if (iteratorToShift != iterator->second.end()) {
+			iterator->second.erase(iteratorToShift);
+		}
+	}
+}
 
 // -- SHIFTS_INTERFACE CLASS -- \\
 
 void Shifts_InterfaceClass::InsertShift(const Shift &argShift)
 {
 	setShifts.insert(argShift);
+}
+
+void Shifts_InterfaceClass::RemoveShift(const Shift& argShift)
+{
+	auto iterator = setShifts.find(argShift);
+	if (iterator != setShifts.end()) {
+		setShifts.erase(iterator);
+	}
 }
 
 const set<Shift>& Shifts_InterfaceClass::GetShifts() const
@@ -350,14 +474,8 @@ void Shifts_InterfaceClass::ListShifts() const
 {
 	cout << setw(2) << "" << setw(12) << left << "Day" << setw(15) << "Start Hour" << setw(15) << "End Hour" << setw(10) << "Line" << setw(30) << "Driver" << setw(10) << "Bus" << endl;
 	for (const Shift &shift : setShifts) {
-		string dayName = DayNumberToString(shift.GetDay());
-		cout << setw(2) << "" << setw(12) << left << dayName << setw(15) << shift.GetStartHour() + ":00" << setw(15) << shift.GetEndHour() + ":00" << setw(10) << shift.GetLine().GetID() << setw(30) << "[" + shift.GetDriver().GetID() + "]" +shift.GetDriver().GetName() << setw(10) << shift.GetBus().GetOrderNum() << endl;
+		string dayName = utilities::DayNumberToString(shift.GetDay());
+		cout << setw(2) << "" << setw(12) << left << dayName << setw(15) << shift.GetStartHour() + ":00" << setw(15) << shift.GetEndHour() + ":00" << setw(10) << shift.GetLine().GetID() << setw(30) << "[" + shift.GetDriver().GetID() + "]" +shift.GetDriver().GetName() << setw(10) << shift.GetBusID() << endl;
 	}
 	cout << right;
-}
-
-string Shifts_InterfaceClass::DayNumberToString(const unsigned int &num) const
-{
-	static string daysArray[] = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
-	return daysArray[num];
 }

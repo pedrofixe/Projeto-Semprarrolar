@@ -1,12 +1,12 @@
 #include "shift.h"
 
-Shift::Shift(unsigned int argDay, unsigned int argStartHour, unsigned int argEndHour, const Driver* argDriver, const Bus* argBus, const Line* argLine)
+Shift::Shift(unsigned int argDay, unsigned int argStartHour, unsigned int argEndHour, const Driver* argDriver, const string& argBusID, const Line* argLine)
 {
 	day = argDay;
 	startHour = argStartHour;
 	endHour = argEndHour;
 	driver = argDriver;
-	bus = argBus;
+	BusID = argBusID;
 	line = argLine;
 }
 
@@ -36,9 +36,9 @@ const Driver& Shift::GetDriver() const
 	return *driver;
 }
 
-const Bus& Shift::GetBus() const
+const string& Shift::GetBusID() const
 {
-	return *bus;
+	return BusID;
 }
 
 const Line& Shift::GetLine() const
@@ -53,6 +53,12 @@ bool operator<(const Shift &left, const Shift &right)
 		return true;
 	}
 	else if (left.GetStartHour() < right.GetStartHour()) {
+		return true;
+	}
+	else if (left.GetLine().GetID() < right.GetLine().GetID()) {
+		return true;
+	}
+	else if (left.GetDriver().GetID() < right.GetDriver().GetID()) {
 		return true;
 	}
 	return false;

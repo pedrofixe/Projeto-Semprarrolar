@@ -6,10 +6,12 @@
 #include <iostream>
 #include <iomanip>
 #include <set>
+#include <map>
 #include "line.h"
 #include "driver.h"
 #include "bus_stop.h"
 #include "shift.h"
+#include "utilities.h"
 
 using namespace std;
 
@@ -41,12 +43,16 @@ class DriversClass {
 
 		void ListDrivers() const;	
 		bool DriverExists(const string&) const;
+
+		Driver* FindDriver(const string& DriverID);
+
 		const vector<Driver>& GetDrivers() const; // n sei se vai ser usado
 	private:
 		vector<Driver> drivers;
 };
 
 class Bus_StopsClass {
+	// esta classe tem que ser seriamente repensada e re-escrita.
 	public:
 		void AddLineToBusStop(Line* ptr_Line, const string& Bus_Stop_Name);
 		void RemoveLineFromBusStop(Line* ptr_Line, const string& Bus_Stop_Name);
@@ -58,19 +64,36 @@ class Bus_StopsClass {
 		vector<Bus_Stop> vecBusStops;
 };
 
+class Buses_Class {
+	public:
+		bool LoadFromFile(const string&);
+		void SaveToFile(const string&) const;
+		void PrintBuses() const;
+		bool InsertBus(const string& BusID); // These 2 methods will return false when the bus specified isnt valid
+		bool RemoveBus(const string& BusID); // TODO: MAKE THIS METHOD DELETE ALL THE SHIFTS FROM THE OTHER OBJECTS
+		const set<Shift>& GetShifts(const string& BusID) const;
+		bool BusExists(const string& BusID);
+		bool CanAddShift(const string& BusID, const Shift&) const;
+		void AddShift(const string& BusID, const Shift&);
+		void RemoveShift(const string& BusID, const Shift&);
+	private:
+		map<string, set<Shift> > mapBusesIDs;
+};
+
 class Shifts_InterfaceClass {
-public:
-	void InsertShift(const Shift&);
-	const set<Shift>& GetShifts() const;
-	void ListShifts() const;
-private:
-	set<Shift> setShifts;
-	string DayNumberToString(const unsigned int&) const;
+	public:
+		void InsertShift(const Shift&);
+		const set<Shift>& GetShifts() const;
+		void ListShifts() const;
+		void RemoveShift(const Shift&);
+	private:
+		set<Shift> setShifts;
 };
 
 static LinesClass	 Lines;
 static DriversClass	 Drivers;
 static Bus_StopsClass	Bus_Stops;
+static Buses_Class Buses;
 static Shifts_InterfaceClass Shifts_Interface;
 
 #endif

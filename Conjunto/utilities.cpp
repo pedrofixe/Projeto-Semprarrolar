@@ -33,3 +33,9 @@ int utilities::intSize(int input)
 
 	return res;
 }
+
+string utilities::DayNumberToString(const unsigned int &num)
+{
+	static string daysArray[] = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+	return daysArray[num];
+}

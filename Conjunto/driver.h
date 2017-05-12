@@ -4,10 +4,20 @@
 #include <string>
 #include <sstream>
 #include <fstream>
-#include <vector>
+#include <set>
 #include "utilities.h"
+#include "shift.h"
 
 using namespace std;
+
+enum CanAddShiftFuncReturns {
+	NOT_AVAILABLE,
+	WEEKLY_LIMIT_REACHED,
+	MUST_RESPECT_REST_TIME,
+	SHIFT_TOO_LONG,
+	AVAILABLE
+
+};
 
 class Driver{
 
@@ -24,12 +34,18 @@ public:
 	unsigned int GetMaxHoursWeek() const;
 	unsigned int GetMinHoursRest() const;
 
+	int CanAddShift(const Shift&) const;
+	void AddShift(const Shift&);
+	void RemoveShift(const Shift&);
+	const set<Shift>& GetDriverShifts() const;
+
 private:
 	string ID;
 	string name;
 	unsigned int maxhoursshift;
 	unsigned int maxhoursweek;
 	unsigned int minhoursrest;
+	set<Shift> driverShifts;
 
 
 };
