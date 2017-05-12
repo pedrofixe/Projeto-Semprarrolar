@@ -1,25 +1,35 @@
 #include "globals.h"
 
-void LinesClass::AddBusLine(const Line& inputLine)
-{
-	Lines.insert(inputLine);
-}
+//----------------------------------LINES CLASS----------------------------------
 
-bool LinesClass::RemoveBusLine(const Line& inputLine)
+int LinesClass::LineSearch(const Line& inputLine)
 {
 	for (int i = 0; i < Lines.size(); ++i)
 	{
 		if (Lines[i].GetID() == inputLine.GetID())
-		{
-			Lines.erase(Lines.begin() + i);
-			return true;
-		}
+			return i;
+	}
+
+	return -1;
+}
+
+void LinesClass::AddLine(const Line& inputLine)
+{
+	Lines.insert(inputLine);
+}
+
+bool LinesClass::RemoveLine(const Line& inputLine)
+{
+	if (LinesClass::LineSearch(inputLine) > -1)
+	{
+		Lines.erase(Lines.begin() + i);
+		return true;
 	}
 
 	return false;
 }
 
-bool LinesClass::RemoveBusLine(const unsigned int& input)
+bool LinesClass::RemoveLine(const unsigned int& input)
 {
 	if (input < Lines.size())
 	{
@@ -134,3 +144,85 @@ void LinesClass::SaveToFile(const string& filename) {
 	lines_file.close();
 }
 
+//----------------------------------DRIVERS CLASS----------------------------------
+
+int DriverClass::DriverSearch(const Driver& inputDriver)
+{
+	for (int i = 0; i < Drivers.size(); ++i)
+	{
+		if (Drivers[i].GetID() == inputDriver.GetID())
+			return i;
+	}
+
+	return -1;
+}
+
+void DriversClass::AddDriver(const Driver& inputDriver)
+{
+	Drivers.insert(inputDriver);
+}
+
+bool DriversClass::RemoveDriver(const Driver& inputDriver)
+{
+	if (DriversClass::DriverSearch(inputDriver) > -1)
+	{
+		Drivers.erase(Drivers.begin() + i);
+		return true;
+	}
+
+	return false;
+}
+
+bool DriversClass::RemoveDriver(const unsigned int& input)
+{
+	if (input < Drivers.size())
+	{
+		Drivers.erase(Drivers.begin() + input);
+		return true;
+	}
+
+	return false;
+}
+
+bool DriversClass::LoadDrivers(const string& filename)
+{
+	ifstream drivers_file(filename);
+	if (drivers_file.fail()) {
+		drivers_file.close();
+		return false;
+	}
+
+	// Load drivers
+	string tempstr;
+	while (getline(drivers_file, tempstr)) {
+		// Take line from file to tempstr
+		tempstr += ";";
+		istringstream driver_stream(tempstr);
+		driver tempdriver;
+		string newtempstr;
+		// Store driver ID
+		getline(driver_stream, newtempstr, ';');
+		utilities::trimString(newtempstr);
+		tempdriver.ID = stoi(newtempstr);
+		// Store driver name
+		getline(driver_stream, newtempstr, ';');
+		utilities::trimString(newtempstr);
+		tempdriver.name = newtempstr;
+		// Store driver's maximum hours per shift
+		getline(driver_stream, newtempstr, ';');
+		utilities::trimString(newtempstr);
+		tempdriver.MaxHoursShift = stoi(newtempstr);
+		// Store driver's maximum hours per week
+		getline(driver_stream, newtempstr, ';');
+		utilities::trimString(newtempstr);
+		tempdriver.MaxHoursWeek = stoi(newtempstr);
+		// Store driver's minimum hours between shifts
+		getline(driver_stream, newtempstr, ';');
+		utilities::trimString(newtempstr);
+		tempdriver.MinHoursBetwenShifts = stoi(newtempstr);
+
+		DriverSet.push_back(tempdriver); // Add tempdriver to DriverSet
+	}
+	drivers_file.close();
+	return true;
+}

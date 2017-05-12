@@ -11,15 +11,15 @@ using namespace std;
 
 class LinesClass {
 	public:
-		void AddBusLine(const Line&);
-		bool RemoveBusLine(const Line&);
-		bool RemoveBusLine(const unsigned int&);
+		void AddLine(const Line&);
+		bool RemoveLine(const Line&);
+		bool RemoveLine(const unsigned int&);
 
 		bool LoadFromFile(const string&);
 		void SaveToFile(const string&);
 
 		void PrintLinesNames() const;
-		bool LineExists() const;
+		int LineSearch(const Line&) const;
 		const vector<Line>& GetLines() const; // n sei se vai ser usado
 	private:
 		vector<Line> Lines;
@@ -28,14 +28,15 @@ class LinesClass {
 
 class DriversClass {
 	public:
-		void AddDriver(Driver&);
-		void RemoveDriver(Driver&);
+		void AddDriver(const Driver&);
+		bool RemoveDriver(const Driver&);
+		bool RemoveDriver(const unsigned int&);
 
 		bool LoadFromFile(const string&);
-		void SaveToFile() const;
+		void SaveToFile(const string&) const;
 
 		void ListDrivers() const;	
-		bool DriverExists(string&) const;
+		int DriverSearch(const &Driver) const;
 		const vector<Driver>& GetDrivers() const; // n sei se vai ser usado
 	private:
 		vector<Driver> Drivers;
