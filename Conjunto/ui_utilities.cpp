@@ -81,21 +81,34 @@ void ui_utilities::ClearScreen()
 
 	void ui_utilities::ClearScreen()
 	{
-		std::cout << "\033[2J\033[1;1H";
-		std::cout << "\033[2J\033[1;1H";
+		cout << "\033[2J\033[1;1H";
+		cout << "\033[2J\033[1;1H";
 	}
 
 	bool ui_utilities::SetWindow(int width, int height)
 	{
-		std::string res = "\e[8;";
-		res += std::to_string(height);
+		string res = "\e[8;";
+		res += to_string(height);
 		res += ";";
-		res += std::to_string(width);
+		res += to_string(width);
 		res += "t";
-		std::cout << res;
+		cout << res;
 
 		
 		return true;
 	}
 
+
 #endif
+
+	void ui_utilities::PrintBanner(string filename, int ConsoleWidth)
+	{
+		ifstream banner(filename, fstream::in);
+
+		cout << "\n";
+		string asciiTemp;
+
+		while (getline(banner, asciiTemp))
+			cout << string(((ConsoleWidth - asciiTemp.size()) / 2), '\n') << asciiTemp << "\n";
+
+	}

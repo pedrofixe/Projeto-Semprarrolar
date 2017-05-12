@@ -1,15 +1,42 @@
 #include "ui.h"
 
-// Prints ASCII banner from filename
-void ui::PrintBanner(std::string filename, int ConsoleWidth)
+void MainMenu()
 {
-	ifstream banner(filename, fstream::in);
+	ui_utilities::ClearScreen();
+	ui_utilities::ClearScreen();
 
-	cout << "\n";
-	string asciiTemp;
+	ui_utilities::PrintBanner();
 
-	while (getline(banner, asciiTemp))
-		cout << string(((ConsoleWidth - asciiTemp.size()) / 2), '\n') << asciiTemp << "\n";
+}
 
-	cout << "\n\n\n";
+void ui::StartMenu()
+{
+	MainMenu();
+}
+
+void ui::StartMenu(const string& filename)
+{
+	SetBannerFilename(filename);
+	MainMenu();
+}
+
+
+bool SetConsoleWidth(const int& Width)
+{
+	if (Width > 119)
+	{
+		ConsoleWidth = Width;
+		return true;
+	}
+	return false;
+}
+
+bool SetConsoleHeight(const int& Height)
+{
+	if (Height > 29)
+	{
+		ConsoleHeight = Height;
+		return true;
+	}
+	return false;
 }

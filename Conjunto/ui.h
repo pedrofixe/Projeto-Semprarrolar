@@ -3,13 +3,29 @@
 
 #include <string>
 #include <fstream>
+#include "ui_utilities.h"
+
+using namespace std;
 
 class ui{
 
 public:
-	
-	static void PrintBanner(std::string, int);
+	void StartMenu();
+	bool StartMenu(const string&);
 
+	bool SetConsoleWidth(const int&);
+	bool SetConsoleHeight(const int&);
+	bool SetBannerFilename(const string&);
+
+	int GetConsoleWidth() const;
+	int GetConsoleHeight() const;
+	int GetBannerFilename() const;
+
+private:
+	int ConsoleWidth = 150;
+	int ConsoleHeight = 40;
+
+	string bannerfilename = "asciibanner.txt";
 
 }
 
