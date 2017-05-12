@@ -11,8 +11,8 @@ class ui_utilities{
 public:
 	
 	static void ClearScreen();
-	static bool SetWindow(int, int);
-	static void PrintBanner(string, int);
+	static bool SetWindow(const int&, const int&);
+	static void PrintBanner(const string&, const int&);
 
 };
 

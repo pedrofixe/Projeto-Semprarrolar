@@ -41,7 +41,7 @@ void ui_utilities::ClearScreen()
 			SetConsoleCursorPosition(hStdOut, homeCoords);
 	}
 
-	bool ui_utilities::SetWindow(int Width, int Height)
+	bool ui_utilities::SetWindow(const int& Width, const int& Height)
 	{
 		_COORD coord;
 		coord.X = Width;
@@ -85,7 +85,7 @@ void ui_utilities::ClearScreen()
 		cout << "\033[2J\033[1;1H";
 	}
 
-	bool ui_utilities::SetWindow(int width, int height)
+	bool ui_utilities::SetWindow(const int& width, const int& height)
 	{
 		string res = "\e[8;";
 		res += to_string(height);
@@ -101,7 +101,7 @@ void ui_utilities::ClearScreen()
 
 #endif
 
-	void ui_utilities::PrintBanner(string filename, int ConsoleWidth)
+	void ui_utilities::PrintBanner(const string& filename, const int& ConsoleWidth)
 	{
 		ifstream banner(filename, fstream::in);
 
