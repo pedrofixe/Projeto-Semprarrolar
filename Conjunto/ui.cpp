@@ -211,164 +211,171 @@ void Menu1to1()
 
 	while (1)
 	{
-		cout << "\nInsert ID:";
+		cout << "\nInsert line's ID:";
 
 		getline(cin, tempstr);
 		utilities::trimString(tempstr);
 
 		if (LineExists(tempstr))
-			templine.SetID(tempstr);
+			break;
+
+		cout << "\nInvalid input!";
+	}
+	templine.SetID(tempstr);
 
 
+	while (1)
+	{
+		cout << "\nInsert time between buses:";
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
 
-	// Se nao for um numero, pedir novo input
-		while (1)
+		if (utilities::is_numeric(tempstr))
+			break;
+
+		cout << "\nInvalid input!";
+	}
+	templine.SetFreq(stoi(tempstr));
+
+	vector<string> tempstops;
+
+	while (1)
+	{
+		tempstops.clear();
+
+		cout << "\nInsert bus stops between commas:";
+		getline(cin, tempstr);
+		tempstr += ',';
+
+		stringstream ss1(tempstr);
+		while (getline(ss1, tempstr, ','))
 		{
-			cout << "\nInsira a frequencia da linha:";
-			getline(cin, tempstr);
+			utilities::trimString(tempstr);
 
-		// Condicao para a continuacao do programa
-			if (is_numeric(tempstr))
-				break;
-
-			cout << "\nInput invalido!";
+			tempstops.push_back(tempstr);
 		}
-		templinha.freq = stoi(tempstr);
 
+		// Condition to continue program
+		if (tempstops.size() > 1)
+			break;
 
-	// Se existir algum numero na sequencia, pedir novo input
-		while (1)
+		cout << "\nInvalid input!";
+	}
+	templine.SetBus_Stops(tempstops);
+
+	vector<unsigned int> temptimebetweenstops;
+
+	while (1)
+	{
+		temptimebetweenstops.clear();
+
+		cout << "\nInsert time between stops, between commas:";
+		getline(cin, tempstr);
+		tempstr += ',';
+
+		bool test = 1;
+
+		stringstream ss1(tempstr);
+		while (getline(ss1, tempstr, ','))
 		{
-			paragens.resize(0);
-
-			cout << "\nInsira as paragens separadas por virgulas:";
-			getline(cin, tempstr);
-			tempstr += ',';
-
-			bool test = 1;
-
-			stringstream ss1(tempstr);
-			while (getline(ss1, newtempstr, ','))
+			if (!is_numeric(tempstr))
 			{
-				if (is_numeric(newtempstr))
-				{
-					test = 0;
-					break;
-				}
-				paragens.push_back(newtempstr);
-			}
-
-		// Condicao para a continuacao do programa
-			if (test && paragens.size() > 1)
+				test = 0;
 				break;
-			cout << "\nInput invalido!";
-		}
-		templinha.paragens = paragens;
-
-
-	// Se existirem caracteres nao numericos, pedir novo input
-		while (1)
-		{
-			tempoviagem.resize(0);
-
-			cout << "\nInsira os tempos entre paragens, entre virgulas:";
-			getline(cin, tempstr);
-			tempstr += ',';
-
-			bool test = 1;
-
-			stringstream ss2(tempstr);
-			while (getline(ss2, newtempstr, ','))
-			{
-				if (!is_numeric(newtempstr))
-				{
-					test = 0;
-					break;
-				}
-				tempoviagem.push_back(stoi(newtempstr));
 			}
-
-		// Condicao para a continuacao do programa
-			if (test && newtempstr.size() == 0 && tempoviagem.size() == paragens.size() - 1)
-				break;
-
-			cout << "\nInput invalido!";
+			temptimebetweenstops.push_back(stoi(tempstr));
 		}
 
-		templinha.tempoviagem = tempoviagem;
+		// The number of times between stops must be equal to the number of stops minus 1
+		if (test && temptimebetweenstops.size() == tempstops.size() - 1)
+			break;
 
-		LinhasGlobais.push_back(templinha);
-
-		SaveLinhas();
-
-		cout << "\nLinha Criada, Pressione qualquer tecla para continuar...";
-
-		cin.get();
-		Menu1();
+		cout << "\nInvalid input!";
 	}
 
+	cout << "\nLine created, Press any key to continue...";
+	cin.get();
 
-	void ui::StartMenu()
-	{
+	Lines.AddBusLine(templine);
+
+	return;
+}
+
+void Menu1to3()
+{
+
+	
+}
+
+
+
+void ui::StartMenu()
+{
+	MainMenu();
+}
+
+bool ui::StartMenu(const string& filename)
+{
+	if (SetBannerFilename(filename))
 		MainMenu();
-	}
+}
 
-	bool ui::StartMenu(const string& filename)
+bool ui::StartMenu(const int& Width, const int& Height, const string& filename)
+{
+	if (SetConsoleWidth(Width) && SetConsoleHeight(Height) && SetBannerFilename(filename))
+		MainMenu();
+}
+
+
+bool ui::SetConsoleWidth(const unsigned int& Width)
+{
+	if (Width > 119 && Width < 241)
 	{
-		if (SetBannerFilename(filename))
-			MainMenu();
+		ConsoleWidth = Width;
+		return true;
 	}
+	return false;
+}
 
-	bool ui::StartMenu(const int& Width, const int& Height, const string& filename)
+bool ui::SetConsoleHeight(const unsigned int& Height)
+{
+	if (Height > 29 && Height < 64)
 	{
-		if (SetConsoleWidth(Width) && SetConsoleHeight(Height) && SetBannerFilename(filename))
-			MainMenu();
+		ConsoleHeight = Height;
+		return true;
 	}
+	return false;
+}
 
+bool ui::SetBannerFilename(const string& filename)
+{
+	ifstream bannerfile(filename);
 
-	bool ui::SetConsoleWidth(const int& Width)
+	if (bannerfile.fail())
 	{
-		if (Width > 119 && Width < 241)
-		{
-			ConsoleWidth = Width;
-			return true;
-		}
+		bannerfile.close();
 		return false;
 	}
-
-	bool ui::SetConsoleHeight(const int& Height)
+	else
 	{
-		if (Height > 29 && Height < 64)
-		{
-			ConsoleHeight = Height;
-			return true;
-		}
-		return false;
+		bannerfilename = filename;
+		return true;
 	}
-
-	bool ui::SetBannerFilename(const string& filename)
-	{
-		ifstream bannerfile(filename);
-
-		if (bannerfile.fail())
-		{
-			bannerfile.close();
-			return false;
-		}
-		else
-		{
-			bannerfilename = filename;
-			return true;
-		}
-	}
+}
 
 
 
-	int ui::GetConsoleWidth()
+unsigned int ui::GetConsoleWidth()
+{
 	return ConsoleWidth;
+}
 
-	int ui::GetConsoleHeight()
+unsigned int ui::GetConsoleHeight()
+{
 	return ConsoleHeight;
+}
 
-	int ui::GetBannerFilename()
+string ui::GetBannerFilename()
+{
 	return bannerfilename;
+}
