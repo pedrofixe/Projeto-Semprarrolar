@@ -84,6 +84,31 @@ void Driver::SetMinHoursRest(const unsigned int& input)
 	this->minhoursrest = input;
 }
 
+string Driver::GetID() const
+{
+	return ID;
+}
+
+string Driver::GetName() const
+{
+	return name;
+}
+
+unsigned int Driver::GetMaxHoursShift() const
+{
+	return maxhoursshift;
+}
+
+unsigned int Driver::GetMaxHoursWeek() const
+{
+	return maxhoursweek;
+}
+
+unsigned int Driver::GetMinHoursRest() const
+{
+	return minhoursrest;
+}
+
 int Driver::CanAddShift(const Shift& argShift) const
 {
 	// First we'll have to check if the driver is free at the specified time. Since we're looping the set we might as well count the work hours of the driver.
