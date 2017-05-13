@@ -2,6 +2,8 @@
 
 void PreMenu()
 {
+	ui_utilities::ClearScreen();
+	ui_utilities::ClearScreen();
 	string temp;
 
 	while(1)
@@ -42,22 +44,22 @@ void PreMenu()
 
 	cout << '\n';
 
-	while(1)
-	{
-		cout <<"\nInsert shifts filename:";
+	// while(1)
+	// {
+	// 	cout <<"\nInsert shifts filename:";
 
-		getline(cin, temp);
-		cout << "\n";
+	// 	getline(cin, temp);
+	// 	cout << "\n";
 
-		ifstream shiftsfile(temp);
+	// 	ifstream shiftsfile(temp);
 
-		if (!shiftsfile.fail())
-			break;
+	// 	if (!shiftsfile.fail())
+	// 		break;
 
-		cout << "Invalid input";
-	}
+	// 	cout << "Invalid input";
+	// }
 
-	cout << '\n';
+	// cout << '\n';
 
 	while(1)
 	{
@@ -74,7 +76,7 @@ void PreMenu()
 		cout << "Invalid input";
 	}
 
-	SetConsoleWidth(Width) && SetConsoleHeight(Height) && SetBannerFilename(filename)
+	Buses_Class::LoadFromFile(temp);
 }
 
 void MainMenu()
