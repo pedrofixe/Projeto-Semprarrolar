@@ -58,7 +58,7 @@ bool LinesClass::LoadFromFile(const string& argFilename)
 		istringstream line_stream(tempstr);
 		Line templine;
 		string newtempstr;
-		vector<Bus_Stop> stop_vector;
+		vector<string> stop_vector;
 		vector<unsigned int> time_vector;
 
 
@@ -81,8 +81,7 @@ bool LinesClass::LoadFromFile(const string& argFilename)
 		while (getline(Bus_Stop_stream, tempstr, ','))
 		{
 			utilities::trimString(tempstr);
-			Bus_Stop tempstop(tempstr);
-			stop_vector.push_back(tempstop);
+			stop_vector.push_back(tempstr);
 
 		}
 		templine.SetBus_Stops(stop_vector);
@@ -115,7 +114,7 @@ bool LinesClass::LoadFromFile(const string& argFilename)
 void LinesClass::SaveToFile() const {
 	ofstream lines_file(filename);
 
-	vector<Bus_Stop> stop_vector;
+	vector<string> stop_vector;
 	vector<unsigned int> timebetweenstops;
 
 	for (const Line &templine : lines) {
@@ -124,7 +123,7 @@ void LinesClass::SaveToFile() const {
 		stop_vector = templine.GetBus_Stops();
 		for (int i = 0; i < stop_vector.size(); ++i)
 		{
-			lines_file << stop_vector[i].GetName();
+			lines_file << stop_vector[i];
 			if (i < stop_vector.size() - 1)
 				lines_file << ", ";
 		}

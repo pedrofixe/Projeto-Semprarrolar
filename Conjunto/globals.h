@@ -14,6 +14,9 @@
 #include "shift.h"
 #include "utilities.h"
 
+#define SCHEDULE_START 8
+#define SCHEDULE_END 22
+
 using namespace std;
 
 class LinesClass {

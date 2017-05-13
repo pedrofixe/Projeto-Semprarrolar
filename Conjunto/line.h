@@ -2,9 +2,9 @@
 #define __LINE_INCLUDED__
 
 #include <string>
-#include <sstream>
-#include <fstream>
 #include <vector>
+#include <iostream>
+#include <iomanip>
 #include "bus_stop.h"
 #include "utilities.h"
 
@@ -15,19 +15,20 @@ class Line {
 		void ShowSchedule() const;
 		void SetID(const string&);
 		void SetFreq(const unsigned int&);
-		void SetBus_Stops(const vector<Bus_Stop>&);
+		void SetBus_Stops(const vector<string>&);
 		void SetTimeBetweenStops(const vector<unsigned int>&);
 
 		string GetID() const;
 		unsigned int GetFreq() const;
-		vector<Bus_Stop> GetBus_Stops() const;
+		const vector<string> GetBus_Stops() const;
 		vector<unsigned int> GetTimeBetweenStops() const;
 
 
 	private:
+		static void PrintSpecificSchedule(const vector<string>& bus_stops, const vector<unsigned int>& timeBetweenStops, unsigned int freq, unsigned int offset);
 		string ID;
 		unsigned int freq;
-		vector<Bus_Stop> bus_stops;
+		vector<string> bus_stops;
 		vector<unsigned int> timeBetweenStops;
 
 };
