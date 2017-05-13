@@ -14,7 +14,9 @@ using namespace std;
 
 int main()
 {
+	ui menu;
 
+	menu.StartMenu(filename, width, height);
 	Line horta;
 
 	horta.SetID("coisas");

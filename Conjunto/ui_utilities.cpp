@@ -101,15 +101,3 @@ void ui_utilities::ClearScreen()
 
 
 #endif
-
-	void ui_utilities::PrintBanner(const string& filename, const int& ConsoleWidth)
-	{
-		ifstream banner(filename);
-
-		cout << "\n";
-		string asciiTemp;
-
-		while (getline(banner, asciiTemp))
-			cout << string(((ConsoleWidth - asciiTemp.size()) / 2), '\n') << asciiTemp << "\n";
-
-	}

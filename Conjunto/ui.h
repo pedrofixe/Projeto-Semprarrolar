@@ -23,12 +23,21 @@ public:
 	unsigned int GetConsoleHeight();
 	string GetBannerFilename();
 
+	void PrintBanner();
+
 private:
 	unsigned int ConsoleWidth = 150;
 	unsigned int ConsoleHeight = 40;
 
 	string bannerfilename = "asciibanner.txt";
 
-}
+	void PreMenu();
+	void MainMenu();
+	void Menu1();
+	void Menu1to1();
+	void Menu1to3();
+
+
+};
 
 #endif

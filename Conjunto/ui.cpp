@@ -1,19 +1,19 @@
 #include "ui.h"
 
-void PreMenu()
+void ui::PreMenu()
 {
 	ui_utilities::ClearScreen();
 	ui_utilities::ClearScreen();
-	string temp;
+	string tempstr;
 
 	while(1)
 	{
 		cout <<"\nInsert lines filename:";
 
-		getline(cin, temp);
+		getline(cin, tempstr);
 		cout << "\n";
 
-		ifstream linesfile(temp);
+		ifstream linesfile(tempstr);
 
 		if (!linesfile.fail())
 			break;
@@ -21,7 +21,7 @@ void PreMenu()
 		cout << "Invalid input";
 	}
 
-	LinesClass::LoadFromFile(temp);
+	Lines.LoadFromFile(tempstr);
 
 	cout << "\n";
 
@@ -29,10 +29,10 @@ void PreMenu()
 	{
 		cout <<"\nInsert drivers filename:";
 
-		getline(cin, temp);
+		getline(cin, tempstr);
 		cout << "\n";
 
-		ifstream driversfile(temp);
+		ifstream driversfile(tempstr);
 
 		if (!driversfile.fail())
 			break;
@@ -40,7 +40,7 @@ void PreMenu()
 		cout << "Invalid input";
 	}
 
-	DriversClass::LoadFromFile(temp);
+	Lines.LoadFromFile(tempstr);
 
 	cout << '\n';
 
@@ -61,32 +61,31 @@ void PreMenu()
 
 	// cout << '\n';
 
-	while(1)
-	{
-		cout <<"\nInsert bus filename:";
+	// while(1)
+	// {
+	// 	cout <<"\nInsert bus filename:";
 
-		getline(cin, temp);
-		cout << "\n";
+	// 	getline(cin, temp);
+	// 	cout << "\n";
 
-		ifstream busfile(temp);
+	// 	ifstream busfile(temp);
 
-		if (!busfile.fail())
-			break;
+	// 	if (!busfile.fail())
+	// 		break;
 
-		cout << "Invalid input";
-	}
+	// 	cout << "Invalid input";
+	// }
 
-	Buses_Class::LoadFromFile(temp);
+	// Buses_Class::LoadFromFile(temp);
 
 	MainMenu();
 }
 
-void MainMenu()
+void ui::MainMenu()
 {
 	ui_utilities::ClearScreen();
 	ui_utilities::ClearScreen();
-	ui_utilities::PrintBanner();
-
+	PrintBanner();
 	cout << string(3, '\n');
 
 	cout << "1- Line management\n";
@@ -145,12 +144,11 @@ void MainMenu()
 
 }
 
-void Menu1()
+void ui::Menu1()
 {
 	ui_utilities::ClearScreen();
 	ui_utilities::ClearScreen();
-	ui_utilities::PrintBanner();
-
+	PrintBanner();
 	cout << string(3, '\n');
 
 	cout << "1- Create line\n";
@@ -177,7 +175,7 @@ void Menu1()
 
 		if (input == "2")
 		{
-			Menu1to2();
+			//Menu1to2();
 			break;
 		}
 
@@ -201,13 +199,15 @@ void Menu1()
 
 }
 
-void Menu1to1()
+void ui::Menu1to1()
 {
 	ui_utilities::ClearScreen();
 	ui_utilities::ClearScreen();
-	ui_utilities::PrintBanner();
+	PrintBanner();
 
-	cout << string(3, '\n');
+	string tempstr;
+
+	Line templine;
 
 	while (1)
 	{
@@ -216,7 +216,7 @@ void Menu1to1()
 		getline(cin, tempstr);
 		utilities::trimString(tempstr);
 
-		if (!LinesClass::LineExists(tempstr))
+		if (!Lines.LineExists(tempstr))
 			break;
 
 		cout << "\nInvalid input!";
@@ -278,7 +278,7 @@ void Menu1to1()
 		stringstream ss1(tempstr);
 		while (getline(ss1, tempstr, ','))
 		{
-			if (!is_numeric(tempstr))
+			if (!utilities::is_numeric(tempstr))
 			{
 				test = 0;
 				break;
@@ -301,11 +301,11 @@ void Menu1to1()
 	return;
 }
 
-void Menu1to3()
+void ui::Menu1to3()
 {
 	ui_utilities::ClearScreen();
 	ui_utilities::ClearScreen();
-	ui_utilities::PrintBanner();
+	PrintBanner();
 
 	cout << string(3, '\n');
 
@@ -317,7 +317,7 @@ void Menu1to3()
 		getline(cin, tempstr);
 		utilities::trimString(tempstr);
 
-		if (LinesClass::RemoveBusLineByID(tempstr))
+		if (Lines.RemoveBusLineByID(tempstr))
 			break;
 
 		cout << "\nLine not found!";
@@ -400,4 +400,17 @@ unsigned int ui::GetConsoleHeight()
 string ui::GetBannerFilename()
 {
 	return bannerfilename;
+}
+
+
+void ui::PrintBanner()
+{
+	ifstream banner(bannerfilename);
+
+	cout << "\n";
+	string asciiTemp;
+
+	while (getline(banner, asciiTemp))
+		cout << string(((ConsoleWidth - asciiTemp.size()) / 2), '\n') << asciiTemp << "\n";
+
 }
