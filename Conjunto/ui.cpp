@@ -207,7 +207,7 @@ void Menu1to1()
 	ui_utilities::ClearScreen();
 	ui_utilities::PrintBanner();
 
-	Line templine;
+	cout << string(3, '\n');
 
 	while (1)
 	{
@@ -216,7 +216,7 @@ void Menu1to1()
 		getline(cin, tempstr);
 		utilities::trimString(tempstr);
 
-		if (LineExists(tempstr))
+		if (!LinesClass::LineExists(tempstr))
 			break;
 
 		cout << "\nInvalid input!";
@@ -303,10 +303,32 @@ void Menu1to1()
 
 void Menu1to3()
 {
+	ui_utilities::ClearScreen();
+	ui_utilities::ClearScreen();
+	ui_utilities::PrintBanner();
 
-	
+	cout << string(3, '\n');
+
+	string tempstr;
+
+	while (1)
+	{
+		cout << "\nInsert line's ID:";
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (LinesClass::RemoveBusLineByID(tempstr))
+			break;
+
+		cout << "\nLine not found!";
+	}
+
+
+	cout << "\nLine removed, Press any key to continue...";
+	cin.get();
+
+	return;
 }
-
 
 
 void ui::StartMenu()

@@ -154,6 +154,17 @@ bool LinesClass::LineExists(const string & argIdentifier) const
 	return false;
 }
 
+int SearchLine(const string& argIdentifier) const
+{
+	for (int i = 0; i < lines.size(); ++i)
+	{
+		if (lines[i].GetID() == argIdentifier)
+			return i;
+	}
+	return -1;
+}
+
+
 void LinesClass::PrintLinesNames() const
 {
 	bool firstIteration = true;
