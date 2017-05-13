@@ -74,8 +74,9 @@ void ui_utilities::ClearScreen()
 			cout << "Failure in setting window size\n" << GetLastError();
 			return FALSE;
 		}
+		
+		return TRUE;
 	}
-	return TRUE;
 
 #else
 
