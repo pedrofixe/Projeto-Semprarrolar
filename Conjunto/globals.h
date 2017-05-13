@@ -26,7 +26,7 @@ class LinesClass {
 
 		void PrintLinesNames() const;
 		bool LineExists(const string& lineIdentifier) const;
-		const vector<Line>& GetLines() const; // n sei se vai ser usado
+		vector<Line>& GetLines(); // cant be const because some methods from other classes only work with non const vectors
 	private:
 		vector<Line> lines;
 
@@ -44,7 +44,7 @@ class DriversClass {
 		void ListDrivers() const;	
 		bool DriverExists(const string&) const;
 
-		Driver* FindDriver(const string& DriverID);
+		Driver* FindDriver(const string& DriverID); // returns a pointer to the specified driver or nullptr if it doesnt exist
 
 		const vector<Driver>& GetDrivers() const; // n sei se vai ser usado
 	private:
@@ -55,10 +55,11 @@ class Bus_StopsClass {
 	// esta classe tem que ser seriamente repensada e re-escrita.
 	public:
 		void AddLineToBusStop(Line* ptr_Line, const string& Bus_Stop_Name);
-		void RemoveLineFromBusStop(Line* ptr_Line, const string& Bus_Stop_Name);
-		void RemoveLineFromALLBus_Stops(Line* ptr_Line);
-		Bus_Stop* FindBus_StopByName(const string&);
+		//void RemoveLineFromBusStop(Line* ptr_Line, const string& Bus_Stop_Name);
+		//void RemoveLineFromALLBus_Stops(Line* ptr_Line);
+		Bus_Stop* FindBus_StopByName(const string&); // returns a pointer to the specified bus stop or nullptr if it doesnt exist
 		void PrintAllBus_Stops_Names() const;
+		void RebuildBus_Stops(vector<Line>&);
 		void RemoveBusStop(const string&);
 	private:
 		vector<Bus_Stop> vecBusStops;
