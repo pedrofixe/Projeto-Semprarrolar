@@ -452,6 +452,27 @@ void Buses_Class::RemoveShift(const string & BusID, const Shift& argShift)
 
 // -- SHIFTS_INTERFACE CLASS -- \\
 
+bool LoadFromFile(const string& filename)
+{
+	ifstream shifts_file(filename);
+
+	if (buses_file.fail())
+	{
+		buses_file.close();
+		return false;
+	}
+
+	// Load lines
+	string tempstr;
+	while (getline(buses_file, tempstr)) {
+		utilities::trimString(tempstr); 
+		mapBusesIDs.insert(make_pair(tempstr, set<Shift>()));
+	}
+	buses_file.close();
+	return true;
+
+}
+
 void Shifts_InterfaceClass::InsertShift(const Shift &argShift)
 {
 	setShifts.insert(argShift);

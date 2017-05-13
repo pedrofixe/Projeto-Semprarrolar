@@ -19,6 +19,8 @@ void PreMenu()
 		cout << "Invalid input";
 	}
 
+	LinesClass::LoadFromFile(temp);
+
 	cout << "\n";
 
 	while(1)
@@ -35,6 +37,8 @@ void PreMenu()
 
 		cout << "Invalid input";
 	}
+
+	DriversClass::LoadFromFile(temp);
 
 	cout << '\n';
 
@@ -69,6 +73,8 @@ void PreMenu()
 
 		cout << "Invalid input";
 	}
+
+	SetConsoleWidth(Width) && SetConsoleHeight(Height) && SetBannerFilename(filename)
 }
 
 void MainMenu()

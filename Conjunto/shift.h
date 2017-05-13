@@ -14,6 +14,14 @@ class Shift {
 		const Driver& GetDriver() const;
 		const string& GetBusID() const;
 		const Line& GetLine() const;
+
+		void SetDay(const unsigned int&);
+		void SetStartHour(const unsigned int&);
+		void SetEndHour(const unsigned int&);
+		void SetDuration(const unsigned int&);
+		void SetDriver(const Driver&);
+		void 
+
 		// Construtor:
 		Shift(unsigned int day, unsigned int startHour, unsigned int endHour, const Driver*, const string& BusID, const Line*);
 		// "less than" operator overload. Used to order the intern set container of Shifts_Interface
