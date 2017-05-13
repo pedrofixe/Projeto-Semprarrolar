@@ -1,5 +1,77 @@
 #include "ui.h"
 
+void PreMenu()
+{
+	string temp;
+
+
+	while(1)
+	{
+		cout <<"\nInsert lines filename:";
+
+		getline(cin, temp);
+		cout << "\n";
+
+		ifstream linesfile(temp);
+
+		if (!linesfile.fail())
+			break;
+
+		cout << "Invalid input";
+	}
+
+	cout << "\n";
+
+	while(1)
+	{
+		cout <<"\nInsert drivers filename:";
+
+		getline(cin, temp);
+		cout << "\n";
+
+		ifstream driversfile(temp);
+
+		if (!driversfile.fail())
+			break;
+
+		cout << "Invalid input";
+	}
+
+	cout << '\n';
+
+	while(1)
+	{
+		cout <<"\nInsert shifts filename:";
+
+		getline(cin, temp);
+		cout << "\n";
+
+		ifstream shiftsfile(temp);
+
+		if (!shiftsfile.fail())
+			break;
+
+		cout << "Invalid input";
+	}
+
+	cout << '\n';
+
+	while(1)
+	{
+		cout <<"\nInsert bus filename:";
+
+		getline(cin, temp);
+		cout << "\n";
+
+		ifstream busfile(temp);
+
+		if (!busfile.fail())
+			break;
+
+		cout << "Invalid input";
+	}
+}
+
 void MainMenu()
 {
 	ui_utilities::ClearScreen();
@@ -71,8 +143,11 @@ bool ui::StartMenu(const string& filename)
 		MainMenu();
 }
 
-bool ui::StartMenu(const int&, const int&, const string&);
-
+bool ui::StartMenu(const int& Width, const int& Height, const string& filename)
+{
+	if (SetConsoleWidth(Width) && SetConsoleHeight(Height) && SetBannerFilename(filename))
+		MainMenu();
+}
 
 
 bool ui::SetConsoleWidth(const int& Width)
