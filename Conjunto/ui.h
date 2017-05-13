@@ -15,17 +15,17 @@ public:
 	bool StartMenu(const string&);
 	bool StartMenu(const int&, const int&, const string&);
 
-	bool SetConsoleWidth(const int&);
-	bool SetConsoleHeight(const int&);
+	bool SetConsoleWidth(const unsigned int&);
+	bool SetConsoleHeight(const unsigned int&);
 	bool SetBannerFilename(const string&);
 
-	int GetConsoleWidth() const;
-	int GetConsoleHeight() const;
-	int GetBannerFilename() const;
+	unsigned int GetConsoleWidth();
+	unsigned int GetConsoleHeight();
+	string GetBannerFilename();
 
 private:
-	int ConsoleWidth = 150;
-	int ConsoleHeight = 40;
+	unsigned int ConsoleWidth = 150;
+	unsigned int ConsoleHeight = 40;
 
 	string bannerfilename = "asciibanner.txt";
 

@@ -12,7 +12,8 @@ namespace utilities{
 	void swap(T&, T&);
 	void trimString(string&);
 	int intSize(int);
-	string DayNumberToString(const unsigned int &num);
+	bool is_numeric(string);
+	string DayNumberToString(const unsigned int&);
 };
 
 
