@@ -4,7 +4,6 @@ void PreMenu()
 {
 	string temp;
 
-
 	while(1)
 	{
 		cout <<"\nInsert lines filename:";
