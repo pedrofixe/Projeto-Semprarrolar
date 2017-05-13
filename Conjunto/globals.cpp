@@ -209,6 +209,14 @@ void DriversClass::AddShiftToDriver(const string & argDriverID, const Shift& arg
 	}
 }
 
+void DriversClass::RemoveShiftFromDriver(const string & argDriverID, const Shift &argShift)
+{
+	Driver* driver = FindDriver(argDriverID);
+	if (driver) {
+		driver->RemoveShift(argShift);
+	}
+}
+
 bool DriversClass::LoadFromFile(const string& fileName)
 {
 	ifstream hFile_Drivers(fileName);
@@ -509,11 +517,6 @@ bool Shifts_InterfaceClass::LoadFromFile(const string& argFilename)
 		getline(sstreamFileLine, lineID, ',');
 		Shift newShift(day, startHour, endHour, driverID, busID, lineID);
 		InsertShift(newShift);
-		// but we will also have to add the shift to the corresponding driver and bus..
-		// first to the buses
-		Buses.AddShift(busID, newShift);
-		// then to the moon... I mean, the corresponding driver;
-		Drivers.AddShiftToDriver(driverID, newShift);
 		
 	}
 	shifts_file.close();
@@ -529,6 +532,12 @@ bool Shifts_InterfaceClass::LoadFromFile(const string &)
 void Shifts_InterfaceClass::InsertShift(const Shift &argShift)
 {
 	setShifts.insert(argShift);
+
+	// but we will also have to add the shift to the corresponding driver and bus..
+	// first to the buses
+	Buses.AddShift(argShift.GetBusID(), argShift);
+	// then to the moon... I mean, the corresponding driver;
+	Drivers.AddShiftToDriver(argShift.GetDriverID(), argShift);
 }
 
 void Shifts_InterfaceClass::RemoveShift(const Shift& argShift)
@@ -537,6 +546,9 @@ void Shifts_InterfaceClass::RemoveShift(const Shift& argShift)
 	if (iterator != setShifts.end()) {
 		setShifts.erase(iterator);
 	}
+	// but we also have to remove the shift from the corresponding driver and bus object
+	Buses.RemoveShift(argShift.GetBusID(), argShift);
+	Drivers.RemoveShiftFromDriver(argShift.GetDriverID(), argShift);
 }
 
 const set<Shift>& Shifts_InterfaceClass::GetShifts() const

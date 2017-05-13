@@ -41,6 +41,7 @@ class DriversClass {
 
 		bool CanAddShiftToDriver(const string& DriverID, const Shift&);
 		void AddShiftToDriver(const string& DriverID, const Shift&);
+		void RemoveShiftFromDriver(const string& DriverID, const Shift&);
 
 		bool LoadFromFile(const string&);
 		void SaveToFile(const string&) const;
