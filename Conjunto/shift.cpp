@@ -1,13 +1,13 @@
 #include "shift.h"
 
-Shift::Shift(unsigned int argDay, unsigned int argStartHour, unsigned int argEndHour, const Driver* argDriver, const string& argBusID, const Line* argLine)
+Shift::Shift(unsigned int argDay, unsigned int argStartHour, unsigned int argEndHour, const string & argDriverID, const string & argBusID, const string & argLineID)
 {
 	day = argDay;
 	startHour = argStartHour;
 	endHour = argEndHour;
-	driver = argDriver;
-	BusID = argBusID;
-	line = argLine;
+	driverID = argDriverID;
+	busID = argBusID;
+	lineID = argLineID;
 }
 
 unsigned int Shift::GetDay() const
@@ -31,19 +31,19 @@ unsigned int Shift::GetDuration() const
 	return endHour - startHour;
 }
 
-const Driver& Shift::GetDriver() const
+const string& Shift::GetDriverID() const
 {
-	return *driver;
+	return driverID;
 }
 
 const string& Shift::GetBusID() const
 {
-	return BusID;
+	return busID;
 }
 
-const Line& Shift::GetLine() const
+const string& Shift::GetLineID() const
 {
-	return *line;
+	return lineID;
 }
 
 
@@ -55,10 +55,10 @@ bool operator<(const Shift &left, const Shift &right)
 	else if (left.GetStartHour() < right.GetStartHour()) {
 		return true;
 	}
-	else if (left.GetLine().GetID() < right.GetLine().GetID()) {
+	else if (left.GetLineID() < right.GetLineID()) {
 		return true;
 	}
-	else if (left.GetDriver().GetID() < right.GetDriver().GetID()) {
+	else if (left.GetBusID() < right.GetBusID()) {
 		return true;
 	}
 	return false;

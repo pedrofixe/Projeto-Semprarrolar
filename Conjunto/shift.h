@@ -11,11 +11,11 @@ class Shift {
 		unsigned int GetStartHour() const;
 		unsigned int GetEndHour() const;
 		unsigned int GetDuration() const;
-		const Driver& GetDriver() const;
+		const string& GetDriverID() const;
 		const string& GetBusID() const;
-		const Line& GetLine() const;
+		const string& GetLineID() const;
 		// Construtor:
-		Shift(unsigned int day, unsigned int startHour, unsigned int endHour, const Driver*, const string& BusID, const Line*);
+		Shift(unsigned int day, unsigned int startHour, unsigned int endHour, const string& DriverID, const string& BusID, const string& LineID);
 		// "less than" operator overload. Used to order the intern set container of Shifts_Interface
 		// Set order is defined by cronological order of the shifts.
 		friend bool operator<(const Shift&, const Shift&);
@@ -23,9 +23,9 @@ class Shift {
 		unsigned int day;
 		unsigned int startHour;
 		unsigned int endHour;
-		const Driver* driver;
-		string BusID;
-		const Line* line;
+		string driverID;
+		string busID;
+		string lineID;
 };
 
 
