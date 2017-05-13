@@ -9,6 +9,55 @@ void MainMenu()
 
 	cout << string(3, '\n');
 
+
+	cout << "1- Line management\n";
+	cout << "2- Driver management\n";
+	cout << "3- Shift management\n";
+	cout << "4- Bus management\n";
+	cout << "5- Program trip\n";
+	cout << "0- Quit\n";
+	cout << "\n";
+
+	string input;
+
+	while (1)
+	{
+		cout << "Selecione uma opcao: ";
+
+		getline(cin, input);
+		cout << "\n";
+
+		if (input == "1")
+		{
+			cout << "Menu1" //Menu1();
+			break;
+		}
+
+		if (input == "2")
+		{
+			cout << "Menu2";
+			break;
+		}
+
+		if (input == "3")
+		{
+			cout << "Menu3";
+			break;
+		}
+
+		if (input == "4")
+		{
+			cout << "Menu4";
+			break;
+		}
+
+		if (input == "0")
+			exit(0);
+
+		cout << "Invalid input\n";
+
+	}
+
 }
 
 void ui::StartMenu()
@@ -16,11 +65,14 @@ void ui::StartMenu()
 	MainMenu();
 }
 
-void ui::StartMenu(const string& filename)
+bool ui::StartMenu(const string& filename)
 {
-	SetBannerFilename(filename);
-	MainMenu();
+	if (SetBannerFilename(filename))
+		MainMenu();
 }
+
+bool ui::StartMenu(const int&, const int&, const string&);
+
 
 
 bool ui::SetConsoleWidth(const int& Width)

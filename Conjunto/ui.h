@@ -12,6 +12,7 @@ class ui{
 public:
 	void StartMenu();
 	bool StartMenu(const string&);
+	bool StartMenu(const int&, const int&, const string&);
 
 	bool SetConsoleWidth(const int&);
 	bool SetConsoleHeight(const int&);
