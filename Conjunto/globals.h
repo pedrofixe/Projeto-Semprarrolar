@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <set>
 #include <map>
+#include <sstream>
 #include "line.h"
 #include "driver.h"
 #include "bus_stop.h"
@@ -52,7 +53,7 @@ class DriversClass {
 };
 
 class Bus_StopsClass {
-	// esta classe tem que ser seriamente repensada e re-escrita.
+	// esta classe tem que ser seriamente repensada e re-escrita. OK FEITO
 	public:
 		void AddLineToBusStop(Line* ptr_Line, const string& Bus_Stop_Name);
 		//void RemoveLineFromBusStop(Line* ptr_Line, const string& Bus_Stop_Name);
@@ -84,13 +85,14 @@ class Buses_Class {
 class Shifts_InterfaceClass {
 	public:
 		bool LoadFromFile(const string&);
-		void SaveToFile(const string&) const;
+		void SaveToFile() const;
 		void InsertShift(const Shift&);
 		const set<Shift>& GetShifts() const;
 		void ListShifts() const;
 		void RemoveShift(const Shift&);
 	private:
 		set<Shift> setShifts;
+		string filename;
 };
 
 static LinesClass	 Lines;

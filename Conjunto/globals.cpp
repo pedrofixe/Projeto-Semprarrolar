@@ -462,25 +462,48 @@ void Buses_Class::RemoveShift(const string & BusID, const Shift& argShift)
 
 // -- SHIFTS_INTERFACE CLASS -- \\
 
-bool LoadFromFile(const string& filename)
+bool Shifts_InterfaceClass::LoadFromFile(const string& argFilename)
 {
-	ifstream shifts_file(filename);
+	ifstream shifts_file(argFilename);
+	filename = argFilename;
 
-	if (buses_file.fail())
+	if (shifts_file.fail())
 	{
-		buses_file.close();
+		shifts_file.close();
 		return false;
 	}
 
 	// Load lines
 	string tempstr;
-	while (getline(buses_file, tempstr)) {
+	while (getline(shifts_file, tempstr)) {
 		utilities::trimString(tempstr); 
-		mapBusesIDs.insert(make_pair(tempstr, set<Shift>()));
+		istringstream sstreamFileLine(tempstr);
+		unsigned int day, startHour, endHour;
+		string driverID, busID, lineID;
+		getline(sstreamFileLine, tempstr, ',');
+		day = stoi(tempstr);
+		getline(sstreamFileLine, tempstr, ',');
+		startHour = stoi(tempstr);
+		getline(sstreamFileLine, tempstr, ',');
+		endHour = stoi(tempstr);
+		//
+		getline(sstreamFileLine, driverID, ',');
+		getline(sstreamFileLine, busID, ',');
+		getline(sstreamFileLine, lineID, ',');
+		Shift newShift(day, startHour, endHour, driverID, busID, lineID);
+		InsertShift(newShift);
+		// but we will also have to add the shift to the corresponding driver and bus..
+
+		
 	}
-	buses_file.close();
+	shifts_file.close();
 	return true;
 
+}
+
+bool Shifts_InterfaceClass::LoadFromFile(const string &)
+{
+	return false;
 }
 
 void Shifts_InterfaceClass::InsertShift(const Shift &argShift)
