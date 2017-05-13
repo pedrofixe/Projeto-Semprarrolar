@@ -5,8 +5,10 @@
 #include <vector>
 #include <iostream>
 #include <iomanip>
+#include <cmath>
 #include "bus_stop.h"
 #include "utilities.h"
+#include "globals.h"
 
 using namespace std;
 
@@ -26,6 +28,7 @@ class Line {
 
 	private:
 		static void PrintSpecificSchedule(const vector<string>& bus_stops, const vector<unsigned int>& timeBetweenStops, unsigned int freq, unsigned int offset);
+		static int CalculateOffset(const vector<unsigned int> timeBetweenStops, const unsigned int &Bus_Stop_Number);
 		string ID;
 		unsigned int freq;
 		vector<string> bus_stops;

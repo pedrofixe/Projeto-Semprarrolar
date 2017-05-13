@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <iostream>
 #include "line.h"
+#include "globals.h"
 
 using namespace std;
 
