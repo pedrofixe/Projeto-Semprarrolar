@@ -2,6 +2,8 @@
 
 void PreMenu()
 {
+	ui_utilities::ClearScreen();
+	ui_utilities::ClearScreen();
 	string temp;
 
 	while(1)
@@ -18,6 +20,8 @@ void PreMenu()
 
 		cout << "Invalid input";
 	}
+
+	LinesClass::LoadFromFile(temp);
 
 	cout << "\n";
 
@@ -36,24 +40,26 @@ void PreMenu()
 		cout << "Invalid input";
 	}
 
-	cout << '\n';
-
-	while(1)
-	{
-		cout <<"\nInsert shifts filename:";
-
-		getline(cin, temp);
-		cout << "\n";
-
-		ifstream shiftsfile(temp);
-
-		if (!shiftsfile.fail())
-			break;
-
-		cout << "Invalid input";
-	}
+	DriversClass::LoadFromFile(temp);
 
 	cout << '\n';
+
+	// while(1)
+	// {
+	// 	cout <<"\nInsert shifts filename:";
+
+	// 	getline(cin, temp);
+	// 	cout << "\n";
+
+	// 	ifstream shiftsfile(temp);
+
+	// 	if (!shiftsfile.fail())
+	// 		break;
+
+	// 	cout << "Invalid input";
+	// }
+
+	// cout << '\n';
 
 	while(1)
 	{
@@ -69,6 +75,8 @@ void PreMenu()
 
 		cout << "Invalid input";
 	}
+
+	Buses_Class::LoadFromFile(temp);
 }
 
 void MainMenu()

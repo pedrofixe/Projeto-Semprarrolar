@@ -4,6 +4,7 @@
 #include <string>
 #include <fstream>
 #include "ui_utilities.h"
+#include "globals.h"
 
 using namespace std;
 

@@ -83,6 +83,8 @@ class Buses_Class {
 
 class Shifts_InterfaceClass {
 	public:
+		bool LoadFromFile(const string&);
+		void SaveToFile(const string&) const;
 		void InsertShift(const Shift&);
 		const set<Shift>& GetShifts() const;
 		void ListShifts() const;

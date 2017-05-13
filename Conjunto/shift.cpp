@@ -10,6 +10,10 @@ Shift::Shift(unsigned int argDay, unsigned int argStartHour, unsigned int argEnd
 	lineID = argLineID;
 }
 
+Shift::Shift()
+{
+}
+
 unsigned int Shift::GetDay() const
 {
 	return day;
@@ -62,4 +66,34 @@ bool operator<(const Shift &left, const Shift &right)
 		return true;
 	}
 	return false;
+}
+
+void Shift::SetDay(const unsigned int &argDay)
+{
+	day = argDay;
+}
+
+void Shift::SetStartHour(const unsigned int& argStartHour)
+{
+	startHour = argStartHour;
+}
+
+void Shift::SetEndHour(const unsigned int& argEndHour)
+{
+	endHour = argEndHour;
+}
+
+void Shift::SetDriverID(const string& argDriverID)
+{
+	driverID = argDriverID;
+}
+
+void Shift::SetBusID(const string &argBusID)
+{
+	busID = argBusID;
+}
+
+void Shift::SetLineID(const string& argLineID)
+{
+	lineID = argLineID;
 }
