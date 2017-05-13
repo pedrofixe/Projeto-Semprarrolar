@@ -77,23 +77,23 @@ void PreMenu()
 	}
 
 	Buses_Class::LoadFromFile(temp);
+
+	MainMenu();
 }
 
 void MainMenu()
 {
 	ui_utilities::ClearScreen();
 	ui_utilities::ClearScreen();
-
 	ui_utilities::PrintBanner();
 
 	cout << string(3, '\n');
-
 
 	cout << "1- Line management\n";
 	cout << "2- Driver management\n";
 	cout << "3- Shift management\n";
 	cout << "4- Bus management\n";
-	cout << "5- Program trip\n";
+	cout << "5- Calculate shortest trip\n";
 	cout << "0- Quit\n";
 	cout << "\n";
 
@@ -101,14 +101,14 @@ void MainMenu()
 
 	while (1)
 	{
-		cout << "Selecione uma opcao: ";
+		cout << "Select an option: ";
 
 		getline(cin, input);
 		cout << "\n";
 
 		if (input == "1")
 		{
-			cout << "Menu1" //Menu1();
+			Menu1();
 			break;
 		}
 
@@ -130,6 +130,12 @@ void MainMenu()
 			break;
 		}
 
+		if (input == "5")
+		{
+			cout << "Menu5";
+			break;
+		}
+
 		if (input == "0")
 			exit(0);
 
@@ -138,6 +144,194 @@ void MainMenu()
 	}
 
 }
+
+void Menu1()
+{
+	ui_utilities::ClearScreen();
+	ui_utilities::ClearScreen();
+	ui_utilities::PrintBanner();
+
+	cout << string(3, '\n');
+
+	cout << "1- Create line\n";
+	cout << "2- Edit line\n";
+	cout << "3- Remove line\n";
+	cout << "9- Return\n";
+	cout << "0- Quit\n";
+	cout << "\n";
+
+	string input;
+
+	while (1)
+	{
+		cout << "Select an option: ";
+
+		getline(cin, input);
+		cout << "\n";
+
+		if (input == "1")
+		{
+			Menu1to1();
+			break;
+		}
+
+		if (input == "2")
+		{
+			Menu1to2();
+			break;
+		}
+
+		if (input == "3")
+		{
+			Menu1to3();
+			break;
+		}
+
+		if (input == "9")
+		{
+			return;
+		}
+
+		if (input == "0")
+			exit(0);
+
+		cout << "Invalid input\n";
+
+	}
+
+}
+
+void Menu1para1()
+{
+	ui_utilities::ClearScreen();
+	ui_utilities::ClearScreen();
+	ui_utilities::PrintBanner();
+	
+	string newtempstr;
+	linha templinha;
+	string tempstr;
+	vector<string> paragens;
+	vector<int> tempoviagem;
+
+
+	// Se nao for um numero, pedir novo input
+	while (1)
+	{
+		cout << "\nInsira o ID:";
+		getline(cin, tempstr);
+
+		// Condicao para a continuacao do programa
+		if (is_numeric(tempstr))
+		{
+			bool test = 1;
+			// Verificar se ja existte alguma linha com o ID igual ao inserido
+			for (int i = 0; i < LinhasGlobais.size(); ++i)
+			{
+				if (LinhasGlobais[i].ID == stoi(tempstr))
+				{
+					cout << "\nJa exite uma linha com o ID inserido";
+					test = 0;
+					break;
+				}
+			}
+
+			if (test)
+				break;
+		}
+		else
+		{
+			cout << "\nInput invalido!";
+		}
+	}
+	templinha.ID = stoi(tempstr);
+
+
+	// Se nao for um numero, pedir novo input
+	while (1)
+	{
+		cout << "\nInsira a frequencia da linha:";
+		getline(cin, tempstr);
+
+		// Condicao para a continuacao do programa
+		if (is_numeric(tempstr))
+			break;
+
+		cout << "\nInput invalido!";
+	}
+	templinha.freq = stoi(tempstr);
+
+
+	// Se existir algum numero na sequencia, pedir novo input
+	while (1)
+	{
+		paragens.resize(0);
+
+		cout << "\nInsira as paragens separadas por virgulas:";
+		getline(cin, tempstr);
+		tempstr += ',';
+
+		bool test = 1;
+
+		stringstream ss1(tempstr);
+		while (getline(ss1, newtempstr, ','))
+		{
+			if (is_numeric(newtempstr))
+			{
+				test = 0;
+				break;
+			}
+			paragens.push_back(newtempstr);
+		}
+
+		// Condicao para a continuacao do programa
+		if (test && paragens.size() > 1)
+			break;
+		cout << "\nInput invalido!";
+	}
+	templinha.paragens = paragens;
+
+
+	// Se existirem caracteres nao numericos, pedir novo input
+	while (1)
+	{
+		tempoviagem.resize(0);
+
+		cout << "\nInsira os tempos entre paragens, entre virgulas:";
+		getline(cin, tempstr);
+		tempstr += ',';
+
+		bool test = 1;
+
+		stringstream ss2(tempstr);
+		while (getline(ss2, newtempstr, ','))
+		{
+			if (!is_numeric(newtempstr))
+			{
+				test = 0;
+				break;
+			}
+			tempoviagem.push_back(stoi(newtempstr));
+		}
+
+		// Condicao para a continuacao do programa
+		if (test && newtempstr.size() == 0 && tempoviagem.size() == paragens.size() - 1)
+			break;
+
+		cout << "\nInput invalido!";
+	}
+
+	templinha.tempoviagem = tempoviagem;
+
+	LinhasGlobais.push_back(templinha);
+
+	SaveLinhas();
+
+	cout << "\nLinha Criada, Pressione qualquer tecla para continuar...";
+
+	cin.get();
+	Menu1();
+}
+
 
 void ui::StartMenu()
 {
