@@ -39,6 +39,9 @@ class DriversClass {
 		bool RemoveDriver(const Driver&);
 		bool RemoveDriverByID(const string&);
 
+		bool CanAddShiftToDriver(const string& DriverID, const Shift&);
+		void AddShiftToDriver(const string& DriverID, const Shift&);
+
 		bool LoadFromFile(const string&);
 		void SaveToFile(const string&) const;
 

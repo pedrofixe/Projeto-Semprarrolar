@@ -192,6 +192,23 @@ bool DriversClass::RemoveDriverByID(const string& argDriverID)
 	return false;
 }
 
+bool DriversClass::CanAddShiftToDriver(const string & argDriverID, const Shift& argShift)
+{
+	Driver* driver = FindDriver(argDriverID);
+	if (driver) {
+		return driver->CanAddShift(argShift);
+	}
+	return false;
+}
+
+void DriversClass::AddShiftToDriver(const string & argDriverID, const Shift& argShift)
+{
+	Driver* driver = FindDriver(argDriverID);
+	if (driver) {
+		driver->AddShift(argShift);
+	}
+}
+
 bool DriversClass::LoadFromFile(const string& fileName)
 {
 	ifstream hFile_Drivers(fileName);
@@ -493,7 +510,10 @@ bool Shifts_InterfaceClass::LoadFromFile(const string& argFilename)
 		Shift newShift(day, startHour, endHour, driverID, busID, lineID);
 		InsertShift(newShift);
 		// but we will also have to add the shift to the corresponding driver and bus..
-
+		// first to the buses
+		Buses.AddShift(busID, newShift);
+		// then to the moon... I mean, the corresponding driver;
+		Drivers.AddShiftToDriver(driverID, newShift);
 		
 	}
 	shifts_file.close();
@@ -529,7 +549,7 @@ void Shifts_InterfaceClass::ListShifts() const
 	cout << setw(2) << "" << setw(12) << left << "Day" << setw(15) << "Start Hour" << setw(15) << "End Hour" << setw(10) << "Line" << setw(30) << "Driver" << setw(10) << "Bus" << endl;
 	for (const Shift &shift : setShifts) {
 		string dayName = utilities::DayNumberToString(shift.GetDay());
-		cout << setw(2) << "" << setw(12) << left << dayName << setw(15) << shift.GetStartHour() + ":00" << setw(15) << shift.GetEndHour() + ":00" << setw(10) << shift.GetLine().GetID() << setw(30) << "[" + shift.GetDriver().GetID() + "]" +shift.GetDriver().GetName() << setw(10) << shift.GetBusID() << endl;
+		cout << setw(2) << "" << setw(12) << left << dayName << setw(15) << shift.GetStartHour() + ":00" << setw(15) << shift.GetEndHour() + ":00" << setw(10) << shift.GetLineID() << setw(30) << "[" + shift.GetDriverID() + "]" +shift.GetDriverID << setw(10) << shift.GetBusID() << endl;
 	}
 	cout << right;
 }
