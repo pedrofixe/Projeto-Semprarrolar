@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <iostream>
 #include "line.h"
 
 using namespace std;

@@ -5,6 +5,8 @@
 void LinesClass::AddBusLine(const Line& inputLine)
 {
 	lines.push_back(inputLine);
+	// rebuild bus stops cache
+	Bus_Stops.RebuildBus_Stops(lines);
 }
 
 bool LinesClass::RemoveBusLine(const Line& inputLine)
@@ -14,6 +16,8 @@ bool LinesClass::RemoveBusLine(const Line& inputLine)
 		if (lines[i].GetID() == inputLine.GetID())
 		{
 			lines.erase(lines.begin() + i);
+			// rebuild bus stops cache
+			Bus_Stops.RebuildBus_Stops(lines);
 			return true;
 		}
 	}
@@ -26,6 +30,8 @@ bool LinesClass::RemoveBusLineByID(const string& argIdentifier)
 	for (auto iterator = lines.cbegin(); iterator != lines.cend(); iterator++) {
 		if (iterator->GetID == argIdentifier) { // found
 			lines.erase(iterator);
+			// rebuild bus stops cache
+			Bus_Stops.RebuildBus_Stops(lines);
 			return true;
 		}
 	}
@@ -33,8 +39,9 @@ bool LinesClass::RemoveBusLineByID(const string& argIdentifier)
 	return false;
 }
 
-bool LinesClass::LoadFromFile(const string& filename)
+bool LinesClass::LoadFromFile(const string& argFilename)
 {
+	filename = argFilename;
 	ifstream lines_file(filename);
 
 	if (lines_file.fail()) 
@@ -97,11 +104,15 @@ bool LinesClass::LoadFromFile(const string& filename)
 		lines.push_back(templine); // Add templine to global line vector
 	}
 	lines_file.close();
+
+	// rebuild bus stops cache
+	Bus_Stops.RebuildBus_Stops(lines);
+
 	return true;
 }
 
 
-void LinesClass::SaveToFile(const string& filename) const {
+void LinesClass::SaveToFile() const {
 	ofstream lines_file(filename);
 
 	vector<Bus_Stop> stop_vector;
@@ -172,6 +183,9 @@ bool DriversClass::RemoveDriver(const Driver& argDriver)
 {
 	for (auto iterator = drivers.cbegin(); iterator != drivers.cend(); iterator++) {
 		if (iterator->GetID() == argDriver.GetID) { // found
+			for (const Shift& shift : iterator->GetDriverShifts()) {
+				Shifts_Interface.RemoveShift(shift);
+			}
 			drivers.erase(iterator);
 			return true;
 		}
@@ -184,6 +198,9 @@ bool DriversClass::RemoveDriverByID(const string& argDriverID)
 {
 	for (auto iterator = drivers.cbegin(); iterator != drivers.cend(); iterator++) {
 		if (iterator->GetID() == argDriverID) { // found
+			for (const Shift& shift : iterator->GetDriverShifts()) {
+				Shifts_Interface.RemoveShift(shift);
+			}
 			drivers.erase(iterator);
 			return true;
 		}
@@ -217,9 +234,10 @@ void DriversClass::RemoveShiftFromDriver(const string & argDriverID, const Shift
 	}
 }
 
-bool DriversClass::LoadFromFile(const string& fileName)
+bool DriversClass::LoadFromFile(const string& argFilename)
 {
-	ifstream hFile_Drivers(fileName);
+	filename = argFilename;
+	ifstream hFile_Drivers(filename);
 	if (hFile_Drivers.fail()) {
 		hFile_Drivers.close();
 		return false;
@@ -259,9 +277,9 @@ bool DriversClass::LoadFromFile(const string& fileName)
 	return true;
 }
 
-void DriversClass::SaveToFile(const string& fileName) const
+void DriversClass::SaveToFile() const
 {
-	ofstream hFile_Drivers(fileName);
+	ofstream hFile_Drivers(filename);
 	for (const Driver &driver : drivers) {
 		hFile_Drivers << driver.GetID() << " ; " << driver.GetName() << " ; " << driver.GetMaxHoursShift() << " ; " << driver.GetMaxHoursWeek << " ; " << driver.GetMinHoursRest() << endl;
 	}
@@ -379,8 +397,9 @@ void Bus_StopsClass::RemoveBusStop(const string & arg_Bus_Stop_Name)
 
 // -- BUSES CLASS -- \\
 
-bool Buses_Class::LoadFromFile(const string& filename)
+bool Buses_Class::LoadFromFile(const string& argFilename)
 {
+	filename = argFilename;
 	ifstream buses_file(filename);
 
 	if (buses_file.fail())
@@ -399,7 +418,7 @@ bool Buses_Class::LoadFromFile(const string& filename)
 	return true;
 }
 
-void Buses_Class::SaveToFile(const string& filename) const
+void Buses_Class::SaveToFile() const
 {
 	ofstream buses_file(filename);
 	for (const auto& bus_pair : mapBusesIDs) {
@@ -539,7 +558,7 @@ void Shifts_InterfaceClass::SaveToFile() const
 			<< shift.GetEndHour() << ","
 			<< shift.GetDriverID() << ","
 			<< shift.GetBusID() << ","
-			<< shift.GetLineID();
+			<< shift.GetLineID() << endl;
 	}
 	shifts_file.close();
 }
@@ -565,6 +584,24 @@ void Shifts_InterfaceClass::RemoveShift(const Shift& argShift)
 	// but we also have to remove the shift from the corresponding driver and bus object
 	Buses.RemoveShift(argShift.GetBusID(), argShift);
 	Drivers.RemoveShiftFromDriver(argShift.GetDriverID(), argShift);
+}
+
+void Shifts_InterfaceClass::RemoveLineShifts(const string & LineID)
+{
+	for (const Shift& shift : setShifts) {
+		if (shift.GetLineID() == LineID) {
+			RemoveShift(shift);
+		}
+	}
+}
+
+void Shifts_InterfaceClass::RemoveBus_Shifts(const string & BusID)
+{
+	for (const Shift& shift : setShifts) {
+		if (shift.GetBusID() == BusID) {
+			RemoveShift(shift);
+		}
+	}
 }
 
 const set<Shift>& Shifts_InterfaceClass::GetShifts() const

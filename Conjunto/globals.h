@@ -23,12 +23,13 @@ class LinesClass {
 		bool RemoveBusLineByID(const string& Identifier);
 
 		bool LoadFromFile(const string&);
-		void SaveToFile(const string&) const;
+		void SaveToFile() const;
 
 		void PrintLinesNames() const;
 		bool LineExists(const string& lineIdentifier) const;
 		vector<Line>& GetLines(); // cant be const because some methods from other classes only work with non const vectors
 	private:
+		string filename;
 		vector<Line> lines;
 
 };
@@ -44,7 +45,7 @@ class DriversClass {
 		void RemoveShiftFromDriver(const string& DriverID, const Shift&);
 
 		bool LoadFromFile(const string&);
-		void SaveToFile(const string&) const;
+		void SaveToFile() const;
 
 		void ListDrivers() const;	
 		bool DriverExists(const string&) const;
@@ -53,6 +54,7 @@ class DriversClass {
 
 		const vector<Driver>& GetDrivers() const; // n sei se vai ser usado
 	private:
+		string filename;
 		vector<Driver> drivers;
 };
 
@@ -73,7 +75,7 @@ class Bus_StopsClass {
 class Buses_Class {
 	public:
 		bool LoadFromFile(const string&);
-		void SaveToFile(const string&) const;
+		void SaveToFile() const;
 		void PrintBuses() const;
 		bool InsertBus(const string& BusID); // These 2 methods will return false when the bus specified isnt valid
 		bool RemoveBus(const string& BusID);
@@ -83,6 +85,7 @@ class Buses_Class {
 		void AddShift(const string& BusID, const Shift&);
 		void RemoveShift(const string& BusID, const Shift&);
 	private:
+		string filename;
 		map<string, set<Shift> > mapBusesIDs;
 };
 
@@ -94,6 +97,8 @@ class Shifts_InterfaceClass {
 		const set<Shift>& GetShifts() const;
 		void ListShifts() const;
 		void RemoveShift(const Shift&);
+		void RemoveLineShifts(const string& LineID);
+		void RemoveBus_Shifts(const string& BusID);
 	private:
 		set<Shift> setShifts;
 		string filename;
