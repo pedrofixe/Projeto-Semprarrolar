@@ -156,7 +156,7 @@ void LinesClass::PrintLinesNames() const
 	}
 }
 
-const vector<Line>& LinesClass::GetLines() const
+vector<Line>& LinesClass::GetLines()
 {
 	return lines;
 }
@@ -291,24 +291,24 @@ void Bus_StopsClass::AddLineToBusStop(Line * ptr_Line, const string & arg_Bus_St
 	newBusStop.AddLine(ptr_Line);
 	vecBusStops.push_back(newBusStop);
 }
-
-void Bus_StopsClass::RemoveLineFromBusStop(Line * ptr_Line, const string & arg_Bus_Stop_Name)
-{
-	Bus_Stop* ptr_BusStop = FindBus_StopByName(arg_Bus_Stop_Name);
-	if (ptr_BusStop->GetLinesCount() > 1) {
-		ptr_BusStop->RemoveLineFromStop(ptr_Line);
-	}
-	else { // delete bus stop if no bus stops there
-		RemoveBusStop(arg_Bus_Stop_Name);
-	}
-}
-
-void Bus_StopsClass::RemoveLineFromALLBus_Stops(Line * ptr_Line)
-{
-	for (auto& bus_stop : vecBusStops) {
-		bus_stop.RemoveLineFromStop(ptr_Line); // will only remove the line if it is present on that bus stop
-	}
-}
+//
+//void Bus_StopsClass::RemoveLineFromBusStop(Line * ptr_Line, const string & arg_Bus_Stop_Name)
+//{
+//	Bus_Stop* ptr_BusStop = FindBus_StopByName(arg_Bus_Stop_Name);
+//	if (ptr_BusStop->GetLinesCount() > 1) {
+//		ptr_BusStop->RemoveLineFromStop(ptr_Line);
+//	}
+//	else { // delete bus stop if no bus stops there
+//		RemoveBusStop(arg_Bus_Stop_Name);
+//	}
+//}
+//
+//void Bus_StopsClass::RemoveLineFromALLBus_Stops(Line * ptr_Line)
+//{
+//	for (auto& bus_stop : vecBusStops) {
+//		bus_stop.RemoveLineFromStop(ptr_Line); // will only remove the line if it is present on that bus stop
+//	}
+//}
 
 Bus_Stop * Bus_StopsClass::FindBus_StopByName(const string & arg_Bus_Stop_Name)
 {
@@ -329,6 +329,16 @@ void Bus_StopsClass::PrintAllBus_Stops_Names() const
 		}
 		else (cout << ",");
 		cout << " " << bus_stop.GetName();
+	}
+}
+
+void Bus_StopsClass::RebuildBus_Stops(vector<Line>& vecLines)
+{
+	vecBusStops.clear();
+	for (Line& linha : vecLines) {
+		for (const Bus_Stop& bus_stop : linha.GetBus_Stops()) {
+			AddLineToBusStop(&linha, bus_stop.GetName());
+		}
 	}
 }
 
