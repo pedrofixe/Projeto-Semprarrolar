@@ -4,16 +4,16 @@
 
 void LinesClass::AddBusLine(const Line& inputLine)
 {
-	Lines.push_back(inputLine);
+	lines.push_back(inputLine);
 }
 
 bool LinesClass::RemoveBusLine(const Line& inputLine)
 {
 	for (int i = 0; i < lines.size(); ++i)
 	{
-		if (Lines[i].GetID() == inputLine.GetID())
+		if (lines[i].GetID() == inputLine.GetID())
 		{
-			Lines.erase(lines.begin() + i);
+			lines.erase(lines.begin() + i);
 			return true;
 		}
 	}
