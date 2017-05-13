@@ -19,8 +19,3 @@ Driver Bus::GetDriver()
 {
 	return *driver;
 }
-
-unsigned int Bus::GetOrderNum()
-{
-	return orderNum;
-}
