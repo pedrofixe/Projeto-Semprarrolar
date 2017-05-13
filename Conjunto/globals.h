@@ -23,13 +23,14 @@ class LinesClass {
 	public:
 		void AddBusLine(const Line&);
 		bool RemoveBusLine(const Line&);
-		bool RemoveBusLineByID(const string& Identifier);
+		bool RemoveBusLineByID(const string&);
 
 		bool LoadFromFile(const string&);
 		void SaveToFile() const;
 
 		void PrintLinesNames() const;
-		bool LineExists(const string& lineIdentifier) const;
+		bool LineExists(const string&) const;
+		int SearchLine(const string&) const;
 		vector<Line>& GetLines(); // cant be const because some methods from other classes only work with non const vectors
 	private:
 		string filename;
