@@ -15,9 +15,9 @@ using namespace std;
 int main()
 {
 
-	ui ui_start;
+	Line horta;
 
-	ui_start.StartMenu(200, 30, "asciibanner.txt");
+	horta.SetID("coisas");
 
 	cout << "\n\n";
 	return 0;

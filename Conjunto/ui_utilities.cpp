@@ -103,7 +103,7 @@ void ui_utilities::ClearScreen()
 
 	void ui_utilities::PrintBanner(const string& filename, const int& ConsoleWidth)
 	{
-		ifstream banner(filename, fstream::in);
+		ifstream banner(filename);
 
 		cout << "\n";
 		string asciiTemp;

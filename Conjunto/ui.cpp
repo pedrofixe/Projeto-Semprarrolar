@@ -201,199 +201,174 @@ void Menu1()
 
 }
 
-void Menu1para1()
+void Menu1to1()
 {
 	ui_utilities::ClearScreen();
 	ui_utilities::ClearScreen();
 	ui_utilities::PrintBanner();
-	
-	string newtempstr;
-	linha templinha;
-	string tempstr;
-	vector<string> paragens;
-	vector<int> tempoviagem;
+
+	Line templine;
+
+	while (1)
+	{
+		cout << "\nInsert ID:";
+
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (LineExists(tempstr))
+			templine.SetID(tempstr);
+
 
 
 	// Se nao for um numero, pedir novo input
-	while (1)
-	{
-		cout << "\nInsira o ID:";
-		getline(cin, tempstr);
+		while (1)
+		{
+			cout << "\nInsira a frequencia da linha:";
+			getline(cin, tempstr);
 
 		// Condicao para a continuacao do programa
-		if (is_numeric(tempstr))
-		{
-			bool test = 1;
-			// Verificar se ja existte alguma linha com o ID igual ao inserido
-			for (int i = 0; i < LinhasGlobais.size(); ++i)
-			{
-				if (LinhasGlobais[i].ID == stoi(tempstr))
-				{
-					cout << "\nJa exite uma linha com o ID inserido";
-					test = 0;
-					break;
-				}
-			}
-
-			if (test)
+			if (is_numeric(tempstr))
 				break;
-		}
-		else
-		{
+
 			cout << "\nInput invalido!";
 		}
-	}
-	templinha.ID = stoi(tempstr);
-
-
-	// Se nao for um numero, pedir novo input
-	while (1)
-	{
-		cout << "\nInsira a frequencia da linha:";
-		getline(cin, tempstr);
-
-		// Condicao para a continuacao do programa
-		if (is_numeric(tempstr))
-			break;
-
-		cout << "\nInput invalido!";
-	}
-	templinha.freq = stoi(tempstr);
+		templinha.freq = stoi(tempstr);
 
 
 	// Se existir algum numero na sequencia, pedir novo input
-	while (1)
-	{
-		paragens.resize(0);
-
-		cout << "\nInsira as paragens separadas por virgulas:";
-		getline(cin, tempstr);
-		tempstr += ',';
-
-		bool test = 1;
-
-		stringstream ss1(tempstr);
-		while (getline(ss1, newtempstr, ','))
+		while (1)
 		{
-			if (is_numeric(newtempstr))
+			paragens.resize(0);
+
+			cout << "\nInsira as paragens separadas por virgulas:";
+			getline(cin, tempstr);
+			tempstr += ',';
+
+			bool test = 1;
+
+			stringstream ss1(tempstr);
+			while (getline(ss1, newtempstr, ','))
 			{
-				test = 0;
-				break;
+				if (is_numeric(newtempstr))
+				{
+					test = 0;
+					break;
+				}
+				paragens.push_back(newtempstr);
 			}
-			paragens.push_back(newtempstr);
-		}
 
 		// Condicao para a continuacao do programa
-		if (test && paragens.size() > 1)
-			break;
-		cout << "\nInput invalido!";
-	}
-	templinha.paragens = paragens;
+			if (test && paragens.size() > 1)
+				break;
+			cout << "\nInput invalido!";
+		}
+		templinha.paragens = paragens;
 
 
 	// Se existirem caracteres nao numericos, pedir novo input
-	while (1)
-	{
-		tempoviagem.resize(0);
-
-		cout << "\nInsira os tempos entre paragens, entre virgulas:";
-		getline(cin, tempstr);
-		tempstr += ',';
-
-		bool test = 1;
-
-		stringstream ss2(tempstr);
-		while (getline(ss2, newtempstr, ','))
+		while (1)
 		{
-			if (!is_numeric(newtempstr))
+			tempoviagem.resize(0);
+
+			cout << "\nInsira os tempos entre paragens, entre virgulas:";
+			getline(cin, tempstr);
+			tempstr += ',';
+
+			bool test = 1;
+
+			stringstream ss2(tempstr);
+			while (getline(ss2, newtempstr, ','))
 			{
-				test = 0;
-				break;
+				if (!is_numeric(newtempstr))
+				{
+					test = 0;
+					break;
+				}
+				tempoviagem.push_back(stoi(newtempstr));
 			}
-			tempoviagem.push_back(stoi(newtempstr));
-		}
 
 		// Condicao para a continuacao do programa
-		if (test && newtempstr.size() == 0 && tempoviagem.size() == paragens.size() - 1)
-			break;
+			if (test && newtempstr.size() == 0 && tempoviagem.size() == paragens.size() - 1)
+				break;
 
-		cout << "\nInput invalido!";
+			cout << "\nInput invalido!";
+		}
+
+		templinha.tempoviagem = tempoviagem;
+
+		LinhasGlobais.push_back(templinha);
+
+		SaveLinhas();
+
+		cout << "\nLinha Criada, Pressione qualquer tecla para continuar...";
+
+		cin.get();
+		Menu1();
 	}
 
-	templinha.tempoviagem = tempoviagem;
 
-	LinhasGlobais.push_back(templinha);
-
-	SaveLinhas();
-
-	cout << "\nLinha Criada, Pressione qualquer tecla para continuar...";
-
-	cin.get();
-	Menu1();
-}
-
-
-void ui::StartMenu()
-{
-	MainMenu();
-}
-
-bool ui::StartMenu(const string& filename)
-{
-	if (SetBannerFilename(filename))
+	void ui::StartMenu()
+	{
 		MainMenu();
-}
-
-bool ui::StartMenu(const int& Width, const int& Height, const string& filename)
-{
-	if (SetConsoleWidth(Width) && SetConsoleHeight(Height) && SetBannerFilename(filename))
-		MainMenu();
-}
-
-
-bool ui::SetConsoleWidth(const int& Width)
-{
-	if (Width > 119 && Width < 241)
-	{
-		ConsoleWidth = Width;
-		return true;
 	}
-	return false;
-}
 
-bool ui::SetConsoleHeight(const int& Height)
-{
-	if (Height > 29 && Height < 64)
+	bool ui::StartMenu(const string& filename)
 	{
-		ConsoleHeight = Height;
-		return true;
+		if (SetBannerFilename(filename))
+			MainMenu();
 	}
-	return false;
-}
 
-bool ui::SetBannerFilename(const string& filename)
-{
-	ifstream bannerfile(filename);
-
-	if (bannerfile.fail())
+	bool ui::StartMenu(const int& Width, const int& Height, const string& filename)
 	{
-		bannerfile.close();
+		if (SetConsoleWidth(Width) && SetConsoleHeight(Height) && SetBannerFilename(filename))
+			MainMenu();
+	}
+
+
+	bool ui::SetConsoleWidth(const int& Width)
+	{
+		if (Width > 119 && Width < 241)
+		{
+			ConsoleWidth = Width;
+			return true;
+		}
 		return false;
 	}
-	else
+
+	bool ui::SetConsoleHeight(const int& Height)
 	{
-		bannerfilename = filename;
-		return true;
+		if (Height > 29 && Height < 64)
+		{
+			ConsoleHeight = Height;
+			return true;
+		}
+		return false;
 	}
-}
+
+	bool ui::SetBannerFilename(const string& filename)
+	{
+		ifstream bannerfile(filename);
+
+		if (bannerfile.fail())
+		{
+			bannerfile.close();
+			return false;
+		}
+		else
+		{
+			bannerfilename = filename;
+			return true;
+		}
+	}
 
 
 
-int ui::GetConsoleWidth()
-return ConsoleWidth;
+	int ui::GetConsoleWidth()
+	return ConsoleWidth;
 
-int ui::GetConsoleHeight()
-return ConsoleHeight;
+	int ui::GetConsoleHeight()
+	return ConsoleHeight;
 
-int ui::GetBannerFilename()
-return bannerfilename;
+	int ui::GetBannerFilename()
+	return bannerfilename;
