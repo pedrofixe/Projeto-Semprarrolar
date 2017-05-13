@@ -76,7 +76,7 @@ class Buses_Class {
 		void SaveToFile(const string&) const;
 		void PrintBuses() const;
 		bool InsertBus(const string& BusID); // These 2 methods will return false when the bus specified isnt valid
-		bool RemoveBus(const string& BusID); // TODO: MAKE THIS METHOD DELETE ALL THE SHIFTS FROM THE OTHER OBJECTS
+		bool RemoveBus(const string& BusID);
 		const set<Shift>& GetShifts(const string& BusID) const;
 		bool BusExists(const string& BusID);
 		bool CanAddShift(const string& BusID, const Shift&) const;

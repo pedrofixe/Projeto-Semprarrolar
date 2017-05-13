@@ -51,6 +51,7 @@ void Bus_Stop::ShowSchedule() const
 	//		ImprimeHorarios(HORARIO_INICIO, HORARIO_FIM, tempoViagemTotal + (tempoViagemTotal - offsetHorarios), frequencia);
 	//	}
 	//}
+	cout << "yy";
 }
 
 //int IndiceElemento(const vector<Paragem> &vec_paragens, const Paragem &paragem) {

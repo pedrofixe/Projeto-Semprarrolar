@@ -40,3 +40,8 @@ vector<unsigned int> Line::GetTimeBetweenStops() const
 {
 	return timeBetweenStops;
 }
+
+void Line::ShowSchedule() const
+{
+
+}

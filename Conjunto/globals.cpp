@@ -498,7 +498,7 @@ bool Shifts_InterfaceClass::LoadFromFile(const string& argFilename)
 		return false;
 	}
 
-	// Load lines
+	// Load shifts
 	string tempstr;
 	while (getline(shifts_file, tempstr)) {
 		utilities::trimString(tempstr); 
@@ -524,10 +524,26 @@ bool Shifts_InterfaceClass::LoadFromFile(const string& argFilename)
 
 }
 
-bool Shifts_InterfaceClass::LoadFromFile(const string &)
+void Shifts_InterfaceClass::SaveToFile() const
 {
-	return false;
+	ofstream shifts_file(filename);
+	if (shifts_file.fail())
+	{
+		shifts_file.close();
+	}
+	// Load lines
+	for (const Shift& shift : setShifts) {
+		shifts_file 
+			<< shift.GetDay() << ","
+			<< shift.GetStartHour() << ","
+			<< shift.GetEndHour() << ","
+			<< shift.GetDriverID() << ","
+			<< shift.GetBusID() << ","
+			<< shift.GetLineID();
+	}
+	shifts_file.close();
 }
+
 
 void Shifts_InterfaceClass::InsertShift(const Shift &argShift)
 {

@@ -14,7 +14,7 @@ class Bus_Stop {
 
 		const string& GetName() const;
 		unsigned int GetLinesCount() const;
-		const vector<Line*>& GetLines() const;
+		const vector< Line* >& GetLines() const;
 		void RemoveLineFromStop(const Line*);
 		void AddLine(Line*);
 
