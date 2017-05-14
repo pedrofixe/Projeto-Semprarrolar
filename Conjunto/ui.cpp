@@ -427,6 +427,6 @@ void ui::PrintBanner()
 			Banner += string(((ConsoleWidth - asciiTemp.size()) / 2), ' ') + asciiTemp + "\n";
 	}
 
-	cout << Banner;
+	cout << endl << Banner;
 
 }

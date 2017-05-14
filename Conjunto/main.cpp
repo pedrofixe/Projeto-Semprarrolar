@@ -16,7 +16,7 @@ int main()
 {
 	ui menu;
 
-	menu.StartMenu(150, 40, "asciibanner.txt");
+	menu.StartMenu(120, 40, "asciibanner.txt");
 
 	cout << "\n\n";
 	return 0;
