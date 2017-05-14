@@ -34,7 +34,7 @@ int utilities::intSize(int input)
 	return res;
 }
 
-bool utilities::is_numeric(string input)
+bool utilities::isNumeric(string input)
 {
 	utilities::trimString(input);
 

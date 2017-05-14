@@ -33,9 +33,12 @@ private:
 
 	void PreMenu();
 	void MainMenu();
-	void Menu1();
-	void Menu1to1();
-	void Menu1to3();
+	void LineManagementMenu();
+	void CreateLineMenu();
+	void RemoveLineMenu();
+	void DriverManagementMenu();
+	void CreateDriverMenu();
+	void RemoveDriverMenu();
 
 
 };

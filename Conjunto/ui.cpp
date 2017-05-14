@@ -81,28 +81,27 @@ void ui::MainMenu()
 	ui_utilities::ClearScreen();
 	ui_utilities::ClearScreen();
 	PrintBanner();
-	cout << string(3, '\n');
 
 	//   FUNCIONALIDADES QUE O PROJETO DEVE TER, RETIRADO DO PDF
-	//1. Ler e guardar a informação de linhas e condutores armazenada em ficheiros;
+	//1. Ler e guardar a informa?o de linhas e condutores armazenada em ficheiros;
 	//2. Gerir os condutores : criar, alterar e remover um condutor;
-	//3. Gerar e visualizar de modo formatado tabelas com horários de uma paragem;
-	//4. Visualizar o trabalho atribuído a um condutor;
-	//5. Visualizar a informação de um autocarro;
-	//6. Visualizar a informação de uma linha, visualizando de modo formatado a tabela com o seu horário;
+	//3. Gerar e visualizar de modo formatado tabelas com hor?ios de uma paragem;
+	//4. Visualizar o trabalho atribu?o a um condutor;
+	//5. Visualizar a informa?o de um autocarro;
+	//6. Visualizar a informa?o de uma linha, visualizando de modo formatado a tabela com o seu hor?io;
 	//7. Inquirir sobre quais as linhas que incluem determinada paragem;
 	//8. Calcular e visualizar um percurso e tempo de viagem entre duas quaisquer paragens indicadas pelo
-	//	utilizador.Deve procurar a solução : na linha que contém a paragem inicial ou; na linha que contém a
-	//	paragem inicial e numa das linhas que tenha paragens comuns com a “linha inicial”.Havendo mais
-	//	do que uma solução o programa deve apresentar todas as soluções encontradas mas por ordem
-	//		crescente de distância.Se não encontrar uma solução dentro das restrições indicadas, o programa
-	//		deve indicar que não encontrou uma ligação entre as duas paragens.
-	//		9. Listar todos os períodos de autocarros sem condutor atribuído.
-	//		10. Listar todos os períodos de condutores sem o serviço completo atribuído(que não tenham atingido o
-	//			limite máximo semanal).
-	//		11. Efetuar interactivamente a atribuição de serviço a um condutor, permitindo ao utilizador ver as
-	//		disponibilidades de serviço dos autocarros, pedindo ao utilizador informação sobre um novo turno e
-	//		verificando a consistência dessa informação com as restrições de horário do condutor e restantes
+	//	utilizador.Deve procurar a solu?o : na linha que cont? a paragem inicial ou; na linha que cont? a
+	//	paragem inicial e numa das linhas que tenha paragens comuns com a ?linha inicial?.Havendo mais
+	//	do que uma solu?o o programa deve apresentar todas as solu?es encontradas mas por ordem
+	//		crescente de dist?cia.Se n? encontrar uma solu?o dentro das restri?es indicadas, o programa
+	//		deve indicar que n? encontrou uma liga?o entre as duas paragens.
+	//		9. Listar todos os per?dos de autocarros sem condutor atribu?o.
+	//		10. Listar todos os per?dos de condutores sem o servi? completo atribu?o(que n? tenham atingido o
+	//			limite m?imo semanal).
+	//		11. Efetuar interactivamente a atribui?o de servi? a um condutor, permitindo ao utilizador ver as
+	//		disponibilidades de servi? dos autocarros, pedindo ao utilizador informa?o sobre um novo turno e
+	//		verificando a consist?cia dessa informa?o com as restri?es de hor?io do condutor e restantes
 	//		dados existentes.
 
 	cout << " 1- Line management\n";
@@ -162,17 +161,16 @@ void ui::MainMenu()
 
 }
 
-void ui::Menu1()
+void ui::LineManagementMenu()
 {
 	ui_utilities::ClearScreen();
 	ui_utilities::ClearScreen();
 	PrintBanner();
-	cout << string(3, '\n');
 
 	cout << "1- Create line\n";
 	cout << "2- Edit line\n";
 	cout << "3- Remove line\n";
-	cout << "9- Return\n";
+	cout << "9- Return to previous menu\n";
 	cout << "0- Quit\n";
 	cout << "\n";
 
@@ -187,7 +185,7 @@ void ui::Menu1()
 
 		if (input == "1")
 		{
-			Menu1to1();
+			CreateLineMenu();
 			break;
 		}
 
@@ -199,7 +197,7 @@ void ui::Menu1()
 
 		if (input == "3")
 		{
-			Menu1to3();
+			RemoveLineMenu();
 			break;
 		}
 
@@ -217,7 +215,7 @@ void ui::Menu1()
 
 }
 
-void ui::Menu1to1()
+void ui::CreateLineMenu()
 {
 	ui_utilities::ClearScreen();
 	ui_utilities::ClearScreen();
@@ -319,13 +317,12 @@ void ui::Menu1to1()
 	return;
 }
 
-void ui::Menu1to3()
+void ui::RemoveLineMenu()
 {
 	ui_utilities::ClearScreen();
 	ui_utilities::ClearScreen();
 	PrintBanner();
 
-	cout << string(3, '\n');
 
 	string tempstr;
 
@@ -343,6 +340,188 @@ void ui::Menu1to3()
 
 
 	cout << "\nLine removed, Press any key to continue...";
+	cin.get();
+
+	return;
+}
+
+
+void ui::DriverManagementMenu()
+{
+
+	ui_utilities::ClearScreen();
+	ui_utilities::ClearScreen();
+	PrintBanner();
+
+	cout << "1- Create driver\n";
+	cout << "2- Edit driver\n";
+	cout << "3- Remove driver\n";
+	cout << "9- Return to previous menu\n";
+	cout << "0- Quit\n";
+	cout << "\n";
+
+	string input;
+
+	while (1)
+	{
+		cout << "Select an option: ";
+
+		getline(cin, input);
+		cout << "\n";
+
+		if (input == "1")
+		{
+			CreateDriverMenu();
+			break;
+		}
+
+		if (input == "2")
+		{
+			//Menu1to2();
+			break;
+		}
+
+		if (input == "3")
+		{
+			RemoveDriverMenu();
+			break;
+		}
+
+		if (input == "9")
+		{
+			return;
+		}
+
+		if (input == "0")
+			exit(0);
+
+		cout << "Invalid input\n";
+
+	}
+
+}
+
+
+void ui::CreateDriverMenu()
+{
+	ui_utilities::ClearScreen();
+	ui_utilities::ClearScreen();
+	PrintBanner();
+
+	string tempstr;
+
+	Driver tempdriver;
+
+	while (1)
+	{
+		cout << "\nInsert driver's ID:";
+
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (!Drivers.LineExists(tempstr))
+			break;
+
+		cout << "\nInvalid input!";
+	}
+	tempdriver.SetID(tempstr);
+
+
+	while (1)
+	{
+		cout << "\nInsert driver's name:";
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		bool test = 1;
+
+		for (int i = 0; i < tempstr.size(); ++i)
+		{
+			if (utilities::isNumeric(tempstr[i]))
+			{
+				test = 0;
+				break;
+			}
+		}
+
+		if (test && tempstr.size() > 0)
+			break;
+
+		cout << "\nInvalid input!";
+	}
+	tempdriver.SetName(tempstr);
+
+	while (1)
+	{
+		cout << "\nInsert driver's maximum hours per shift:";
+		getline(cin, tempstr);
+
+		// Condition to continue program
+		if (utilities::isNumeric(tempstr) && stoi(tempstr) > 0)
+			break;
+
+		cout << "\nInvalid input!";
+	}
+	tempdriver.SetMaxHoursShift(stoi(tempstops));
+
+
+	while (1)
+	{
+		cout << "\nInsert driver's maximum hours per week:";
+		getline(cin, tempstr);
+
+		// Condition to continue program
+		if (utilities::isNumeric(tempstr) && stoi(tempstr) > 0)
+			break;
+
+		cout << "\nInvalid input!";
+	}
+	tempdriver.SetMaxHoursWeek(stoi(tempstops));
+
+
+	while (1)
+	{
+		cout << "\nInsert driver's minimum rest hours:";
+		getline(cin, tempstr);
+
+		// Condition to continue program
+		if (utilities::isNumeric(tempstr) && stoi(tempstr) > 0)
+			break;
+
+		cout << "\nInvalid input!";
+	}
+	tempdriver.GetMinHoursRest(stoi(tempstops));
+
+	cout << "\nDriver created, Press any key to continue...";
+	cin.get();
+
+	Drivers.AddDriver(tempdriver);
+
+	return;
+}
+
+void ui::RemoveDriverMenu()
+{
+	ui_utilities::ClearScreen();
+	ui_utilities::ClearScreen();
+	PrintBanner();
+
+	string tempstr;
+
+	while (1)
+	{
+		cout << "\nInsert driver's ID:";
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (Drivers.RemoveDriverByID(tempstr))
+			break;
+
+		cout << "\nLine not found!";
+	}
+
+
+	cout << "\nDriver removed, Press any key to continue...";
 	cin.get();
 
 	return;
@@ -446,5 +625,7 @@ void ui::PrintBanner()
 	}
 
 	cout << endl << Banner;
+
+	cout << string(3,'\n');
 
 }

@@ -179,7 +179,7 @@ void LinesClass::PrintLinesNames() const
 
 vector<Line>& LinesClass::GetLines()
 {
-	return lines;
+	return Lines;
 }
 
 // -- DRIVERS CLASS -- \\

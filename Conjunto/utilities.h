@@ -12,7 +12,7 @@ namespace utilities{
 	void swap(T&, T&);
 	void trimString(string&);
 	int intSize(int);
-	bool is_numeric(string);
+	bool isNumeric(string);
 	string DayNumberToString(const unsigned int&);
 };
 
