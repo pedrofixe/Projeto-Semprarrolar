@@ -8,11 +8,16 @@
 #include <set>
 #include <map>
 #include <sstream>
-#include "line.h"
 #include "driver.h"
 #include "bus_stop.h"
 #include "shift.h"
 #include "utilities.h"
+#include "line.h"
+
+// The compiler was throwing a tantrum... Seems like the only way to please is to re-declare this classes here despite the corresponding
+// header file being included just above. 
+class Line;
+class Bus_Stop;
 
 #define SCHEDULE_START 8
 #define SCHEDULE_END 22
@@ -40,7 +45,7 @@ class LinesClass {
 
 class DriversClass {
 	public:
-		bool AddDriver(const Driver&);
+		void AddDriver(const Driver&);
 		bool RemoveDriver(const Driver&);
 		bool RemoveDriverByID(const string&);
 

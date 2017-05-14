@@ -6,7 +6,6 @@
 #include "shift.h"
 
 class Bus {
-
 	public:
 		bool AddShift(const Shift&); // estes 2 metodos parecem um bocado inuteis considerando o resto da arquitetura mas e' o que esta indicado no pdf
 		const vector<Shift*>& GetShifts(); // 

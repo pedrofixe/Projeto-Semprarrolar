@@ -6,6 +6,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
+#include <string>
 //#include "bus_stop.h"
 #include "utilities.h"
 #include "globals.h"

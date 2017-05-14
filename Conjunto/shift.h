@@ -1,9 +1,9 @@
 #ifndef __SHIFT_INCLUDED__
 #define __SHIFT_INCLUDED__
 
-#include "driver.h"
-#include "bus.h"
-#include "line.h"
+#include <string>
+
+using namespace std;
 
 class Shift {
 	public:

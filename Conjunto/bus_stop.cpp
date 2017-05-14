@@ -37,20 +37,26 @@ void Bus_Stop::ShowSchedule() const
 		const unsigned int bus_stop_number = GetBus_StopNumber(line->GetBus_Stops(), this->GetName());
 		const unsigned int offset = CalculateOffset(line->GetTimeBetweenStops(), bus_stop_number);
 
+		const unsigned int number_of_bus_stops = line->GetBus_Stops().size();
 		// Mostrar no sentido de ida
-		if (this->GetName != line->GetBus_Stops[line->GetBus_Stops().size() - 1]) { // is not the last stop
-			cout << setw(5) << "Schedule of the Line " << line->GetID() << " in the direction " << line->GetBus_Stops()[0] << " -> " << line->GetBus_Stops()[line->GetBus_Stops.size() - 1] << " :" << endl;
+		if (this->GetName() != line->GetBus_Stops()[number_of_bus_stops - 1]) { // is not the last stop
+			cout << setw(5) << "Schedule of the Line " << line->GetID() << " in the direction " << line->GetBus_Stops()[0] << " -> " << line->GetBus_Stops()[number_of_bus_stops - 1] << " :" << endl;
 			PrintSpecificSchedule(SCHEDULE_START, SCHEDULE_END, offset, freq);
 		}
 
 		if (this->GetName() != line->GetBus_Stops()[0]) { // is not the first stop
 			cout << endl << endl;
 			// Mostrar no sentido de volta
-			const unsigned int tempoViagemTotal = CalculateOffset(line->GetTimeBetweenStops(), line->GetBus_Stops().size() - 1);
-			cout << setw(5) << "Horario da linha " << line->GetID() << " no sentido " << line->GetBus_Stops[line->GetBus_Stops.size() - 1] << " -> " << line->GetBus_Stops[0] << " :" << endl;
+			const unsigned int tempoViagemTotal = CalculateOffset(line->GetTimeBetweenStops(), number_of_bus_stops - 1);
+			cout << setw(5) << "Horario da linha " << line->GetID() << " no sentido " << line->GetBus_Stops()[number_of_bus_stops - 1] << " -> " << line->GetBus_Stops()[0] << " :" << endl;
 			PrintSpecificSchedule(SCHEDULE_START, SCHEDULE_END, tempoViagemTotal + (tempoViagemTotal - offset), freq);
 		}
 	}
+}
+
+Bus_Stop::Bus_Stop(const string & argBus_StopName)
+{
+	name = argBus_StopName;
 }
 
 int Bus_Stop::GetBus_StopNumber(const vector<string>& vec_Bus_Stops, const string & Bus_Stop_Name)

@@ -10,6 +10,9 @@
 
 using namespace std;
 
+// Must re-declare classes so the compiler doesnt get upset
+class Line;
+
 class Bus_Stop {
 
 	public:
@@ -23,13 +26,13 @@ class Bus_Stop {
 		void ShowSchedule() const; // falta implementar
 
 		// Constructor:
-		Bus_Stop(const string& argBus_StopName) : name(argBus_StopName) { };
+		Bus_Stop(const string& argBus_StopName);
 
 	private:
 		static int GetBus_StopNumber(const vector<string> &vec_Bus_Stops, const string& Bus_Stop_Name);		
 		static int CalculateOffset(const vector<unsigned int> timeBetweenStops, const unsigned int &Bus_Stop_Number);
 		static void PrintSpecificSchedule(const unsigned int &Start, const unsigned int &End, const unsigned int &offset, const unsigned int &freq);
-		const string name;
+		string name;
 		vector<Line*> linesAtStop;
 
 };

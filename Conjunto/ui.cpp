@@ -339,13 +339,21 @@ void ui::StartMenu()
 bool ui::StartMenu(const string& filename)
 {
 	if (SetBannerFilename(filename))
+	{
 		MainMenu();
+		return true;
+	}
+	return false;
 }
 
 bool ui::StartMenu(const int& Width, const int& Height, const string& filename)
 {
 	if (SetConsoleWidth(Width) && SetConsoleHeight(Height) && SetBannerFilename(filename))
+	{
 		MainMenu();
+		return true;
+	}
+	return false;
 }
 
 
