@@ -6,77 +6,72 @@ void ui::PreMenu()
 	ui_utilities::ClearScreen();
 	string tempstr;
 
+	PrintBanner();
+
 	while(1)
 	{
-		cout <<"\nInsert lines filename:";
+		cout <<"\n Insert lines filename (leave empty for default: linhas.txt): ";
 
 		getline(cin, tempstr);
-		cout << "\n";
+		if (tempstr == "")	tempstr = "linhas.txt";
 
-		ifstream linesfile(tempstr);
-
-		if (!linesfile.fail())
-			break;
-
-		cout << "Invalid input";
+		if (!Lines.LoadFromFile(tempstr)) {
+			cout << "File doesn't exist!";
+			continue;
+		}
+		break;
 	}
-
-	Lines.LoadFromFile(tempstr);
 
 	cout << "\n";
 
-	while(1)
+	while (1)
 	{
-		cout <<"\nInsert drivers filename:";
+		cout << "\n Insert drivers filename (leave empty for default: condutores.txt): ";
 
 		getline(cin, tempstr);
-		cout << "\n";
+		if (tempstr == "")	tempstr = "condutores.txt";
 
-		ifstream driversfile(tempstr);
-
-		if (!driversfile.fail())
-			break;
-
-		cout << "Invalid input";
+		if (!Drivers.LoadFromFile(tempstr)) {
+			cout << "File doesn't exist!";
+			continue;
+		}
+		break;
 	}
-
-	Lines.LoadFromFile(tempstr);
 
 	cout << '\n';
 
-	// while(1)
-	// {
-	// 	cout <<"\nInsert shifts filename:";
+	while (1)
+	{
+		cout << "\n Insert buses filename (leave empty for default: autocarros.txt): ";
 
-	// 	getline(cin, temp);
-	// 	cout << "\n";
+		getline(cin, tempstr);
+		if (tempstr == "")	tempstr = "autocarros.txt";
 
-	// 	ifstream shiftsfile(temp);
+		if (!Buses.LoadFromFile(tempstr)) {
+			cout << "File doesn't exist!";
+			continue;
+		}
+		break;
+	}
 
-	// 	if (!shiftsfile.fail())
-	// 		break;
+	cout << '\n';
 
-	// 	cout << "Invalid input";
-	// }
+	while (1)
+	{
+		cout << "\n Insert shifts filename (leave empty for default: turnos.txt): ";
 
-	// cout << '\n';
+		getline(cin, tempstr);
+		if (tempstr == "")	tempstr = "turnos.txt";
 
-	// while(1)
-	// {
-	// 	cout <<"\nInsert bus filename:";
-
-	// 	getline(cin, temp);
-	// 	cout << "\n";
-
-	// 	ifstream busfile(temp);
-
-	// 	if (!busfile.fail())
-	// 		break;
-
-	// 	cout << "Invalid input";
-	// }
-
-	// Buses_Class::LoadFromFile(temp);
+		if (!Shifts_Interface.LoadFromFile(tempstr)) {
+			cout << "File doesn't exist!";
+			continue;
+		}
+		break;
+	}
+	
+	cout << "\n\n All files have been loaded with sucess. Press enter to continue...";
+	getchar();
 
 	MainMenu();
 }
@@ -333,14 +328,14 @@ void ui::Menu1to3()
 
 void ui::StartMenu()
 {
-	MainMenu();
+	PreMenu();
 }
 
 bool ui::StartMenu(const string& filename)
 {
 	if (SetBannerFilename(filename))
 	{
-		MainMenu();
+		PreMenu();
 		return true;
 	}
 	return false;
@@ -350,7 +345,7 @@ bool ui::StartMenu(const int& Width, const int& Height, const string& filename)
 {
 	if (SetConsoleWidth(Width) && SetConsoleHeight(Height) && SetBannerFilename(filename))
 	{
-		MainMenu();
+		PreMenu();
 		return true;
 	}
 	return false;

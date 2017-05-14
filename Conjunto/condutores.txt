@@ -1,0 +1,5 @@
+3 ; Antonio Fabricio ; 4 ; 25 ; 2
+5 ; Jose Mendes ; 6 ; 42 ; 4
+6 ; Joao Borges ; 5 ; 37 ; 3
+9 ; Vitor Nunes ; 3 ; 20 ; 1
+15 ; Fabio Oliveira ; 25 ; 54 ; 54
