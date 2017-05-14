@@ -476,6 +476,11 @@ void Bus_StopsClass::RemoveBusStop(const string & arg_Bus_Stop_Name)
 	}
 }
 
+const vector<Bus_Stop> Bus_StopsClass::getVecBusStops() const
+{
+	return vecBusStops;
+}
+
 // -- BUSES CLASS -- \\
 
 bool Buses_Class::LoadFromFile(const string& argFilename)
@@ -519,6 +524,7 @@ void Buses_Class::PrintBuses() const
 bool Buses_Class::InsertBus(const string & BusID)
 {
 	if (mapBusesIDs.insert(make_pair(BusID, set<Shift>())).second) { // element was inserted with success
+		SaveToFile();
 		return true;
 	}
 	return false;
@@ -528,7 +534,14 @@ bool Buses_Class::RemoveBus(const string & BusID)
 {
 	auto iterator = mapBusesIDs.find(BusID);
 	if (iterator != mapBusesIDs.end()) {
+		// Welp, first we will have to delete the corresponding shifts from the other classes..
+		for (auto shift : iterator->second) {
+			Drivers.RemoveShiftFromDriver(shift.GetDriverID(), shift);
+		}
+		Shifts_Interface.RemoveBus_Shifts(BusID);
+
 		mapBusesIDs.erase(iterator);
+		SaveToFile();
 		return true;
 	}
 	return false;
@@ -593,6 +606,23 @@ void Buses_Class::RemoveShiftsByLineID(const string & LineID)
 				mapIterator->second.erase(setShiftsIterator);
 			}
 		}
+	}
+}
+
+unsigned int Buses_Class::GetNumberOfBuses() const
+{
+	return mapBusesIDs.size();
+}
+
+void Buses_Class::ListBuses() const
+{
+	bool firstIteration = true;
+	for (auto mapIterator = mapBusesIDs.begin(); mapIterator != mapBusesIDs.end(); mapIterator++) {
+		if (firstIteration) {
+			(firstIteration = false);
+		}
+		else (std::cout << ",");
+		std::cout << " " << mapIterator->first;
 	}
 }
 
@@ -701,7 +731,7 @@ const set<Shift>& Shifts_InterfaceClass::GetShifts() const
 	return setShifts;
 }
 
-void Shifts_InterfaceClass::ListShifts() const
+void Shifts_InterfaceClass::ListShifts(const set<Shift> &setShifts)
 {
 	cout << setw(2) << "" << setw(12) << left << "Day" << setw(15) << "Start Hour" << setw(15) << "End Hour" << setw(10) << "Line" << setw(30) << "Driver" << setw(10) << "Bus" << endl;
 	for (const Shift &shift : setShifts) {

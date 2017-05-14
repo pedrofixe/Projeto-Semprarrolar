@@ -137,9 +137,9 @@ void ui::MainMenu()
 				break;
 			}
 
-			if (input == "3")
+			else if (input == "3")
 			{
-				cout << "Menu3";
+				BusManagementMenu();
 				break;
 			}
 
@@ -174,8 +174,11 @@ void ui::LineManagementMenu()
 		PrintBanner();
 
 		cout << "  - LINE MANAGEMENT MENU -\n";
+		cout << " Active bus lines:";
+		Lines.PrintLinesNames();
+		cout << endl << endl;
 		cout << " 1- Create line\n";
-		cout << " 2- Edit line\n";
+		cout << " 2- Edit line [NOT FINISHED YET]\n";
 		cout << " 3- Remove line\n";
 		cout << " 9- Return to previous menu\n";
 		cout << "\n";
@@ -197,7 +200,7 @@ void ui::LineManagementMenu()
 
 			else if (input == "2")
 			{
-				//Menu1to2();
+				EditLineMenu();
 				break;
 			}
 
@@ -255,7 +258,7 @@ void ui::CreateLineMenu()
 
 	while (1)
 	{
-		cout << "\n Insert new Line's frequency of service: ";
+		cout << "\n Insert new Line's frequency of service (minutes): ";
 		getline(cin, tempstr);
 		utilities::trimString(tempstr);
 
@@ -274,66 +277,79 @@ void ui::CreateLineMenu()
 
 	vector<string> tempstops;
 
-	while (1)
-	{
-		tempstops.clear();
-
-		cout << "\n Insert new Line's bus stops (press enter after you type each one and press CTRL+Z to end:";
-		getline(cin, tempstr);
-		tempstr += ',';
-
-		stringstream ss1(tempstr);
-		while (getline(ss1, tempstr, ','))
-		{
-			utilities::trimString(tempstr);
-
-			tempstops.push_back(tempstr);
+	cout << "\n Insert new Line's bus stops (press enter after you type each one and to stop insert 0):";
+	cout << endl;
+	while (getline(cin, tempstr)) {
+		utilities::trimString(tempstr);
+		if (tempstr == "0") break;
+		if (tempstr.length() < 3) {
+			cout << "Oops! That is too short... Try again!" << endl;
 		}
-
-		// Condition to continue program
-		if (tempstops.size() > 1)
-			break;
-
-		cout << "\nInvalid input!";
+		tempstops.push_back(tempstr);
 	}
-	templine.SetBus_Stops(tempstops);
 
 	vector<unsigned int> temptimebetweenstops;
 
-	while (1)
-	{
-		temptimebetweenstops.clear();
+	cout << "\n Perfect! Now please insert the time it takes to travel between the following stops (minutes): ";
+	cout << endl;
 
-		cout << "\nInsert time between stops, between commas:";
+	for (size_t i = 0; i < tempstops.size() - 1; i++) {
+		cout << "-Travel time beetween " << tempstops[i] << " and " << tempstops[i + 1] << "? ";
 		getline(cin, tempstr);
-		tempstr += ',';
 
-		bool test = 1;
-
-		stringstream ss1(tempstr);
-		while (getline(ss1, tempstr, ','))
-		{
-			if (!utilities::isNumeric(tempstr))
-			{
-				test = 0;
-				break;
-			}
-			temptimebetweenstops.push_back(stoi(tempstr));
+		if (!utilities::isNumeric(tempstr)) {
+			cout << "Sorry but it seems you didn't insert a number! Try again.";
+			i--;
+			continue;
+		}
+		if (stoi(tempstr) > 300 || stoi(tempstr) <= 2) {
+			cout << "Yeah... That doesn't seem about right. Try again";
+			i--;
+			continue;
 		}
 
-		// The number of times between stops must be equal to the number of stops minus 1
-		if (test && temptimebetweenstops.size() == tempstops.size() - 1)
-			break;
-
-		cout << "\nInvalid input!";
+		temptimebetweenstops.push_back( stoi(tempstr) );
 	}
 
-	cout << "\nLine created, Press any key to continue...";
+	templine.SetBus_Stops(tempstops);
+	templine.SetTimeBetweenStops(temptimebetweenstops);
+
+	cout << "\n   Line created, Press any key to continue...";
 	cin.get();
 
 	Lines.AddBusLine(templine);
 
 	return;
+}
+
+void ui::EditLineMenu() 
+{
+	ui_utilities::SetWindow(ConsoleWidth, ConsoleHeight);
+	ui_utilities::ClearScreen();
+	PrintBanner();
+
+	string tempstr;
+
+	cout << "\n - EDIT LINE MENU -"
+		<< "\n Please select one of the following bus lines:";
+
+	Lines.PrintLinesNames();
+	cout << endl << endl;
+
+	while (1)
+	{
+		cout << " Line: ";
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (tempstr == "0") return;
+
+		if (Lines.LineExists(tempstr))
+			break;
+
+		cout << "\nLine not found!";
+		cout << "\nEnter 0 if you wish to go back to the previous menu.\n";
+	}
 }
 
 void ui::RemoveLineMenu()
@@ -345,7 +361,7 @@ void ui::RemoveLineMenu()
 	string tempstr;
 
 	cout << "\n - REMOVE LINE MENU -"
-		<< "\n Please select one of the following bus lines.";
+		<< "\n Please select one of the following bus lines:";
 
 	Lines.PrintLinesNames();
 
@@ -355,7 +371,7 @@ void ui::RemoveLineMenu()
 
 	while (1)
 	{
-		cout << "Line: ";
+		cout << " Line: ";
 		getline(cin, tempstr);
 		utilities::trimString(tempstr);
 
@@ -369,7 +385,7 @@ void ui::RemoveLineMenu()
 	}
 
 
-	cout << "\nLine removed, Press any key to continue...";
+	cout << "\n  Line removed, Press any key to continue...";
 	cin.get();
 
 	return;
@@ -378,64 +394,77 @@ void ui::RemoveLineMenu()
 
 void ui::DriverManagementMenu()
 {
-	ui_utilities::SetWindow(ConsoleWidth,ConsoleHeight);
-	ui_utilities::ClearScreen();
-	ui_utilities::ClearScreen();
-	PrintBanner();
+	while (true) {
 
-	cout << "1- Create driver\n";
-	cout << "2- Edit driver\n";
-	cout << "3- Remove driver\n";
-	cout << "9- Return to previous menu\n";
-	cout << "0- Quit\n";
-	cout << "\n";
+		ui_utilities::SetWindow(ConsoleWidth, ConsoleHeight);
+		ui_utilities::ClearScreen();
+		PrintBanner();
 
-	string input;
-
-	while (1)
-	{
-		cout << "Select an option: ";
-
-		getline(cin, input);
+		cout << " - MANAGE DRIVERS MENU -";
+		cout << "\n Currently there are " << Drivers.GetDrivers().size() << " drivers employed at SEMPRARROLAR.";
+		cout << endl << endl;
+		cout << " 1- Create driver\n";
+		cout << " 2- List drivers\n";
+		cout << " 3- List driver shifts\n";
+		cout << " 4- Edit driver [NOT DONE YET]\n";
+		cout << " 5- Remove driver\n";
+		cout << " 9- Return to previous menu\n";
 		cout << "\n";
 
-		if (input == "1")
+		string input;
+
+		while (1)
 		{
-			CreateDriverMenu();
-			break;
+			cout << "Select an option: ";
+
+			getline(cin, input);
+			cout << "\n";
+
+			if (input == "1")
+			{
+				CreateDriverMenu();
+				break;
+			}
+
+			else if (input == "2")
+			{
+				ListDriversMenu();
+				break;
+			}
+
+			else if (input == "3")
+			{
+				ListDriverShiftsMenu();
+				break;
+			}
+
+			else if (input == "4")
+			{
+				//EditDriversMenu();
+				break;
+			}
+
+			else if (input == "5")
+			{
+				RemoveDriverMenu();
+				break;
+			}
+
+			else if (input == "9")
+			{
+				return;
+			}
+			else
+				cout << "Invalid input\n";
+
 		}
-
-		if (input == "2")
-		{
-			//Menu1to2();
-			break;
-		}
-
-		if (input == "3")
-		{
-			RemoveDriverMenu();
-			break;
-		}
-
-		if (input == "9")
-		{
-			return;
-		}
-
-		if (input == "0")
-			exit(0);
-
-		cout << "Invalid input\n";
 
 	}
-
 }
-
 
 void ui::CreateDriverMenu()
 {
 	ui_utilities::SetWindow(ConsoleWidth,ConsoleHeight);
-	ui_utilities::ClearScreen();
 	ui_utilities::ClearScreen();
 	PrintBanner();
 
@@ -443,120 +472,304 @@ void ui::CreateDriverMenu()
 
 	Driver tempdriver;
 
+	cout << " - CREATE DRIVER MENU -";
+	cout << endl;
+
 	while (1)
 	{
-		cout << "\nInsert driver's ID:";
+		cout << "\n Insert new driver's ID: ";
 
 		getline(cin, tempstr);
 		utilities::trimString(tempstr);
 
-		if (!Drivers.DriverExists(tempstr))
-			break;
-
-		cout << "\nInvalid input!";
+		if (Drivers.DriverExists(tempstr)) {
+			cout << "\nSorry but it seems there already exists a driver with that ID! Try again.";
+			continue;
+		}
+		else if (tempstr.length() < 2) {
+			cout << "\nSorry but the ID you entered is too short! Try again.";
+			continue;
+		}
+		break;
 	}
 	tempdriver.SetID(tempstr);
 
 
 	while (1)
 	{
-		cout << "\nInsert driver's name:";
+		cout << "\n Insert driver's name: ";
 		getline(cin, tempstr);
 		utilities::trimString(tempstr);
 
-		bool test = 1;
-
-		for (int i = 0; i < tempstr.size(); ++i)
-		{
-			if (tempstr[i] >= '0' && tempstr[i] <= '9')
-			{
-				test = 0;
-				break;
-			}
+		if (tempstr.length() < 3) {
+			cout << "Sorry but the name you entered is too short! Try again.";
+			continue;
 		}
-
-		if (test && tempstr.size() > 0)
-			break;
-
-		cout << "\nInvalid input!";
+		break;
 	}
 	tempdriver.SetName(tempstr);
 
 	while (1)
 	{
-		cout << "\nInsert driver's maximum hours per shift:";
+		cout << "\n Insert driver's maximum hours per shift:";
 		getline(cin, tempstr);
 
 		// Condition to continue program
 		if (utilities::isNumeric(tempstr) && stoi(tempstr) > 0)
 			break;
 
-		cout << "\nInvalid input!";
+		cout << "Invalid input!";
 	}
 	tempdriver.SetMaxHoursShift(stoi(tempstr));
 
 
 	while (1)
 	{
-		cout << "\nInsert driver's maximum hours per week:";
+		cout << "\n Insert driver's maximum hours of work per week:";
 		getline(cin, tempstr);
 
 		// Condition to continue program
 		if (utilities::isNumeric(tempstr) && stoi(tempstr) > 0)
 			break;
 
-		cout << "\nInvalid input!";
+		cout << "Invalid input!";
 	}
 	tempdriver.SetMaxHoursWeek(stoi(tempstr));
 
 
 	while (1)
 	{
-		cout << "\nInsert driver's minimum rest hours:";
+		cout << "\n Insert driver's minimum rest hours between shifts:";
 		getline(cin, tempstr);
 
 		// Condition to continue program
 		if (utilities::isNumeric(tempstr) && stoi(tempstr) > 0)
 			break;
 
-		cout << "\nInvalid input!";
+		cout << "Invalid input!";
 	}
+
 	tempdriver.SetMinHoursRest(stoi(tempstr));
 
-	cout << "\nDriver created, Press any key to continue...";
+	Drivers.AddDriver(tempdriver);
+	cout << "\n    Driver created, Press any key to continue...";
 	cin.get();
 
-	Drivers.AddDriver(tempdriver);
-
 	return;
+}
+
+void ui::ListDriversMenu() {
+	ui_utilities::SetWindow(ConsoleWidth, ConsoleHeight);
+	ui_utilities::ClearScreen();
+	PrintBanner();
+	cout << endl << endl << " Listing Drivers: " << endl << endl;
+
+	Drivers.ListDrivers();
+	
+	cout << "\n Press any key to continue...";
+	cin.get();
+}
+
+void ui::ListDriverShiftsMenu() {
+
+	ui_utilities::SetWindow(ConsoleWidth, ConsoleHeight);
+	ui_utilities::ClearScreen();
+	PrintBanner();
+
+	string tempstr;
+
+	cout << " - LIST DRIVER SHIFTS MENU -";
+	cout << endl;
+
+	while (1)
+	{
+		cout << "\n Insert driver's ID:";
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (Drivers.DriverExists(tempstr))
+			break;
+
+		cout << "\nDriver not found!";
+	}
+	Driver *driver = Drivers.FindDriver(tempstr);
+
+	cout << endl;
+
+	Shifts_InterfaceClass::ListShifts(driver->GetDriverShifts());
+
+	cout << endl << endl << "\n       Press any key to continue...";
+	cin.get();
 }
 
 void ui::RemoveDriverMenu()
 {
 	ui_utilities::SetWindow(ConsoleWidth,ConsoleHeight);
 	ui_utilities::ClearScreen();
-	ui_utilities::ClearScreen();
 	PrintBanner();
 
 	string tempstr;
 
+	cout << " - REMOVE DRIVER MENU -";
+	cout << endl;
+
 	while (1)
 	{
-		cout << "\nInsert driver's ID:";
+		cout << "\n Insert driver's ID:";
 		getline(cin, tempstr);
 		utilities::trimString(tempstr);
 
 		if (Drivers.RemoveDriverByID(tempstr))
 			break;
 
-		cout << "\nLine not found!";
+		cout << "\nDriver not found!";
 	}
 
 
-	cout << "\nDriver removed, Press any key to continue...";
+	cout << "\n         Driver removed, Press any key to continue...";
 	cin.get();
 
 	return;
+}
+
+void ui::BusManagementMenu() {
+	while (true) {
+
+		ui_utilities::SetWindow(ConsoleWidth, ConsoleHeight);
+		ui_utilities::ClearScreen();
+		PrintBanner();
+
+		cout << " - MANAGE BUSES MENU -";
+		cout << "\n Currently there are " << Buses.GetNumberOfBuses() << " buses being used at SEMPRARROLAR.";
+		cout << endl << endl;
+		cout << " 1- Create bus\n";
+		cout << " 2- List buses\n";
+		cout << " 3- Remove bus\n";
+		cout << " 9- Return to previous menu\n";
+		cout << "\n";
+
+		string input;
+
+		while (1)
+		{
+			cout << "Select an option: ";
+
+			getline(cin, input);
+			cout << "\n";
+
+			if (input == "1")
+			{
+				CreateBusMenu();
+				break;
+			}
+			else if (input == "2")
+			{
+				ListBusesMenu();
+				break;
+			}
+			else if (input == "3")
+			{
+				RemoveBusMenu();
+				break;
+			}
+			else {
+				cout << "\nInvalid Input";
+			}
+		}
+	}
+}
+
+void ui::CreateBusMenu() {
+	ui_utilities::SetWindow(ConsoleWidth, ConsoleHeight);
+	ui_utilities::ClearScreen();
+	PrintBanner();
+
+	string tempstr;
+
+	Driver tempdriver;
+
+	cout << " - CREATE BUS MENU -";
+	cout << endl;
+
+	while (1)
+	{
+		cout << "\n Insert new Bus ID: ";
+
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (Buses.BusExists(tempstr)) {
+			cout << "\nSorry but it seems there already exists a bus with that ID! Try again.";
+			continue;
+		}
+		else if (tempstr.length() < 2) {
+			cout << "\nSorry but the ID you entered is too short! Try again.";
+			continue;
+		}
+		break;
+	}
+	Buses.InsertBus(tempstr);
+	cout << "\n   Bus created, Press any key to continue...";
+	cin.get();
+	return;
+
+}
+
+void ui::ListBusesMenu() {
+	ui_utilities::SetWindow(ConsoleWidth, ConsoleHeight);
+	ui_utilities::ClearScreen();
+	PrintBanner();
+
+	string tempstr;
+
+	Driver tempdriver;
+
+	cout << " - LIST BUSES MENU -" << endl << endl;
+
+	Buses.ListBuses();
+
+	cout << "\n Press any key to continue...";
+	cin.get();
+	return;
+
+}
+
+void ui::RemoveBusMenu() {
+	ui_utilities::SetWindow(ConsoleWidth, ConsoleHeight);
+	ui_utilities::ClearScreen();
+	PrintBanner();
+
+	string tempstr;
+
+	Driver tempdriver;
+
+	cout << " - REMOVE BUS MENU -"
+		<< "\n Please select one of the following buses:";
+
+	Buses.ListBuses();
+
+	cout << "\n Keep in mind all the shifts associated with that bus will be also deleted!";
+
+	cout << endl << endl;
+
+	while (1)
+	{
+		cout << "\n Insert Bus ID: ";
+
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (!Buses.BusExists(tempstr)) {
+			cout << "\nSorry but no Bus was found with that ID! Try again.";
+			continue;
+		}
+		break;
+	}
+	Buses.RemoveBus(tempstr);
+	cout << "\n   Bus removed, Press any key to continue...";
+	cin.get();
+	return;
+
 }
 
 

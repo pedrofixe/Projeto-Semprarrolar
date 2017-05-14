@@ -14,7 +14,7 @@
 #include "utilities.h"
 #include "line.h"
 
-// The compiler was throwing a tantrum... Seems like the only way to please is to re-declare this classes here despite the corresponding
+// The compiler was throwing a tantrum... Seems like the only way to please its desires is to re-declare this classes here despite the corresponding
 // header file being included just above. 
 class Line;
 class Bus_Stop;
@@ -79,6 +79,7 @@ class Bus_StopsClass {
 		void PrintAllBus_Stops_Names() const;
 		void RebuildBus_Stops(vector<Line>&);
 		void RemoveBusStop(const string&);
+		const vector<Bus_Stop> getVecBusStops() const;
 	private:
 		vector<Bus_Stop> vecBusStops;
 };
@@ -96,6 +97,8 @@ class Buses_Class {
 		void AddShift(const string& BusID, const Shift&);
 		void RemoveShift(const string& BusID, const Shift&);
 		void RemoveShiftsByLineID(const string& LineID);
+		unsigned int GetNumberOfBuses() const;
+		void ListBuses() const;
 	private:
 		string filename;
 		map<string, set<Shift> > mapBusesIDs;
@@ -107,7 +110,7 @@ class Shifts_InterfaceClass {
 		void SaveToFile() const;
 		void InsertShift(const Shift&);
 		const set<Shift>& GetShifts() const;
-		void ListShifts() const;
+		static void ListShifts(const set<Shift>&);
 		void RemoveShift(const Shift&);
 		void RemoveLineShifts(const string& LineID);
 		void RemoveBus_Shifts(const string& BusID);

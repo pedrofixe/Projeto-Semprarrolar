@@ -33,12 +33,22 @@ private:
 
 	void PreMenu();
 	void MainMenu();
+
 	void LineManagementMenu();
 	void CreateLineMenu();
+	void EditLineMenu();
 	void RemoveLineMenu();
+
 	void DriverManagementMenu();
 	void CreateDriverMenu();
+	void ListDriversMenu();
+	void ListDriverShiftsMenu();
 	void RemoveDriverMenu();
+
+	void BusManagementMenu();
+	void CreateBusMenu();
+	void ListBusesMenu();
+	void RemoveBusMenu();
 
 
 };
