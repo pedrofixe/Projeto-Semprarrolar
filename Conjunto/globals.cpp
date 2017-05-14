@@ -7,6 +7,7 @@ void LinesClass::AddBusLine(const Line& inputLine)
 	lines.push_back(inputLine);
 	// rebuild bus stops cache
 	Bus_Stops.RebuildBus_Stops(lines);
+	SaveToFile();
 }
 
 bool LinesClass::RemoveBusLine(const Line& inputLine)
@@ -18,6 +19,11 @@ bool LinesClass::RemoveBusLine(const Line& inputLine)
 			lines.erase(lines.begin() + i);
 			// rebuild bus stops cache
 			Bus_Stops.RebuildBus_Stops(lines);
+			// remove all associated shifts
+			Shifts_Interface.RemoveLineShifts(lines[i].GetID());
+			Drivers.RemoveAllShiftsWithLineID(lines[i].GetID());
+			Buses.RemoveShiftsByLineID(lines[i].GetID());
+			SaveToFile();
 			return true;
 		}
 	}
@@ -27,14 +33,19 @@ bool LinesClass::RemoveBusLine(const Line& inputLine)
 
 bool LinesClass::RemoveBusLineByID(const string& argIdentifier)
 {
-	// for (auto iterator = lines.cbegin(); iterator != lines.cend(); iterator++) {
-	// 	if (iterator.GetID == argIdentifier) { // found
-	// 		lines.erase(iterator);
-	// 		// rebuild bus stops cache
-	// 		Bus_Stops.RebuildBus_Stops(lines);
-	// 		return true;
-	// 	}
-	// }
+	 for (auto iterator = lines.begin(); iterator != lines.end(); iterator++) {
+	 	if (iterator->GetID() == argIdentifier) { // found
+	 		lines.erase(iterator);
+	 		// rebuild bus stops cache
+	 		Bus_Stops.RebuildBus_Stops(lines);
+			// remove all associated shifts
+			Shifts_Interface.RemoveLineShifts(argIdentifier);
+			Drivers.RemoveAllShiftsWithLineID(argIdentifier);
+			Buses.RemoveShiftsByLineID(argIdentifier);
+			SaveToFile();
+	 		return true;
+	 	}
+	 }
 
 	// return false;
 
@@ -48,15 +59,16 @@ bool LinesClass::RemoveBusLineByID(const string& argIdentifier)
 	// else
 	// 	return false;
 
-	for (int i = 0; i < lines.size(); ++i)
+	/*for (int i = 0; i < lines.size(); ++i)
 	{
 		if (lines[i].GetID() == argIdentifier)
 		{
 			lines.erase(lines.begin() + i);
+			Bus_Stops.RebuildBus_Stops(lines);
 			return true;
 		}
 	}
-	return false;
+	return false; */
 }
 
 bool LinesClass::LoadFromFile(const string& argFilename)
@@ -293,6 +305,13 @@ void DriversClass::RemoveShiftFromDriver(const string & argDriverID, const Shift
 	Driver* driver = FindDriver(argDriverID);
 	if (driver) {
 		driver->RemoveShift(argShift);
+	}
+}
+
+void DriversClass::RemoveAllShiftsWithLineID(const string & LineID)
+{
+	for (auto driver : drivers) {
+		driver.RemoveAllLineShifts(LineID);
 	}
 }
 
@@ -562,6 +581,17 @@ void Buses_Class::RemoveShift(const string & BusID, const Shift& argShift)
 		auto iteratorToShift = iterator->second.find(argShift);
 		if (iteratorToShift != iterator->second.end()) {
 			iterator->second.erase(iteratorToShift);
+		}
+	}
+}
+
+void Buses_Class::RemoveShiftsByLineID(const string & LineID)
+{
+	for (auto mapIterator = mapBusesIDs.begin(); mapIterator != mapBusesIDs.end(); mapIterator++) {
+		for (auto setShiftsIterator = mapIterator->second.begin(); setShiftsIterator != mapIterator->second.end(); setShiftsIterator++) {
+			if (setShiftsIterator->GetLineID() == LineID) {
+				mapIterator->second.erase(setShiftsIterator);
+			}
 		}
 	}
 }

@@ -37,6 +37,7 @@ public:
 	int CanAddShift(const Shift&) const;
 	void AddShift(const Shift&);
 	void RemoveShift(const Shift&);
+	void RemoveAllLineShifts(const string& LineID);
 	const set<Shift>& GetDriverShifts() const;
 
 private:

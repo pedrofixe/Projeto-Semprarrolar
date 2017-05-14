@@ -89,6 +89,15 @@ void Driver::RemoveShift(const Shift& argShift)
 	}
 }
 
+void Driver::RemoveAllLineShifts(const string & LineID)
+{
+	for (auto iterator = driverShifts.begin(); iterator != driverShifts.end(); iterator++) {
+		if (iterator->GetLineID() == LineID) {
+			driverShifts.erase(iterator);
+		}
+	}
+}
+
 const set<Shift>& Driver::GetDriverShifts() const
 {
 	return driverShifts;

@@ -13,6 +13,7 @@ void utilities::swap(T &a, T &b)
 // Remove spaces at the beginning and at the end of a string
 void utilities::trimString(string &input)
 {
+	if (input.length() < 2) return;
 	while (input[0] == ' ')
 		input.erase(input.begin());
 

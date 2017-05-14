@@ -84,6 +84,8 @@ void ui_utilities::ClearScreen()
 	{
 		cout << "\033[2J\033[1;1H";
 		cout << "\033[2J\033[1;1H";
+		cout << "\033[2J\033[1;1H";
+		cout << "\033[2J\033[1;1H";
 	}
 
 	bool ui_utilities::SetWindow(const int& width, const int& height)

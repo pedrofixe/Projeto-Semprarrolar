@@ -4,7 +4,6 @@ void ui::PreMenu()
 {
 	ui_utilities::SetWindow(ConsoleWidth,ConsoleHeight);
 	ui_utilities::ClearScreen();
-	ui_utilities::ClearScreen();
 	string tempstr;
 
 	PrintBanner();
@@ -71,7 +70,7 @@ void ui::PreMenu()
 		break;
 	}
 	
-	cout << "\n\n All files have been loaded with sucess. Press enter to continue...";
+	cout << "\n\n All files have been loaded with success. Press enter to continue...";
 	getchar();
 
 	MainMenu();
@@ -79,149 +78,151 @@ void ui::PreMenu()
 
 void ui::MainMenu()
 {
-	ui_utilities::SetWindow(ConsoleWidth,ConsoleHeight);
-	ui_utilities::ClearScreen();
-	ui_utilities::ClearScreen();
-	PrintBanner();
+	while (true) {
 
-	//   FUNCIONALIDADES QUE O PROJETO DEVE TER, RETIRADO DO PDF
-	//1. Ler e guardar a informa?o de linhas e condutores armazenada em ficheiros;
-	//2. Gerir os condutores : criar, alterar e remover um condutor;
-	//3. Gerar e visualizar de modo formatado tabelas com hor?ios de uma paragem;
-	//4. Visualizar o trabalho atribu?o a um condutor;
-	//5. Visualizar a informa?o de um autocarro;
-	//6. Visualizar a informa?o de uma linha, visualizando de modo formatado a tabela com o seu hor?io;
-	//7. Inquirir sobre quais as linhas que incluem determinada paragem;
-	//8. Calcular e visualizar um percurso e tempo de viagem entre duas quaisquer paragens indicadas pelo
-	//	utilizador.Deve procurar a solu?o : na linha que cont? a paragem inicial ou; na linha que cont? a
-	//	paragem inicial e numa das linhas que tenha paragens comuns com a ?linha inicial?.Havendo mais
-	//	do que uma solu?o o programa deve apresentar todas as solu?es encontradas mas por ordem
-	//		crescente de dist?cia.Se n? encontrar uma solu?o dentro das restri?es indicadas, o programa
-	//		deve indicar que n? encontrou uma liga?o entre as duas paragens.
-	//		9. Listar todos os per?dos de autocarros sem condutor atribu?o.
-	//		10. Listar todos os per?dos de condutores sem o servi? completo atribu?o(que n? tenham atingido o
-	//			limite m?imo semanal).
-	//		11. Efetuar interactivamente a atribui?o de servi? a um condutor, permitindo ao utilizador ver as
-	//		disponibilidades de servi? dos autocarros, pedindo ao utilizador informa?o sobre um novo turno e
-	//		verificando a consist?cia dessa informa?o com as restri?es de hor?io do condutor e restantes
-	//		dados existentes.
+		ui_utilities::SetWindow(ConsoleWidth, ConsoleHeight);
+		ui_utilities::ClearScreen();
+		PrintBanner();
 
-	cout << " 1- Line management\n";
-	cout << " 2- Driver management\n";
-	cout << " 3- Bus management\n";
-	cout << " 4- Shift management\n";
-	cout << " 5- Calculate shortest trip\n";
-	cout << " 6- Visualize Schedules\n";
-	cout << " 0- Quit\n";
-	cout << "\n";
+		//   FUNCIONALIDADES QUE O PROJETO DEVE TER, RETIRADO DO PDF
+		//1. Ler e guardar a informa?o de linhas e condutores armazenada em ficheiros;
+		//2. Gerir os condutores : criar, alterar e remover um condutor;
+		//3. Gerar e visualizar de modo formatado tabelas com hor?ios de uma paragem;
+		//4. Visualizar o trabalho atribu?o a um condutor;
+		//5. Visualizar a informa?o de um autocarro;
+		//6. Visualizar a informa?o de uma linha, visualizando de modo formatado a tabela com o seu hor?io;
+		//7. Inquirir sobre quais as linhas que incluem determinada paragem;
+		//8. Calcular e visualizar um percurso e tempo de viagem entre duas quaisquer paragens indicadas pelo
+		//	utilizador.Deve procurar a solu?o : na linha que cont? a paragem inicial ou; na linha que cont? a
+		//	paragem inicial e numa das linhas que tenha paragens comuns com a ?linha inicial?.Havendo mais
+		//	do que uma solu?o o programa deve apresentar todas as solu?es encontradas mas por ordem
+		//		crescente de dist?cia.Se n? encontrar uma solu?o dentro das restri?es indicadas, o programa
+		//		deve indicar que n? encontrou uma liga?o entre as duas paragens.
+		//		9. Listar todos os per?dos de autocarros sem condutor atribu?o.
+		//		10. Listar todos os per?dos de condutores sem o servi? completo atribu?o(que n? tenham atingido o
+		//			limite m?imo semanal).
+		//		11. Efetuar interactivamente a atribui?o de servi? a um condutor, permitindo ao utilizador ver as
+		//		disponibilidades de servi? dos autocarros, pedindo ao utilizador informa?o sobre um novo turno e
+		//		verificando a consist?cia dessa informa?o com as restri?es de hor?io do condutor e restantes
+		//		dados existentes.
 
-	string input;
-
-	while (1)
-	{
-		cout << "Select an option: ";
-
-		getline(cin, input);
+		cout << "  - MAIN MENU -\n";
+		cout << " 1- Line management\n";
+		cout << " 2- Driver management\n";
+		cout << " 3- Bus management\n";
+		cout << " 4- Shift management\n";
+		cout << " 5- Calculate shortest trip\n";
+		cout << " 6- Visualize Schedules\n";
+		cout << " 0- Quit\n";
 		cout << "\n";
 
-		if (input == "1")
+		string input;
+
+		while (true)
 		{
-			LineManagementMenu();
-			break;
+			cout << "Select an option: ";
+
+			getline(cin, input);
+			cout << "\n";
+
+			if (input == "1")
+			{
+				LineManagementMenu();
+				break;
+			}
+
+			else if (input == "2")
+			{
+				DriverManagementMenu();
+				break;
+			}
+
+			if (input == "3")
+			{
+				cout << "Menu3";
+				break;
+			}
+
+			else if (input == "4")
+			{
+				cout << "Menu4";
+				break;
+			}
+
+			else if (input == "5")
+			{
+				cout << "Menu5";
+				break;
+			}
+
+			else if (input == "0")
+				return;
+
+			else
+				cout << "Invalid input\n";
+
 		}
-
-		if (input == "2")
-		{
-			DriverManagementMenu();
-			break;
-		}
-
-		if (input == "3")
-		{
-			cout << "Menu3";
-			break;
-		}
-
-		if (input == "4")
-		{
-			cout << "Menu4";
-			break;
-		}
-
-		if (input == "5")
-		{
-			cout << "Menu5";
-			break;
-		}
-
-		if (input == "0")
-			exit(0);
-
-		cout << "Invalid input\n";
 
 	}
-
 }
 
 void ui::LineManagementMenu()
 {
-	ui_utilities::SetWindow(ConsoleWidth,ConsoleHeight);
-	ui_utilities::ClearScreen();
-	ui_utilities::ClearScreen();
-	PrintBanner();
+	while (true) {
+		ui_utilities::SetWindow(ConsoleWidth, ConsoleHeight);
+		ui_utilities::ClearScreen();
+		PrintBanner();
 
-	cout << "1- Create line\n";
-	cout << "2- Edit line\n";
-	cout << "3- Remove line\n";
-	cout << "9- Return to previous menu\n";
-	cout << "0- Quit\n";
-	cout << "\n";
-
-	string input;
-
-	while (1)
-	{
-		cout << "Select an option: ";
-
-		getline(cin, input);
+		cout << "  - LINE MANAGEMENT MENU -\n";
+		cout << " 1- Create line\n";
+		cout << " 2- Edit line\n";
+		cout << " 3- Remove line\n";
+		cout << " 9- Return to previous menu\n";
 		cout << "\n";
 
-		if (input == "1")
+		string input;
+
+		while (true)
 		{
-			CreateLineMenu();
-			break;
+			cout << "Select an option: ";
+
+			getline(cin, input);
+			cout << "\n";
+
+			if (input == "1")
+			{
+				CreateLineMenu();
+				break;
+			}
+
+			else if (input == "2")
+			{
+				//Menu1to2();
+				break;
+			}
+
+			else if (input == "3")
+			{
+				RemoveLineMenu();
+				break;
+			}
+
+			else if (input == "9")
+			{
+				return;
+			}
+
+			else 
+				cout << "Invalid input\n";
+
 		}
-
-		if (input == "2")
-		{
-			//Menu1to2();
-			break;
-		}
-
-		if (input == "3")
-		{
-			RemoveLineMenu();
-			break;
-		}
-
-		if (input == "9")
-		{
-			return;
-		}
-
-		if (input == "0")
-			exit(0);
-
-		cout << "Invalid input\n";
 
 	}
-
 }
 
 void ui::CreateLineMenu()
 {
 	ui_utilities::SetWindow(ConsoleWidth,ConsoleHeight);
-	ui_utilities::ClearScreen();
 	ui_utilities::ClearScreen();
 	PrintBanner();
 
@@ -229,32 +230,46 @@ void ui::CreateLineMenu()
 
 	Line templine;
 
+	cout << "\n - CREATE LINE MENU -";
+	cout << endl;
+
 	while (1)
 	{
-		cout << "\nInsert line's ID:";
+		cout << "\n Insert new Line's ID: ";
 
 		getline(cin, tempstr);
 		utilities::trimString(tempstr);
 
-		if (!Lines.LineExists(tempstr))
-			break;
+		if (Lines.LineExists(tempstr)) {
+			cout << "Sorry but that Line ID isn't valid! It seems that line already exists.";
+			continue;
+		}
+		else if (tempstr.length() < 3) {
+			cout << "Sorry but the ID you inserted is too short. Please try again!";
+			continue;
+		}
 
-		cout << "\nInvalid input!";
+		break;
 	}
 	templine.SetID(tempstr);
 
-
 	while (1)
 	{
-		cout << "\nInsert time between buses:";
+		cout << "\n Insert new Line's frequency of service: ";
 		getline(cin, tempstr);
 		utilities::trimString(tempstr);
 
-		if (utilities::isNumeric(tempstr))
-			break;
-
-		cout << "\nInvalid input!";
+		if (!utilities::isNumeric(tempstr)) {
+			cout << "Sorry but it seems you didn't insert a number! Try again.";
+			continue;
+		}
+		if (stoi(tempstr) > 300 || stoi(tempstr) <= 2) {
+			cout << "Yeah... That doesn't seem about right. Try again";
+			continue;
+		}
+		break;
 	}
+
 	templine.SetFreq(stoi(tempstr));
 
 	vector<string> tempstops;
@@ -263,7 +278,7 @@ void ui::CreateLineMenu()
 	{
 		tempstops.clear();
 
-		cout << "\nInsert bus stops between commas:";
+		cout << "\n Insert new Line's bus stops (press enter after you type each one and press CTRL+Z to end:";
 		getline(cin, tempstr);
 		tempstr += ',';
 
@@ -325,22 +340,32 @@ void ui::RemoveLineMenu()
 {
 	ui_utilities::SetWindow(ConsoleWidth,ConsoleHeight);
 	ui_utilities::ClearScreen();
-	ui_utilities::ClearScreen();
 	PrintBanner();
-
 
 	string tempstr;
 
+	cout << "\n - REMOVE LINE MENU -"
+		<< "\n Please select one of the following bus lines.";
+
+	Lines.PrintLinesNames();
+
+	cout << "\n Keep in mind all the shifts associated with that line will be also deleted!";
+
+	cout << endl << endl;
+
 	while (1)
 	{
-		cout << "\nInsert line's ID:";
+		cout << "Line: ";
 		getline(cin, tempstr);
 		utilities::trimString(tempstr);
+
+		if (tempstr == "0") return;
 
 		if (Lines.RemoveBusLineByID(tempstr))
 			break;
 
 		cout << "\nLine not found!";
+		cout << "\nEnter 0 if you wish to go back to the previous menu.\n";
 	}
 
 
@@ -618,31 +643,31 @@ string ui::GetBannerFilename()
 void ui::PrintBanner()
 {
 
-	// static string Banner = "";
-	// if (Banner == "") {
-	// 	ifstream hBanner(bannerfilename);
-	// 	if (hBanner.fail()) {
-	// 		cout << "Error openning banner file." << endl;
-	// 		hBanner.close();
-	// 		return;
-	// 	}
-	// 	string asciiTemp;
-	// 	while (getline(hBanner, asciiTemp))
-	// 		Banner += string(((ConsoleWidth - asciiTemp.size()) / 2), ' ') + asciiTemp + "\n";
-	// }
+	 static string Banner = "";
+	 if (Banner == "") {
+	 	ifstream hBanner(bannerfilename);
+	 	if (hBanner.fail()) {
+	 		cout << "Error openning banner file." << endl;
+	 		hBanner.close();
+	 		return;
+	 	}
+	 	string asciiTemp;
+	 	while (getline(hBanner, asciiTemp))
+	 		Banner += string(((ConsoleWidth - asciiTemp.size()) / 2), ' ') + asciiTemp + "\n";
+	 }
 
-	// cout << endl << Banner;
+	 cout << endl << Banner << endl << endl;
 
-	ifstream banner(bannerfilename);
+	//ifstream banner(bannerfilename);
 
-	cout << "\n";
-	string asciiTemp;
+	//cout << "\n";
+	//string asciiTemp;
 
-	while (getline(banner, asciiTemp))
-		cout << string(((ConsoleWidth - asciiTemp.size()) / 2),' ') << asciiTemp << "\n";
+	//while (getline(banner, asciiTemp))
+	//	cout << string(((ConsoleWidth - asciiTemp.size()) / 2),' ') << asciiTemp << "\n";
 
-	cout << "\n\n\n";
+	//cout << "\n\n\n";
 
-	cout << string(3,'\n');
+	//cout << string(3,'\n');
 
 }

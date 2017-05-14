@@ -53,6 +53,7 @@ class DriversClass {
 		bool CanAddShiftToDriver(const string& DriverID, const Shift&);
 		void AddShiftToDriver(const string& DriverID, const Shift&);
 		void RemoveShiftFromDriver(const string& DriverID, const Shift&);
+		void RemoveAllShiftsWithLineID(const string& LineID);
 
 		bool LoadFromFile(const string&);
 		void SaveToFile() const;
@@ -94,6 +95,7 @@ class Buses_Class {
 		bool CanAddShift(const string& BusID, const Shift&) const;
 		void AddShift(const string& BusID, const Shift&);
 		void RemoveShift(const string& BusID, const Shift&);
+		void RemoveShiftsByLineID(const string& LineID);
 	private:
 		string filename;
 		map<string, set<Shift> > mapBusesIDs;
