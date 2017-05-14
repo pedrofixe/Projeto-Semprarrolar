@@ -1,10 +1,12 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "bus.h"
 #include "bus_stop.h"
 #include "driver.h"
-#include "line.h"
 #include "globals.h"
+#include "line.h"
+#include "shift.h"
 #include "ui.h"
 #include "ui_utilities.h"
 #include "utilities.h"
