@@ -83,12 +83,35 @@ void ui::MainMenu()
 	PrintBanner();
 	cout << string(3, '\n');
 
-	cout << "1- Line management\n";
-	cout << "2- Driver management\n";
-	cout << "3- Shift management\n";
-	cout << "4- Bus management\n";
-	cout << "5- Calculate shortest trip\n";
-	cout << "0- Quit\n";
+	//   FUNCIONALIDADES QUE O PROJETO DEVE TER, RETIRADO DO PDF
+	//1. Ler e guardar a informação de linhas e condutores armazenada em ficheiros;
+	//2. Gerir os condutores : criar, alterar e remover um condutor;
+	//3. Gerar e visualizar de modo formatado tabelas com horários de uma paragem;
+	//4. Visualizar o trabalho atribuído a um condutor;
+	//5. Visualizar a informação de um autocarro;
+	//6. Visualizar a informação de uma linha, visualizando de modo formatado a tabela com o seu horário;
+	//7. Inquirir sobre quais as linhas que incluem determinada paragem;
+	//8. Calcular e visualizar um percurso e tempo de viagem entre duas quaisquer paragens indicadas pelo
+	//	utilizador.Deve procurar a solução : na linha que contém a paragem inicial ou; na linha que contém a
+	//	paragem inicial e numa das linhas que tenha paragens comuns com a “linha inicial”.Havendo mais
+	//	do que uma solução o programa deve apresentar todas as soluções encontradas mas por ordem
+	//		crescente de distância.Se não encontrar uma solução dentro das restrições indicadas, o programa
+	//		deve indicar que não encontrou uma ligação entre as duas paragens.
+	//		9. Listar todos os períodos de autocarros sem condutor atribuído.
+	//		10. Listar todos os períodos de condutores sem o serviço completo atribuído(que não tenham atingido o
+	//			limite máximo semanal).
+	//		11. Efetuar interactivamente a atribuição de serviço a um condutor, permitindo ao utilizador ver as
+	//		disponibilidades de serviço dos autocarros, pedindo ao utilizador informação sobre um novo turno e
+	//		verificando a consistência dessa informação com as restrições de horário do condutor e restantes
+	//		dados existentes.
+
+	cout << " 1- Line management\n";
+	cout << " 2- Driver management\n";
+	cout << " 3- Bus management\n";
+	cout << " 4- Shift management\n";
+	cout << " 5- Calculate shortest trip\n";
+	cout << " 6- Visualize Schedules\n";
+	cout << " 0- Quit\n";
 	cout << "\n";
 
 	string input;
