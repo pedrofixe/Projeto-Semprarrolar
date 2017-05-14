@@ -95,7 +95,6 @@ void ui_utilities::ClearScreen()
 		res += "t";
 		cout << res;
 
-		
 		return true;
 	}
 

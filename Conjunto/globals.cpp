@@ -27,15 +27,35 @@ bool LinesClass::RemoveBusLine(const Line& inputLine)
 
 bool LinesClass::RemoveBusLineByID(const string& argIdentifier)
 {
-	for (auto iterator = lines.cbegin(); iterator != lines.cend(); iterator++) {
-		if (iterator->GetID() == argIdentifier) { // found
-			lines.erase(iterator);
-			// rebuild bus stops cache
-			Bus_Stops.RebuildBus_Stops(lines);
+	// for (auto iterator = lines.cbegin(); iterator != lines.cend(); iterator++) {
+	// 	if (iterator.GetID == argIdentifier) { // found
+	// 		lines.erase(iterator);
+	// 		// rebuild bus stops cache
+	// 		Bus_Stops.RebuildBus_Stops(lines);
+	// 		return true;
+	// 	}
+	// }
+
+	// return false;
+
+	// Line * lineptr = FindLine(argIdentifier);
+
+	// if (lineptr != nullptr)
+	// {
+	// 	lines.erase(*lineptr);
+	// 	return true;
+	// }
+	// else
+	// 	return false;
+
+	for (int i = 0; i < lines.size(); ++i)
+	{
+		if (lines[i].GetID() == argIdentifier)
+		{
+			lines.erase(lines.begin() + i);
 			return true;
 		}
 	}
-
 	return false;
 }
 
@@ -164,6 +184,17 @@ int LinesClass::SearchLine(const string& argIdentifier) const
 	return -1;
 }
 
+Line * LinesClass::FindLine(const string & LineID)
+{
+	for (auto& line : lines) {
+		if (line.GetID() == LineID) {
+			return &line;
+		}
+	}
+	return nullptr;
+}
+
+
 
 void LinesClass::PrintLinesNames() const
 {
@@ -179,7 +210,7 @@ void LinesClass::PrintLinesNames() const
 
 vector<Line>& LinesClass::GetLines()
 {
-	return Lines;
+	return lines;
 }
 
 // -- DRIVERS CLASS -- \\
@@ -206,17 +237,38 @@ bool DriversClass::RemoveDriver(const Driver& argDriver)
 
 bool DriversClass::RemoveDriverByID(const string& argDriverID)
 {
-	for (auto iterator = drivers.cbegin(); iterator != drivers.cend(); iterator++) {
-		if (iterator->GetID() == argDriverID) { // found
-			for (const Shift& shift : iterator->GetDriverShifts()) {
-				Shifts_Interface.RemoveShift(shift);
-			}
-			drivers.erase(iterator);
+	// for (auto iterator = drivers.cbegin(); iterator != drivers.cend(); iterator++) {
+	// 	if (iterator->GetID() == argDriverID) { // found
+	// 		for (const Shift& shift : iterator->GetDriverShifts()) {
+	// 			Shifts_Interface.RemoveShift(shift);
+	// 		}
+	// 		drivers.erase(iterator);
+	// 		return true;
+	// 	}
+	// }
+
+	// return false;
+
+	// Driver * driverptr = FindDriver(argDriverID);
+
+	// if (driverptr != nullptr)
+	// {
+	// 	drivers.erase(driverptr);
+	// 	return true;
+	// }
+	// else
+	// 	return false;
+
+	for (int i = 0; i < drivers.size(); ++i)
+	{
+		if (drivers[i].GetID() == argDriverID)
+		{
+			drivers.erase(drivers.begin() + i);
 			return true;
 		}
 	}
-
 	return false;
+
 }
 
 bool DriversClass::CanAddShiftToDriver(const string & argDriverID, const Shift& argShift)
@@ -563,12 +615,12 @@ void Shifts_InterfaceClass::SaveToFile() const
 	// Load lines
 	for (const Shift& shift : setShifts) {
 		shifts_file 
-			<< shift.GetDay() << ","
-			<< shift.GetStartHour() << ","
-			<< shift.GetEndHour() << ","
-			<< shift.GetDriverID() << ","
-			<< shift.GetBusID() << ","
-			<< shift.GetLineID() << endl;
+		<< shift.GetDay() << ","
+		<< shift.GetStartHour() << ","
+		<< shift.GetEndHour() << ","
+		<< shift.GetDriverID() << ","
+		<< shift.GetBusID() << ","
+		<< shift.GetLineID() << endl;
 	}
 	shifts_file.close();
 }

@@ -2,6 +2,7 @@
 
 void ui::PreMenu()
 {
+	ui_utilities::SetWindow(ConsoleWidth,ConsoleHeight);
 	ui_utilities::ClearScreen();
 	ui_utilities::ClearScreen();
 	string tempstr;
@@ -78,6 +79,7 @@ void ui::PreMenu()
 
 void ui::MainMenu()
 {
+	ui_utilities::SetWindow(ConsoleWidth,ConsoleHeight);
 	ui_utilities::ClearScreen();
 	ui_utilities::ClearScreen();
 	PrintBanner();
@@ -124,13 +126,13 @@ void ui::MainMenu()
 
 		if (input == "1")
 		{
-			Menu1();
+			LineManagementMenu();
 			break;
 		}
 
 		if (input == "2")
 		{
-			cout << "Menu2";
+			DriverManagementMenu();
 			break;
 		}
 
@@ -163,6 +165,7 @@ void ui::MainMenu()
 
 void ui::LineManagementMenu()
 {
+	ui_utilities::SetWindow(ConsoleWidth,ConsoleHeight);
 	ui_utilities::ClearScreen();
 	ui_utilities::ClearScreen();
 	PrintBanner();
@@ -217,6 +220,7 @@ void ui::LineManagementMenu()
 
 void ui::CreateLineMenu()
 {
+	ui_utilities::SetWindow(ConsoleWidth,ConsoleHeight);
 	ui_utilities::ClearScreen();
 	ui_utilities::ClearScreen();
 	PrintBanner();
@@ -246,7 +250,7 @@ void ui::CreateLineMenu()
 		getline(cin, tempstr);
 		utilities::trimString(tempstr);
 
-		if (utilities::is_numeric(tempstr))
+		if (utilities::isNumeric(tempstr))
 			break;
 
 		cout << "\nInvalid input!";
@@ -294,7 +298,7 @@ void ui::CreateLineMenu()
 		stringstream ss1(tempstr);
 		while (getline(ss1, tempstr, ','))
 		{
-			if (!utilities::is_numeric(tempstr))
+			if (!utilities::isNumeric(tempstr))
 			{
 				test = 0;
 				break;
@@ -319,6 +323,7 @@ void ui::CreateLineMenu()
 
 void ui::RemoveLineMenu()
 {
+	ui_utilities::SetWindow(ConsoleWidth,ConsoleHeight);
 	ui_utilities::ClearScreen();
 	ui_utilities::ClearScreen();
 	PrintBanner();
@@ -348,7 +353,7 @@ void ui::RemoveLineMenu()
 
 void ui::DriverManagementMenu()
 {
-
+	ui_utilities::SetWindow(ConsoleWidth,ConsoleHeight);
 	ui_utilities::ClearScreen();
 	ui_utilities::ClearScreen();
 	PrintBanner();
@@ -404,6 +409,7 @@ void ui::DriverManagementMenu()
 
 void ui::CreateDriverMenu()
 {
+	ui_utilities::SetWindow(ConsoleWidth,ConsoleHeight);
 	ui_utilities::ClearScreen();
 	ui_utilities::ClearScreen();
 	PrintBanner();
@@ -419,7 +425,7 @@ void ui::CreateDriverMenu()
 		getline(cin, tempstr);
 		utilities::trimString(tempstr);
 
-		if (!Drivers.LineExists(tempstr))
+		if (!Drivers.DriverExists(tempstr))
 			break;
 
 		cout << "\nInvalid input!";
@@ -437,7 +443,7 @@ void ui::CreateDriverMenu()
 
 		for (int i = 0; i < tempstr.size(); ++i)
 		{
-			if (utilities::isNumeric(tempstr[i]))
+			if (tempstr[i] >= '0' && tempstr[i] <= '9')
 			{
 				test = 0;
 				break;
@@ -462,7 +468,7 @@ void ui::CreateDriverMenu()
 
 		cout << "\nInvalid input!";
 	}
-	tempdriver.SetMaxHoursShift(stoi(tempstops));
+	tempdriver.SetMaxHoursShift(stoi(tempstr));
 
 
 	while (1)
@@ -476,7 +482,7 @@ void ui::CreateDriverMenu()
 
 		cout << "\nInvalid input!";
 	}
-	tempdriver.SetMaxHoursWeek(stoi(tempstops));
+	tempdriver.SetMaxHoursWeek(stoi(tempstr));
 
 
 	while (1)
@@ -490,7 +496,7 @@ void ui::CreateDriverMenu()
 
 		cout << "\nInvalid input!";
 	}
-	tempdriver.GetMinHoursRest(stoi(tempstops));
+	tempdriver.SetMinHoursRest(stoi(tempstr));
 
 	cout << "\nDriver created, Press any key to continue...";
 	cin.get();
@@ -502,6 +508,7 @@ void ui::CreateDriverMenu()
 
 void ui::RemoveDriverMenu()
 {
+	ui_utilities::SetWindow(ConsoleWidth,ConsoleHeight);
 	ui_utilities::ClearScreen();
 	ui_utilities::ClearScreen();
 	PrintBanner();
@@ -556,21 +563,21 @@ bool ui::StartMenu(const int& Width, const int& Height, const string& filename)
 
 bool ui::SetConsoleWidth(const unsigned int& Width)
 {
-	if (Width > 119 && Width < 241)
-	{
+	//if (Width > 119 && Width < 241)
+	//{
 		ConsoleWidth = Width;
 		return true;
-	}
+	//}
 	return false;
 }
 
 bool ui::SetConsoleHeight(const unsigned int& Height)
 {
-	if (Height > 29 && Height < 64)
-	{
+	// if (Height > 29 && Height < 64)
+	// {
 		ConsoleHeight = Height;
 		return true;
-	}
+	// }
 	return false;
 }
 
@@ -611,20 +618,30 @@ string ui::GetBannerFilename()
 void ui::PrintBanner()
 {
 
-	static string Banner = "";
-	if (Banner == "") {
-		ifstream hBanner(bannerfilename);
-		if (hBanner.fail()) {
-			cout << "Error openning banner file." << endl;
-			hBanner.close();
-			return;
-		}
-		string asciiTemp;
-		while (getline(hBanner, asciiTemp))
-			Banner += string(((ConsoleWidth - asciiTemp.size()) / 2), ' ') + asciiTemp + "\n";
-	}
+	// static string Banner = "";
+	// if (Banner == "") {
+	// 	ifstream hBanner(bannerfilename);
+	// 	if (hBanner.fail()) {
+	// 		cout << "Error openning banner file." << endl;
+	// 		hBanner.close();
+	// 		return;
+	// 	}
+	// 	string asciiTemp;
+	// 	while (getline(hBanner, asciiTemp))
+	// 		Banner += string(((ConsoleWidth - asciiTemp.size()) / 2), ' ') + asciiTemp + "\n";
+	// }
 
-	cout << endl << Banner;
+	// cout << endl << Banner;
+
+	ifstream banner(bannerfilename);
+
+	cout << "\n";
+	string asciiTemp;
+
+	while (getline(banner, asciiTemp))
+		cout << string(((ConsoleWidth - asciiTemp.size()) / 2),' ') << asciiTemp << "\n";
+
+	cout << "\n\n\n";
 
 	cout << string(3,'\n');
 

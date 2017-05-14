@@ -36,6 +36,7 @@ class LinesClass {
 		void PrintLinesNames() const;
 		bool LineExists(const string&) const;
 		int SearchLine(const string&) const;
+		Line* FindLine(const string&);
 		vector<Line>& GetLines(); // cant be const because some methods from other classes only work with non const vectors
 	private:
 		string filename;
