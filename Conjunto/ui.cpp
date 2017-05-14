@@ -413,12 +413,20 @@ string ui::GetBannerFilename()
 
 void ui::PrintBanner()
 {
-	ifstream banner(bannerfilename);
 
-	cout << "\n";
-	string asciiTemp;
+	static string Banner = "";
+	if (Banner == "") {
+		ifstream hBanner(bannerfilename);
+		if (hBanner.fail()) {
+			cout << "Error openning banner file." << endl;
+			hBanner.close();
+			return;
+		}
+		string asciiTemp;
+		while (getline(hBanner, asciiTemp))
+			Banner += string(((ConsoleWidth - asciiTemp.size()) / 2), ' ') + asciiTemp + "\n";
+	}
 
-	while (getline(banner, asciiTemp))
-		cout << string(((ConsoleWidth - asciiTemp.size()) / 2), '\n') << asciiTemp << "\n";
+	cout << Banner;
 
 }
