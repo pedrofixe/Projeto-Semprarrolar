@@ -98,11 +98,14 @@ class Buses_Class {
 		const set<Shift>& GetShifts(const string& BusID) const;
 		bool BusExists(const string& BusID);
 		bool CanAddShift(const string& BusID, const Shift&) const;
+		static bool CanAddShift(const set<Shift> & shiftSet, const Shift& argShift);
 		void AddShift(const string& BusID, const Shift&);
 		void RemoveShift(const string& BusID, const Shift&);
 		void RemoveShiftsByLineID(const string& LineID);
 		unsigned int GetNumberOfBuses() const;
 		void ListBuses() const;
+		void ShowServiceSchedule(const string& BusID) const;
+		static void DisplaySpecificDay(unsigned int day, const string& spacer, const set<Shift>&);
 	private:
 		string filename;
 		map<string, set<Shift> > mapBusesIDs;

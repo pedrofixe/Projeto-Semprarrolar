@@ -1300,8 +1300,12 @@ void ui::VisualizeBusServiceScheduleMenu()
 		}
 		break;
 	}
-	
 
+	cout << endl;
+	
+	Buses.ShowServiceSchedule(tempstr);
+
+	cout << endl;
 
 	cout << "\n   Press any key to continue...";
 	cin.get();

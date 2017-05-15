@@ -409,7 +409,8 @@ void DriversClass::ListAvailableDrivers() const
 	for (Driver driver : drivers) {
 		unsigned int workingHours = driver.GetNrWorkingHours();
 		if (workingHours <= driver.GetMaxHoursWeek()) {
-			cout << " --> " << driver.GetName() << " : \t\t\t Available to work more " << driver.GetMaxHoursWeek() - workingHours << " hours." << endl;
+			cout << setw(35) << left << " --> " + driver.GetName() + " : ";
+			cout << "Available to work " << driver.GetMaxHoursWeek() - workingHours << " more hours." << endl;
 		}
 	}
 }
@@ -610,6 +611,16 @@ bool Buses_Class::CanAddShift(const string & BusID, const Shift& argShift) const
 	return true;
 }
 
+bool Buses_Class::CanAddShift(const set<Shift> & shiftSet, const Shift& argShift)
+{
+	for (const auto& bus_Shift : shiftSet) {
+		if (bus_Shift.GetDay() == argShift.GetDay() && (argShift.GetStartHour() >= bus_Shift.GetStartHour() && argShift.GetStartHour() < bus_Shift.GetEndHour())) {
+			return false;
+		}
+	}
+	return true;
+}
+
 void Buses_Class::AddShift(const string & BusID, const Shift &argShift)
 {
 	auto iterator = mapBusesIDs.find(BusID);
@@ -655,6 +666,46 @@ void Buses_Class::ListBuses() const
 		else (std::cout << ",");
 		std::cout << " " << mapIterator->first;
 	}
+}
+
+void Buses_Class::ShowServiceSchedule(const string & BusID) const
+{
+	auto busIterator = mapBusesIDs.find(BusID);
+	if (busIterator != mapBusesIDs.end()) {
+		static string blankFiller = "                ";
+		cout << blankFiller << string(60, '#') << endl;
+		size_t nameLengthLeft = busIterator->first.length();
+		size_t nameLengthRight = nameLengthLeft % 2 == 1 ? (nameLengthLeft + 1) : nameLengthLeft;
+		cout << blankFiller << "#" << string(28 - nameLengthLeft / 2, '#') << " " + busIterator->first + " " << string(28 - nameLengthRight / 2, '#') << "#" << endl;
+		cout << blankFiller << "############# 8:00                    20:00 ################" << endl;
+
+		for (int i = 0; i < 7; i++) {
+			DisplaySpecificDay(i, blankFiller, busIterator->second);
+		}
+		cout << blankFiller << string(60, '#') << endl;
+		cout << blankFiller << "             A- Available | N- Not Available";
+
+	}
+}
+
+void Buses_Class::DisplaySpecificDay(unsigned int day, const string & blankFiller, const set<Shift>& setShifts)
+{
+	const string dayName = utilities::DayNumberToString(day);
+	unsigned int nrSpaces = 9 - dayName.length();
+
+	cout << blankFiller << "# " + dayName + string(nrSpaces, ' ') + " | ";
+
+	for (unsigned int i = 8; i < SCHEDULE_END; i++) {
+		Shift tempShift(day, i, i + 1, "", "", "");
+		if (CanAddShift(setShifts, tempShift)) {
+			cout << "A";
+		}
+		else cout << "N";
+		cout << " ";
+	}
+
+	cout << "################";
+	cout << endl;
 }
 
 // -- SHIFTS_INTERFACE CLASS -- \\
