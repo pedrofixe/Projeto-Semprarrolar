@@ -54,6 +54,8 @@ private:
 	void RemoveBusMenu();
 
 	void ShiftManagementMenu();
+	void CreateShiftMenu();
+	void RemoveShiftMenu();
 	void VisualizeDriverWorkScheduleMenu();
 	void ListAvailableDriversMenu();
 	void ListAllShiftsMenu();

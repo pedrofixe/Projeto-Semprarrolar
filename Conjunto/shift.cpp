@@ -12,6 +12,7 @@ Shift::Shift(unsigned int argDay, unsigned int argStartHour, unsigned int argEnd
 
 Shift::Shift()
 {
+
 }
 
 unsigned int Shift::GetDay() const

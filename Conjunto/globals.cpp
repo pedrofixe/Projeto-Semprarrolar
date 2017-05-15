@@ -791,6 +791,19 @@ void Shifts_InterfaceClass::RemoveShift(const Shift& argShift)
 	SaveToFile();
 }
 
+void Shifts_InterfaceClass::RemoveShiftByIndex(unsigned int Index)
+{
+	unsigned int x = 1;
+	for (auto iterator = setShifts.begin(); iterator != setShifts.end(); iterator++) {
+		if (x == Index) {
+			setShifts.erase(iterator); 
+			Buses.RemoveShift(iterator->GetBusID(), *iterator);
+			Drivers.RemoveShiftFromDriver(iterator->GetDriverID(), *iterator);
+			SaveToFile();
+		}
+	}
+}
+
 void Shifts_InterfaceClass::RemoveLineShifts(const string & LineID)
 {
 	for (const Shift& shift : setShifts) {
@@ -814,12 +827,24 @@ const set<Shift>& Shifts_InterfaceClass::GetShifts() const
 	return setShifts;
 }
 
-void Shifts_InterfaceClass::ListShifts(const set<Shift> &setShifts)
+void Shifts_InterfaceClass::ListShifts(const set<Shift> &setShifts, bool showIndexColumn)
 {
-	cout << setw(2) << "" << setw(12) << left << "Day" << setw(15) << "Start Hour" << setw(15) << "End Hour" << setw(10) << "Line" << setw(30) << "Driver" << setw(10) << "Bus" << endl;
-	for (const Shift &shift : setShifts) {
-		string dayName = utilities::DayNumberToString(shift.GetDay());
-		cout << setw(2) << "" << setw(12) << left << dayName << setw(15) << shift.GetStartHour() + ":00" << setw(15) << shift.GetEndHour() + ":00" << setw(10) << shift.GetLineID() << setw(30) << "[" + shift.GetDriverID() + "]" +shift.GetDriverID() << setw(10) << shift.GetBusID() << endl;
+	if (showIndexColumn) {
+		unsigned int x = 1;
+		cout << setw(2) << "" << "#" << "   " << setw(12) << left << "Day" << setw(15) << "Start Hour" << setw(15) << "End Hour" << setw(10) << "Line" << setw(30) << "Driver" << setw(10) << "Bus" << endl;
+		for (const Shift &shift : setShifts) {
+			string dayName = utilities::DayNumberToString(shift.GetDay());
+			cout << setw(2) << "" << setw(4) << x << setw(12) << left << dayName << setw(15) << shift.GetStartHour() + ":00" << setw(15) << shift.GetEndHour() + ":00" << setw(10) << shift.GetLineID() << setw(30) << "[" + shift.GetDriverID() + "]" + shift.GetDriverID() << setw(10) << shift.GetBusID() << endl;
+			x++;
+		}
+		cout << right;
 	}
-	cout << right;
+	else {
+		cout << setw(2) << "" << setw(12) << left << "Day" << setw(15) << "Start Hour" << setw(15) << "End Hour" << setw(10) << "Line" << setw(30) << "Driver" << setw(10) << "Bus" << endl;
+		for (const Shift &shift : setShifts) {
+			string dayName = utilities::DayNumberToString(shift.GetDay());
+			cout << setw(2) << "" << setw(12) << left << dayName << setw(15) << shift.GetStartHour() + ":00" << setw(15) << shift.GetEndHour() + ":00" << setw(10) << shift.GetLineID() << setw(30) << "[" + shift.GetDriverID() + "]" + shift.GetDriverID() << setw(10) << shift.GetBusID() << endl;
+		}
+		cout << right;
+	}
 }

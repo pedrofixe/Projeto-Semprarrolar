@@ -106,6 +106,8 @@ void ui::MainMenu()
 		//		verificando a consist?cia dessa informa?o com as restri?es de hor?io do condutor e restantes
 		//		dados existentes.
 
+		// OK! PARECE QUE ESTAO TODAS IMPLEMENTADAS! HURRAY!!
+
 		cout << "  - MAIN MENU -\n";
 		cout << " 1- Line management\n";
 		cout << " 2- Driver management\n";
@@ -1133,12 +1135,11 @@ void ui::ShiftManagementMenu() {
 		cout << "\n Currently there are " << Shifts_Interface.GetShifts().size() << " work shifts at SEMPRARROLAR.";
 		cout << endl << endl;
 		cout << " 1- Create Shift\n";
-		cout << " 2- Edit Shift\n";
-		cout << " 3- List all shifts\n";
-		cout << " 4- Remove Shift\n";
-		cout << " 5- Visualize driver work schedule\n";
-		cout << " 6- List drivers who haven't reached their weekly work limit\n";
-		cout << " 7- Visualize bus service schedule\n";
+		cout << " 2- List all shifts\n";
+		cout << " 3- Remove Shift\n";
+		cout << " 4- Visualize driver work schedule\n";
+		cout << " 5- List drivers who haven't reached their weekly work limit\n";
+		cout << " 6- Visualize bus service schedule\n";
 		cout << " 9- Return to previous menu\n";
 		cout << "\n";
 
@@ -1153,30 +1154,30 @@ void ui::ShiftManagementMenu() {
 
 			if (input == "1")
 			{
-				CreateBusMenu();
+				CreateShiftMenu();
 				break;
 			}
 			else if (input == "2")
 			{
-				ListBusesMenu();
+				ListAllShiftsMenu();
 				break;
 			}
 			else if (input == "3")
 			{
-				ListAllShiftsMenu();
+				RemoveShiftMenu();
 				break;
 			}
-			else if (input == "5")
+			else if (input == "4")
 			{
 				VisualizeDriverWorkScheduleMenu();
 				break;
 			}
-			else if (input == "6")
+			else if (input == "5")
 			{
 				ListAvailableDriversMenu();
 				break;
 			}
-			else if (input == "7")
+			else if (input == "6")
 			{
 				VisualizeBusServiceScheduleMenu();
 				break;
@@ -1186,10 +1187,65 @@ void ui::ShiftManagementMenu() {
 				return;
 			}
 			else {
-				cout << "\nInvalid Input";
+				cout << "\nInvalid Input\n";
 			}
 		}
 	}
+}
+
+void ui::CreateShiftMenu() {
+	ui_utilities::SetWindow(ConsoleWidth, ConsoleHeight);
+	ui_utilities::ClearScreen();
+	PrintBanner();
+
+	string tempstr;
+
+	cout << " - CREATE SHIFT MENU -";
+	cout << endl;
+
+	cout << endl;
+}
+
+void ui::RemoveShiftMenu()
+{
+	ui_utilities::SetWindow(ConsoleWidth, ConsoleHeight);
+	ui_utilities::ClearScreen();
+	PrintBanner();
+
+	string tempstr;
+
+	cout << " - REMOVE SHIFT MENU -";
+	cout << endl;
+
+	cout << endl;
+
+	Shifts_InterfaceClass::ListShifts(Shifts_Interface.GetShifts(), true);
+
+	while (1)
+	{
+		cout << " Shift #: ";
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (tempstr == "0") return;
+
+		if (!utilities::isNumeric(tempstr)) {
+			cout << "\nSorry but it seems you didn't insert a number! Try again.";
+			continue;
+		}
+		if (stoi(tempstr) > Shifts_Interface.GetShifts().size() ) {
+			cout << "\nSorry but it seems the number you inserted is just too damn high! Try again";
+			continue;
+		}
+
+		cout << "\nShift not found!";
+		cout << "\nEnter 0 if you wish to go back to the previous menu.\n";
+	}
+
+	Shifts_Interface.RemoveShiftByIndex(stoi(tempstr));
+
+	cout << endl << endl << "\n     Shift removed,  Press any key to continue...";
+	cin.get();
 }
 
 void ui::VisualizeDriverWorkScheduleMenu() {
@@ -1499,7 +1555,7 @@ void ui::FindShortestTrip() {
 
 	cout << endl;
 
-	cout << "\n   Press any key to continue...";
+	cout << "   Press any key to continue...";
 	cin.get();
 }
 

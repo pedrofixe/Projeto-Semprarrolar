@@ -66,7 +66,7 @@ class DriversClass {
 
 		Driver* FindDriver(const string& DriverID); // returns a pointer to the specified driver or nullptr if it doesnt exist
 
-		vector<Driver>& GetDrivers(); // n sei se vai ser usado
+		vector<Driver>& GetDrivers(); // removed const qualifier because the compiler gods were not pleased.
 	private:
 		string filename;
 		vector<Driver> drivers;
@@ -83,7 +83,7 @@ class Bus_StopsClass {
 		void RebuildBus_Stops(vector<Line>&);
 		void RemoveBusStop(const string&);
 		const vector<Bus_Stop>& getVecBusStops() const;
-		//static void PrintTripBetweenBus_Stops(Bus_Stop* bus_stop1, Bus_Stop* bus_stop2);
+		//static void PrintTripBetweenBus_Stops(Bus_Stop* bus_stop1, Bus_Stop* bus_stop2); // had to move it back to ui.cpp because it was throwing runtime exceptions with no valuable information
 	private:
 		vector<Bus_Stop> vecBusStops;
 };
@@ -117,8 +117,9 @@ class Shifts_InterfaceClass {
 		void SaveToFile() const;
 		void InsertShift(const Shift&, bool saveToFile = true);
 		const set<Shift>& GetShifts() const;
-		static void ListShifts(const set<Shift>&);
+		static void ListShifts(const set<Shift>&, bool showIndexColumn = false);
 		void RemoveShift(const Shift&);
+		void RemoveShiftByIndex(unsigned int Index);
 		void RemoveLineShifts(const string& LineID);
 		void RemoveBus_Shifts(const string& BusID);
 	private:
