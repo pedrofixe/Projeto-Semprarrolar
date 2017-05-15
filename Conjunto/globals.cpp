@@ -278,7 +278,7 @@ bool DriversClass::RemoveDriverByID(const string& argDriverID)
 	return false;
 
 }
-
+/*
 int DriversClass::CanAddShiftToDriver(const string & argDriverID, const Shift& argShift)
 {
 	Driver* driver = FindDriver(argDriverID);
@@ -286,7 +286,7 @@ int DriversClass::CanAddShiftToDriver(const string & argDriverID, const Shift& a
 		return driver->CanAddShift(argShift);
 	}
 	return -1;
-}
+} */
 
 void DriversClass::AddShiftToDriver(const string & argDriverID, const Shift& argShift)
 {
@@ -404,10 +404,10 @@ int DriversClass::SearchDriver(const string& argIdentifier) const
 	return -1;
 }
 
-void DriversClass::ListAvailableDrivers() const
+void DriversClass::ListAvailableDrivers(const set<Shift>& setShifts) const
 {
 	for (Driver driver : drivers) {
-		unsigned int workingHours = driver.GetNrWorkingHours();
+		unsigned int workingHours = driver.GetNrWorkingHours(utilities::GetShiftsFromDriver(setShifts, driver.GetID()) );
 		if (workingHours <= driver.GetMaxHoursWeek()) {
 			cout << setw(35) << left << " --> " + driver.GetName() + " : ";
 			cout << "Available to work " << driver.GetMaxHoursWeek() - workingHours << " more hours." << endl;
@@ -669,7 +669,7 @@ void Buses_Class::ListBuses() const
 	}
 }
 
-void Buses_Class::ShowServiceSchedule(const string & BusID) const
+void Buses_Class::ShowServiceSchedule(const string & BusID, const set<Shift>& setShifts) const
 {
 	auto busIterator = mapBusesIDs.find(BusID);
 	if (busIterator != mapBusesIDs.end()) {
@@ -681,7 +681,7 @@ void Buses_Class::ShowServiceSchedule(const string & BusID) const
 		cout << blankFiller << "############# 8:00                    20:00 ################" << endl;
 
 		for (int i = 0; i < 7; i++) {
-			DisplaySpecificDay(i, blankFiller, busIterator->second);
+			DisplaySpecificDay(i, blankFiller, setShifts);
 		}
 		cout << blankFiller << string(60, '#') << endl;
 		cout << blankFiller << "             A- Available | N- Not Available";
@@ -774,9 +774,9 @@ void Shifts_InterfaceClass::InsertShift(const Shift &argShift, bool saveToFile)
 	setShifts.insert(argShift);
 	// but we will also have to add the shift to the corresponding driver and bus..
 	// first to the buses
-	Buses.AddShift(argShift.GetBusID(), argShift);
+	//Buses.AddShift(argShift.GetBusID(), argShift);
 	// then to the moon... I mean, the corresponding driver;
-	Drivers.AddShiftToDriver(argShift.GetDriverID(), argShift);
+	//Drivers.AddShiftToDriver(argShift.GetDriverID(), argShift);
 	if(saveToFile) SaveToFile();
 }
 
@@ -823,7 +823,7 @@ void Shifts_InterfaceClass::RemoveBus_Shifts(const string & BusID)
 	}
 }
 
-const set<Shift>& Shifts_InterfaceClass::GetShifts() const
+const set<Shift> Shifts_InterfaceClass::GetShifts() const
 {
 	return setShifts;
 }

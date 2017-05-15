@@ -913,7 +913,7 @@ void ui::ListDriverShiftsMenu() {
 
 	cout << endl;
 
-	Shifts_InterfaceClass::ListShifts(driver->GetDriverShifts(), Drivers.GetDrivers());
+	Shifts_InterfaceClass::ListShifts( utilities::GetShiftsFromDriver(Shifts_Interface.GetShifts(), driver->GetID()) , Drivers.GetDrivers());
 
 	cout << endl << endl << "\n       Press any key to continue...";
 	cin.get();
@@ -1230,16 +1230,16 @@ void ui::CreateShiftMenu() {
 
 	Driver* driver = Drivers.FindDriver(tempstr);
 
-	unsigned int workHours = driver->GetNrWorkingHours();
+	unsigned int workHours = driver->GetNrWorkingHours(utilities::GetShiftsFromDriver(Shifts_Interface.GetShifts(), driver->GetID()));
 	if (driver->GetMaxHoursWeek() - workHours == 0) {
 		cout << endl << "Oops! It seems that driver has reached his weekly limit of work hours. ";
 		cout << endl << endl << "\n     Press any key to continue...";
 		cin.get();
 		return;
 	}
-	driver->ShowWorkSchedule();
+	driver->ShowWorkSchedule(utilities::GetShiftsFromDriver(Shifts_Interface.GetShifts(), driver->GetID()));
 	cout << endl;
-	cout << "  Number of available hours to work: " << driver->GetMaxHoursWeek() - driver->GetNrWorkingHours();
+	cout << "  Number of available hours to work: " << driver->GetMaxHoursWeek() - driver->GetNrWorkingHours(utilities::GetShiftsFromDriver(Shifts_Interface.GetShifts(), driver->GetID()));
 	cout << endl;
 	cout << endl;
 
@@ -1263,7 +1263,7 @@ void ui::CreateShiftMenu() {
 		break;
 	}
 
-	Buses.ShowServiceSchedule(tempstr);
+	Buses.ShowServiceSchedule(tempstr, utilities::GetShiftsFromBusID(Shifts_Interface.GetShifts(), tempstr));
 
 	string busID = tempstr;
 
@@ -1359,7 +1359,7 @@ void ui::CreateShiftMenu() {
 	Shift newShift(dayNumber, startHour, endHour, driver->GetID(), busID, lineID);
 
 
-	int canAddShift = driver->CanAddShift(newShift);
+	int canAddShift = driver->CanAddShift(newShift, utilities::GetShiftsFromDriver(Shifts_Interface.GetShifts(), driver->GetID()));
 	switch (canAddShift) {
 		case NOT_AVAILABLE:
 			cout << "The driver is already working during that time! I'm sorry but you will have to try again." << endl; // try harder this time
@@ -1465,7 +1465,7 @@ void ui::VisualizeDriverWorkScheduleMenu() {
 	
 	driver = Drivers.FindDriver(tempstr);
 
-	driver->ShowWorkSchedule();
+	driver->ShowWorkSchedule(utilities::GetShiftsFromDriver(Shifts_Interface.GetShifts(), driver->GetID()));
 
 	cout << endl;
 
@@ -1482,7 +1482,7 @@ void ui::ListAvailableDriversMenu() {
 
 	cout << "\n - LIST AVAILABLE DRIVERS MENU -" << endl << endl;
 
-	Drivers.ListAvailableDrivers();
+	Drivers.ListAvailableDrivers(Shifts_Interface.GetShifts());
 
 	cout << endl;
 
@@ -1544,7 +1544,7 @@ void ui::VisualizeBusServiceScheduleMenu()
 
 	cout << endl;
 	
-	Buses.ShowServiceSchedule(tempstr);
+	Buses.ShowServiceSchedule(tempstr, utilities::GetShiftsFromBusID(Shifts_Interface.GetShifts(), tempstr));
 
 	cout << endl;
 
