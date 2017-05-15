@@ -1027,6 +1027,7 @@ void ui::CreateBusMenu() {
 		break;
 	}
 	Buses.InsertBus(tempstr);
+	Buses.SaveToFile();
 	cout << "\n   Bus created, Press any key to continue...";
 	cin.get();
 	return;
@@ -1114,6 +1115,7 @@ void ui::RemoveBusMenu() {
 		break;
 	}
 	Buses.RemoveBus(tempstr);
+	Buses.SaveToFile();
 	cout << "\n   Bus removed, Press any key to continue...";
 	cin.get();
 	return;
