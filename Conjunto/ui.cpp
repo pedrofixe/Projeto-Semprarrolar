@@ -124,6 +124,7 @@ void ui::MainMenu()
 			cout << "Select an option: ";
 
 			getline(cin, input);
+			utilities::trimString(input);
 			cout << "\n";
 
 			if (input == "1")
@@ -201,6 +202,7 @@ void ui::LineManagementMenu()
 			cout << "Select an option: ";
 
 			getline(cin, input);
+			utilities::trimString(input);
 			cout << "\n";
 
 			if (input == "1")
@@ -255,11 +257,11 @@ void ui::CreateLineMenu()
 		utilities::trimString(tempstr);
 
 		if (Lines.LineExists(tempstr)) {
-			cout << "Sorry but that Line ID isn't valid! It seems that line already exists.";
+			cout << "\nSorry but that Line ID isn't valid! It seems that line already exists.";
 			continue;
 		}
 		else if (tempstr.length() < 3) {
-			cout << "Sorry but the ID you inserted is too short. Please try again!";
+			cout << "\nSorry but the ID you inserted is too short. Please try again!";
 			continue;
 		}
 
@@ -274,11 +276,11 @@ void ui::CreateLineMenu()
 		utilities::trimString(tempstr);
 
 		if (!utilities::isNumeric(tempstr)) {
-			cout << "Sorry but it seems you didn't insert a number! Try again.";
+			cout << "\nSorry but it seems you didn't insert a number! Try again.";
 			continue;
 		}
 		if (stoi(tempstr) > 300 || stoi(tempstr) <= 2) {
-			cout << "Yeah... That doesn't seem about right. Try again";
+			cout << "\nYeah... That doesn't seem about right. Try again";
 			continue;
 		}
 		break;
@@ -290,14 +292,30 @@ void ui::CreateLineMenu()
 
 	cout << "\n Insert new Line's bus stops (press enter after you type each one and to stop insert 0):";
 	cout << endl;
+
+
 	while (getline(cin, tempstr)) {
 		utilities::trimString(tempstr);
-		if (tempstr == "0") break;
-		if (tempstr.length() < 3) {
-			cout << "Oops! That is too short... Try again!" << endl;
+		if (tempstr == "0");
+		{
+			if (tempstops.size() < 2)
+			{
+				cout << "\nSorry but you need to insert at least 2 stops";
+				continue;
+			}
+			else
+				break;
+
 		}
-		tempstops.push_back(tempstr);
+		if (tempstr.length() < 3)
+		{
+			cout << "\nOops! That is too short... Try again!" << endl;
+			continue;
+		}
+		else
+			tempstops.push_back(tempstr);
 	}
+
 
 	vector<unsigned int> temptimebetweenstops;
 
@@ -307,6 +325,7 @@ void ui::CreateLineMenu()
 	for (size_t i = 0; i < tempstops.size() - 1; i++) {
 		cout << "-Travel time beetween " << tempstops[i] << " and " << tempstops[i + 1] << "? ";
 		getline(cin, tempstr);
+		utilities::trimString(tempstr);
 
 		if (!utilities::isNumeric(tempstr)) {
 			cout << "Sorry but it seems you didn't insert a number! Try again.";
@@ -325,7 +344,7 @@ void ui::CreateLineMenu()
 	templine.SetBus_Stops(tempstops);
 	templine.SetTimeBetweenStops(temptimebetweenstops);
 
-	cout << "\n   Line created, Press any key to continue...";
+	cout << "\n\n Line created, Press any key to continue...";
 	cin.get();
 
 	Lines.AddBusLine(templine);
@@ -341,9 +360,10 @@ void ui::EditLineMenu()
 	PrintBanner();
 
 	string tempstr;
+	int lineindex;
 
 	cout << "\n - EDIT LINE MENU -"
-		<< "\n Please select one of the following bus lines:";
+	<< "\n\n Please select one of the following bus lines:";
 
 	Lines.PrintLinesNames();
 	cout << endl << endl;
@@ -362,6 +382,132 @@ void ui::EditLineMenu()
 		cout << "\nLine not found!";
 		cout << "\nEnter 0 if you wish to go back to the previous menu.\n";
 	}
+	lineindex = Lines.SearchLine(tempstr);
+
+	while(1)
+	{
+		cout << "\n Insert line's new ID(leave blank to not edit) :";
+		getline(cin,tempstr);
+		utilities::trimString(tempstr);
+
+		if (tempstr == "")
+			break;
+
+		if (Lines.LineExists(tempstr)) {
+			cout << "\nSorry but that Line ID isn't valid! It seems that line already exists.";
+			continue;
+		}
+		else if (tempstr.length() < 3) {
+			cout << "\nSorry but the ID you inserted is too short. Please try again!";
+			continue;
+		}
+
+		Lines.GetLines()[lineindex].SetID(tempstr);
+		break;
+	}
+
+	while(1)
+	{
+		cout << "\n Insert line's frequency of service(leave blank to not edit): ";
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (tempstr == "")
+			break;
+
+		if (!utilities::isNumeric(tempstr)) {
+			cout << "\nSorry but it seems you didn't insert a number! Try again.";
+			continue;
+		}
+		if (stoi(tempstr) > 300 || stoi(tempstr) <= 2) {
+			cout << "\nYeah... That doesn't seem about right. Try again";
+			continue;
+		}
+
+		Lines.GetLines()[lineindex].SetFreq(stoi(tempstr));
+		break;
+	}
+
+	vector<string> tempstops;
+
+	cout << "\n Insert line's bus stops (press enter after you type each one and to stop insert 0) (leave blank to not edit):";
+	cout << endl;
+
+	bool altered = 1;
+
+	while (getline(cin, tempstr)) {
+		utilities::trimString(tempstr);
+
+		if (tempstr == "")
+		{
+			altered = 0;
+			break;
+		}
+
+		if (tempstr == "0");
+		{
+			if (tempstops.size() < 2)
+			{
+				cout << "\nSorry but you need to insert at least 2 stops";
+				continue;
+			}
+			else
+			{
+				Lines.GetLines()[lineindex].SetBus_Stops(tempstops);
+				break;
+			}
+
+		}
+		if (tempstr.length() < 3)
+		{
+			cout << "\nOops! That is too short... Try again!" << endl;
+			continue;
+		}
+		else
+			tempstops.push_back(tempstr);
+	}
+
+	vector<unsigned int> temptimebetweenstops;
+
+	cout << "\n Perfect! Now please insert the time it takes to travel between the following stops (minutes) (leave blank to not edit if you didn't edit stops): ";
+	cout << endl;
+
+	bool test = 1;
+
+	for (size_t i = 0; i < Lines.GetLines()[lineindex].GetBus_Stops().size() - 1; i++) {
+		cout << "-Travel time beetween " << Lines.GetLines()[lineindex].GetBus_Stops()[i] << " and " << Lines.GetLines()[lineindex].GetBus_Stops()[i + 1] << "? ";
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (tempstr == "" && !altered)
+		{
+			test = 0;
+			break;
+		}
+
+		if (!utilities::isNumeric(tempstr)) {
+			cout << "Sorry but it seems you didn't insert a number! Try again.";
+			i--;
+			continue;
+		}
+		if (stoi(tempstr) > 300 || stoi(tempstr) <= 2) {
+			cout << "Yeah... That doesn't seem about right. Try again";
+			i--;
+			continue;
+		}
+
+		temptimebetweenstops.push_back( stoi(tempstr) );
+	}
+
+	if (test)
+		Lines.GetLines()[lineindex].SetTimeBetweenStops(temptimebetweenstops);
+
+	cout << "\n\n Line edited, Press any key to continue...";
+	cin.get();
+
+	Bus_Stops.RebuildBus_Stops(Lines.GetLines()); // rebuild bus stops cache
+
+	return;
 }
 
 void ui::RemoveLineMenu()
@@ -373,7 +519,7 @@ void ui::RemoveLineMenu()
 	string tempstr;
 
 	cout << "\n - REMOVE LINE MENU -"
-		<< "\n Please select one of the following bus lines:";
+	<< "\n Please select one of the following bus lines:";
 
 	Lines.PrintLinesNames();
 
@@ -796,7 +942,7 @@ void ui::RemoveBusMenu() {
 	Driver tempdriver;
 
 	cout << " - REMOVE BUS MENU -"
-		<< "\n Please select one of the following buses:";
+	<< "\n Please select one of the following buses:";
 
 	Buses.ListBuses();
 
@@ -834,7 +980,7 @@ void ui::FindShortestTrip() {
 	Driver tempdriver;
 
 	cout << " - FIND SHORTEST TRIP MENU -"
-		<< "\n Please select two of the following bus stops:";
+	<< "\n Please select two of the following bus stops:";
 
 	Bus_Stops.PrintAllBus_Stops_Names();
 	cout << endl;
@@ -899,7 +1045,7 @@ void ui::FindShortestTrip() {
 					}
 				}
 				else {
-					for (size_t i = bus_stop_1_nr; i >= bus_stop_2_nr && i <= bus_stop_1_nr; i--) {	// O uso do tipo int nesta linha face ao size_t é com o intuito de prevenir casos de overflow que surgiram durante o teste do programa
+					for (size_t i = bus_stop_1_nr; i >= bus_stop_2_nr && i <= bus_stop_1_nr; i--) {	// O uso do tipo int nesta linha face ao size_t ?com o intuito de prevenir casos de overflow que surgiram durante o teste do programa
 						trip.bus_stops.push_back(line1->GetBus_Stops()[i] + "[" + line1->GetID() + "]");
 					}
 				}
@@ -968,7 +1114,7 @@ void ui::SchedulesMenu() {
 
 		while (1)
 		{
-			cout << "Select an option: ";
+			cout << "\nSelect an option: ";
 
 			getline(cin, input);
 			cout << "\n";
@@ -1004,7 +1150,7 @@ void ui::ViewLineScheduleMenu() {
 	Driver tempdriver;
 
 	cout << " - VIEW LINE SCHEDULE MENU -"
-		<< "\n Please select one of the following bus lines:";
+	<< "\n Please select one of the following bus lines:";
 
 	Lines.PrintLinesNames();
 	cout << endl << endl;
@@ -1043,7 +1189,7 @@ void ui::ViewBus_StopScheduleMenu() {
 	Driver tempdriver;
 
 	cout << " - VIEW BUS STOP SCHEDULE MENU -"
-		<< "\n Please select one of the following bus stops:";
+	<< "\n Please select one of the following bus stops:";
 
 	Bus_Stops.PrintAllBus_Stops_Names();
 	cout << endl << endl;
@@ -1081,7 +1227,7 @@ void ui::FindBusLineByBusStop()
 	Driver tempdriver;
 
 	cout << " - SEARCH BUS LINES BY BUS STOP SCHEDULE MENU -"
-		<< "\n Please select one of the following bus stops:";
+	<< "\n Please select one of the following bus stops:";
 
 	Bus_Stops.PrintAllBus_Stops_Names();
 	cout << endl << endl;
@@ -1146,8 +1292,8 @@ bool ui::SetConsoleWidth(const unsigned int& Width)
 {
 	//if (Width > 119 && Width < 241)
 	//{
-		ConsoleWidth = Width;
-		return true;
+	ConsoleWidth = Width;
+	return true;
 	//}
 	return false;
 }
@@ -1156,8 +1302,8 @@ bool ui::SetConsoleHeight(const unsigned int& Height)
 {
 	// if (Height > 29 && Height < 64)
 	// {
-		ConsoleHeight = Height;
-		return true;
+	ConsoleHeight = Height;
+	return true;
 	// }
 	return false;
 }
@@ -1199,20 +1345,20 @@ string ui::GetBannerFilename()
 void ui::PrintBanner()
 {
 
-	 static string Banner = "";
-	 if (Banner == "") {
-	 	ifstream hBanner(bannerfilename);
-	 	if (hBanner.fail()) {
-	 		cout << "Error openning banner file." << endl;
-	 		hBanner.close();
-	 		return;
-	 	}
-	 	string asciiTemp;
-	 	while (getline(hBanner, asciiTemp))
-	 		Banner += string(((ConsoleWidth - asciiTemp.size()) / 2), ' ') + asciiTemp + "\n";
-	 }
+	static string Banner = "";
+	if (Banner == "") {
+		ifstream hBanner(bannerfilename);
+		if (hBanner.fail()) {
+			cout << "Error openning banner file." << endl;
+			hBanner.close();
+			return;
+		}
+		string asciiTemp;
+		while (getline(hBanner, asciiTemp))
+			Banner += string(((ConsoleWidth - asciiTemp.size()) / 2), ' ') + asciiTemp + "\n";
+	}
 
-	 cout << endl << Banner << endl << endl;
+	cout << endl << Banner << endl << endl;
 
 	//ifstream banner(bannerfilename);
 
