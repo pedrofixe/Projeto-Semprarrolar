@@ -42,7 +42,7 @@ bool utilities::isNumeric(string input)
 	if (input.size() == 0)
 		return false;
 
-	for (int i = 0; i < input.size(); ++i)
+	for (size_t i = 0; i < input.size(); i++)
 	{
 		if (input[i] < '0' || input[i] > '9')
 			return false;
@@ -55,4 +55,30 @@ string utilities::DayNumberToString(const unsigned int& num)
 {
 	static string daysArray[] = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
 	return daysArray[num];
+}
+
+int utilities::DayStringToNumber(const string& dayName)
+{
+	if (dayName == "monday") {
+		return 0;
+	}
+	else if (dayName == "tuesday") {
+		return 1;
+	}
+	else if (dayName == "wednesday") {
+		return 2;
+	}
+	else if (dayName == "thursday") {
+		return 3;
+	}
+	else if (dayName == "friday") {
+		return 4;
+	}
+	else if (dayName == "saturday") {
+		return 5;
+	}
+	else if (dayName == "sunday") {
+		return 6;
+	}
+	else return -1;
 }

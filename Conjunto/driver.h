@@ -42,7 +42,6 @@ public:
 	const set<Shift>& GetDriverShifts() const;
 
 	void ShowWorkSchedule() const;
-	void DisplaySpecificDay(int day, const string& spacer) const;
 	unsigned int GetNrWorkingHours() const;
 
 private:
@@ -53,6 +52,7 @@ private:
 	unsigned int minhoursrest;
 	set<Shift> driverShifts;
 
+	void DisplaySpecificDay(int day, const string& spacer) const;
 
 };
 

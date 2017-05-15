@@ -3,6 +3,7 @@
 
 #include <string>
 #include <fstream>
+#include <cctype>
 #include "utilities.h"
 #include "ui_utilities.h"
 #include "globals.h"

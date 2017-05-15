@@ -425,6 +425,7 @@ Driver * DriversClass::FindDriver(const string & DriverID)
 	return nullptr;
 }
 
+
 vector<Driver>& DriversClass::GetDrivers()
 {
 	return drivers;
@@ -827,14 +828,29 @@ const set<Shift>& Shifts_InterfaceClass::GetShifts() const
 	return setShifts;
 }
 
-void Shifts_InterfaceClass::ListShifts(const set<Shift> &setShifts, bool showIndexColumn)
+// helper function... for some reason GetDriver is always returning nullptr when inside the following method.
+// the compiler gods for sure are not pleased. remind me to sacrifice a sheep when starting my next project
+Driver* FindMyDriver(const string& DriverName, vector<Driver>& vecDrivers) {
+	for (auto& driver : vecDrivers) {
+		if (driver.GetID() == DriverName) {
+			return &driver;
+		}
+	}
+	return nullptr;
+}
+
+void Shifts_InterfaceClass::ListShifts(const set<Shift> &setShifts, vector<Driver>& DriversVector, bool showIndexColumn)
 {
 	if (showIndexColumn) {
 		unsigned int x = 1;
 		cout << setw(2) << "" << "#" << "   " << setw(12) << left << "Day" << setw(15) << "Start Hour" << setw(15) << "End Hour" << setw(10) << "Line" << setw(30) << "Driver" << setw(10) << "Bus" << endl;
 		for (const Shift &shift : setShifts) {
+			Driver* driver = FindMyDriver(shift.GetDriverID(), DriversVector);
+			string driverName = driver->GetName();
 			string dayName = utilities::DayNumberToString(shift.GetDay());
-			cout << setw(2) << "" << setw(4) << x << setw(12) << left << dayName << setw(15) << shift.GetStartHour() + ":00" << setw(15) << shift.GetEndHour() + ":00" << setw(10) << shift.GetLineID() << setw(30) << "[" + shift.GetDriverID() + "]" + shift.GetDriverID() << setw(10) << shift.GetBusID() << endl;
+			string startHour = to_string(shift.GetStartHour());
+			string endHour = to_string(shift.GetEndHour());
+			cout << setw(2) << "" << setw(4) << x << setw(12) << left << dayName << setw(15) << startHour + ":00" << setw(15) << endHour + ":00" << setw(10) << shift.GetLineID() << setw(30) << "[" + shift.GetDriverID() + "] " + driverName << setw(10) << shift.GetBusID() << endl;
 			x++;
 		}
 		cout << right;
@@ -842,8 +858,12 @@ void Shifts_InterfaceClass::ListShifts(const set<Shift> &setShifts, bool showInd
 	else {
 		cout << setw(2) << "" << setw(12) << left << "Day" << setw(15) << "Start Hour" << setw(15) << "End Hour" << setw(10) << "Line" << setw(30) << "Driver" << setw(10) << "Bus" << endl;
 		for (const Shift &shift : setShifts) {
+			Driver* driver = FindMyDriver(shift.GetDriverID(), DriversVector);
+			string driverName = driver->GetName();
 			string dayName = utilities::DayNumberToString(shift.GetDay());
-			cout << setw(2) << "" << setw(12) << left << dayName << setw(15) << shift.GetStartHour() + ":00" << setw(15) << shift.GetEndHour() + ":00" << setw(10) << shift.GetLineID() << setw(30) << "[" + shift.GetDriverID() + "]" + shift.GetDriverID() << setw(10) << shift.GetBusID() << endl;
+			string startHour = to_string(shift.GetStartHour());
+			string endHour = to_string(shift.GetEndHour());
+			cout << setw(2) << "" << setw(12) << left << dayName << setw(15) << startHour + ":00" << setw(15) << endHour + ":00" << setw(10) << shift.GetLineID() << setw(30) << "[" + shift.GetDriverID() + "] " + driverName << setw(10) << shift.GetBusID() << endl;
 		}
 		cout << right;
 	}

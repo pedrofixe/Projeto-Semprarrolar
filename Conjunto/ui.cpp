@@ -884,7 +884,7 @@ void ui::ListDriversMenu() {
 
 void ui::ListDriverShiftsMenu() {
 
-	ui_utilities::SetWindow(ConsoleWidth, ConsoleHeight);
+	ui_utilities::SetWindow(ConsoleWidth, 500);
 	ui_utilities::ClearScreen();
 	PrintBanner();
 
@@ -893,9 +893,14 @@ void ui::ListDriverShiftsMenu() {
 	cout << " - LIST DRIVER SHIFTS MENU -";
 	cout << endl;
 
+	cout << "\nPlease select one of the following drivers:";
+
+	Drivers.PrintLinesNames();
+	cout << endl << endl;
+
 	while (1)
 	{
-		cout << "\n Insert driver's ID:";
+		cout << "\n Driver's ID:";
 		getline(cin, tempstr);
 		utilities::trimString(tempstr);
 
@@ -908,7 +913,7 @@ void ui::ListDriverShiftsMenu() {
 
 	cout << endl;
 
-	Shifts_InterfaceClass::ListShifts(driver->GetDriverShifts());
+	Shifts_InterfaceClass::ListShifts(driver->GetDriverShifts(), Drivers.GetDrivers());
 
 	cout << endl << endl << "\n       Press any key to continue...";
 	cin.get();
@@ -1080,7 +1085,7 @@ void ui::ListBusShiftsMenu() {
 
 	cout << endl;
 
-	Shifts_InterfaceClass::ListShifts( Buses.GetShifts(tempstr) );
+	Shifts_InterfaceClass::ListShifts( Buses.GetShifts(tempstr), Drivers.GetDrivers());
 
 	cout << endl << endl << "\n       Press any key to continue...";
 	cin.get();
@@ -1194,7 +1199,7 @@ void ui::ShiftManagementMenu() {
 }
 
 void ui::CreateShiftMenu() {
-	ui_utilities::SetWindow(ConsoleWidth, ConsoleHeight);
+	ui_utilities::SetWindow(ConsoleWidth, 500);
 	ui_utilities::ClearScreen();
 	PrintBanner();
 
@@ -1203,7 +1208,187 @@ void ui::CreateShiftMenu() {
 	cout << " - CREATE SHIFT MENU -";
 	cout << endl;
 
+	cout << " --> First select one of the following drivers:";
+	Drivers.PrintLinesNames();
+
+	cout << endl << endl;
+
+	while (1)
+	{
+		cout << " Driver: ";
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (tempstr == "0") return;
+
+		if (Drivers.DriverExists(tempstr))
+			break;
+
+		cout << "\nDriver not found!";
+		cout << "\nEnter 0 if you wish to go back to the previous menu.\n";
+	}
+
+	Driver* driver = Drivers.FindDriver(tempstr);
+
+	unsigned int workHours = driver->GetNrWorkingHours();
+	if (driver->GetMaxHoursWeek() - workHours == 0) {
+		cout << endl << "Oops! It seems that driver has reached his weekly limit of work hours. ";
+		cout << endl << endl << "\n     Press any key to continue...";
+		cin.get();
+		return;
+	}
+	driver->ShowWorkSchedule();
 	cout << endl;
+	cout << "  Number of available hours to work: " << driver->GetMaxHoursWeek() - driver->GetNrWorkingHours();
+	cout << endl;
+	cout << endl;
+
+	cout << " --> Now select one of the following buses:";
+
+	Buses.ListBuses();
+
+	cout << endl << endl;
+
+	while (1)
+	{
+		cout << "\n Insert Bus ID: ";
+
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (!Buses.BusExists(tempstr)) {
+			cout << "\nSorry but no Bus was found with that ID! Try again.";
+			continue;
+		}
+		break;
+	}
+
+	Buses.ShowServiceSchedule(tempstr);
+
+	string busID = tempstr;
+
+	cout << endl << endl;
+
+	cout << " --> Now enter the day of the shift: ";
+
+	while (1)
+	{
+		cout << "\n Insert Day: ";
+
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		for (auto& elem : tempstr) // lower case the string
+			elem = tolower(elem);
+
+		if (utilities::DayStringToNumber(tempstr) == -1) {
+			cout << "\nSorry but that isn't a valid day. Try again";
+			continue;
+		}
+		break;
+	}
+
+	int dayNumber = utilities::DayStringToNumber(tempstr);
+
+	cout << " --> Now please enter the start hour of the shift: ";
+
+	while (1)
+	{
+		cout << "\n Insert Start Hour: ";
+
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (!utilities::isNumeric(tempstr)) {
+			cout << "\nSorry but it seems you didn't insert a number! Try again.";
+			continue;
+		}
+		else if (stoi(tempstr) < SCHEDULE_START || stoi(tempstr) >= SCHEDULE_END-1) {
+			cout << "\nSorry but it seems you didn't insert a valid number! Let me remind you that the shift start hour must be between " << SCHEDULE_START << " and " << (SCHEDULE_END - 1)
+				<< endl << "Try again.";
+			continue;
+		}
+		break;
+	}
+
+	unsigned int startHour = stoi(tempstr);
+
+	cout << " --> Now please enter the end hour of the shift: ";
+
+	while (1)
+	{
+		cout << "\n Insert End Hour: ";
+
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (!utilities::isNumeric(tempstr)) {
+			cout << "\nSorry but it seems you didn't insert a number! Try again.";
+			continue;
+		}
+		else if (stoi(tempstr) < SCHEDULE_START+1 || stoi(tempstr) >= SCHEDULE_END) {
+			cout << "\nSorry but it seems you didn't insert a valid number! Let me remind you that the shift end hour must be between " << (SCHEDULE_START+1) << " and " << SCHEDULE_END
+				<< endl << "Try again.";
+			continue;
+		}
+		break;
+	}
+
+	unsigned int endHour = stoi(tempstr);
+
+	cout << " --> Now please enter one of the following lines of the shift:";
+
+	Lines.PrintLinesNames();
+
+	cout << endl << endl;
+
+	while (1)
+	{
+		cout << " Line: ";
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (Lines.LineExists(tempstr))
+			break;
+
+		cout << "\nLine not found! Try again \n";
+	}
+
+	string lineID = tempstr;
+
+	Shift newShift(dayNumber, startHour, endHour, driver->GetID(), busID, lineID);
+
+
+	int canAddShift = driver->CanAddShift(newShift);
+	switch (canAddShift) {
+		case NOT_AVAILABLE:
+			cout << "The driver is already working during that time! I'm sorry but you will have to try again." << endl; // try harder this time
+			cout << endl << "\n    Press any key to continue...";
+			cin.get();
+			return;
+		case MUST_RESPECT_REST_TIME:
+			cout << "The driver cannot work that shift because it includes his mandatory rest hours! I'm sorry but you will have to try again." << endl;
+			cout << endl << "\n    Press any key to continue...";
+			cin.get();
+			return;
+		case SHIFT_TOO_LONG:
+			cout << "The driver cannot work that shift because it is too long for him! I'm sorry but you will have to try again." << endl;
+			cout << endl << "\n    Press any key to continue...";
+			cin.get();
+			return;
+	}
+
+	if (!Buses.CanAddShift(busID, newShift)) {
+		cout << "The driver is cannot work that shift because the bus isn't available during that time! I'm sorry but you will have to try again." << endl;
+		cout << endl << "\n    Press any key to continue...";
+		cin.get();
+		return;
+	}
+
+	Shifts_Interface.InsertShift(newShift);
+
+	cout << endl << endl << "\n    Shift created, Press any key to continue...";
+	cin.get();
 }
 
 void ui::RemoveShiftMenu()
@@ -1219,7 +1404,8 @@ void ui::RemoveShiftMenu()
 
 	cout << endl;
 
-	Shifts_InterfaceClass::ListShifts(Shifts_Interface.GetShifts(), true);
+	Shifts_InterfaceClass::ListShifts(Shifts_Interface.GetShifts(), Drivers.GetDrivers(), true);
+	cout << endl;
 
 	while (1)
 	{
@@ -1288,12 +1474,11 @@ void ui::VisualizeDriverWorkScheduleMenu() {
 }
 
 void ui::ListAvailableDriversMenu() {
-	ui_utilities::SetWindow(ConsoleWidth, ConsoleHeight);
+	ui_utilities::SetWindow(ConsoleWidth, 500);
 	ui_utilities::ClearScreen();
 	PrintBanner();
 
 	string tempstr;
-	Driver* driver;
 
 	cout << "\n - LIST AVAILABLE DRIVERS MENU -" << endl << endl;
 
@@ -1309,7 +1494,7 @@ void ui::ListAvailableDriversMenu() {
 
 void ui::ListAllShiftsMenu()
 {
-	ui_utilities::SetWindow(ConsoleWidth, ConsoleHeight);
+	ui_utilities::SetWindow(ConsoleWidth, 500);
 	ui_utilities::ClearScreen();
 	PrintBanner();
 
@@ -1320,7 +1505,7 @@ void ui::ListAllShiftsMenu()
 
 	cout << endl;
 
-	Shifts_InterfaceClass::ListShifts( Shifts_Interface.GetShifts() );
+	Shifts_InterfaceClass::ListShifts( Shifts_Interface.GetShifts(), Drivers.GetDrivers());
 
 	cout << endl << endl << "\n       Press any key to continue...";
 	cin.get();

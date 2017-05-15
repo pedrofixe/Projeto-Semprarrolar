@@ -14,6 +14,7 @@ namespace utilities{
 	int intSize(int);
 	bool isNumeric(string);
 	string DayNumberToString(const unsigned int&);
+	int DayStringToNumber(const string&);
 };
 
 

@@ -65,7 +65,6 @@ class DriversClass {
 		void ListAvailableDrivers() const;
 
 		Driver* FindDriver(const string& DriverID); // returns a pointer to the specified driver or nullptr if it doesnt exist
-
 		vector<Driver>& GetDrivers(); // removed const qualifier because the compiler gods were not pleased.
 	private:
 		string filename;
@@ -105,10 +104,10 @@ class Buses_Class {
 		unsigned int GetNumberOfBuses() const;
 		void ListBuses() const;
 		void ShowServiceSchedule(const string& BusID) const;
-		static void DisplaySpecificDay(unsigned int day, const string& spacer, const set<Shift>&);
 	private:
 		string filename;
 		map<string, set<Shift> > mapBusesIDs;
+		static void DisplaySpecificDay(unsigned int day, const string& spacer, const set<Shift>&);
 };
 
 class Shifts_InterfaceClass {
@@ -117,7 +116,7 @@ class Shifts_InterfaceClass {
 		void SaveToFile() const;
 		void InsertShift(const Shift&, bool saveToFile = true);
 		const set<Shift>& GetShifts() const;
-		static void ListShifts(const set<Shift>&, bool showIndexColumn = false);
+		static void ListShifts(const set<Shift>&, vector<Driver>& DriverVector, bool showIndexColumn = false);
 		void RemoveShift(const Shift&);
 		void RemoveShiftByIndex(unsigned int Index);
 		void RemoveLineShifts(const string& LineID);
