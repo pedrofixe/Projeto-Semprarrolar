@@ -348,6 +348,7 @@ void ui::CreateLineMenu()
 	cin.get();
 
 	Lines.AddBusLine(templine);
+	Lines.SaveToFile();
 	Bus_Stops.RebuildBus_Stops(Lines.GetLines()); // rebuild bus stops cache
 
 	return;
@@ -502,6 +503,7 @@ void ui::EditLineMenu()
 	if (test)
 		Lines.GetLines()[lineindex].SetTimeBetweenStops(temptimebetweenstops);
 
+	Lines.SaveToFile();
 	cout << "\n\n Line edited, Press any key to continue...";
 	cin.get();
 
@@ -543,6 +545,7 @@ void ui::RemoveLineMenu()
 	}
 
 	Bus_Stops.RebuildBus_Stops(Lines.GetLines()); // rebuild bus stops cache
+	Lines.SaveToFile();
 	cout << "\n  Line removed, Press any key to continue...";
 	cin.get();
 
@@ -710,6 +713,7 @@ void ui::CreateDriverMenu()
 	tempdriver.SetMinHoursRest(stoi(tempstr));
 
 	Drivers.AddDriver(tempdriver);
+	Drivers.SaveToFile();	
 	cout << "\n\n  Driver created, Press any key to continue...";
 	cin.get();
 
@@ -855,8 +859,7 @@ void ui::EditDriverMenu()
 		cout << "\nSorry but you need to insert a number!";
 	}
 	
-
-
+	Drivers.SaveToFile();	
 	cout << "\n\n  Driver Edited, Press any key to continue...";
 	cin.get();
 
@@ -930,8 +933,8 @@ void ui::RemoveDriverMenu()
 		cout << "\nDriver not found!";
 	}
 
-
-	cout << "\n         Driver removed, Press any key to continue...";
+	Drivers.SaveToFile();
+	cout << "\n\n  Driver removed, Press any key to continue...";
 	cin.get();
 
 	return;
