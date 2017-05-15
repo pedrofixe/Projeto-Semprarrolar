@@ -70,7 +70,7 @@ void ui::PreMenu()
 		break;
 	}
 
-	cout << "\n\n All files have been loaded with success. Press enter to continue...";
+	cout << "\n\n   All files have been loaded with success. Press enter to continue...";
 	getchar();
 
 	MainMenu();
@@ -296,7 +296,7 @@ void ui::CreateLineMenu()
 
 	while (getline(cin, tempstr)) {
 		utilities::trimString(tempstr);
-		if (tempstr == "0");
+		if (tempstr == "0")
 		{
 			if (tempstops.size() < 2)
 			{
@@ -431,7 +431,7 @@ void ui::EditLineMenu()
 
 	vector<string> tempstops;
 
-	cout << "\n Insert line's new bus stops (press enter after you type each one and to stop insert 0) (leave blank to not edit):";
+	cout << "\n Insert line's new bus stops (press enter after you type each one and to stop insert 0) \n(leave blank if you don't wish to make changes):";
 	cout << endl;
 
 	bool altered = 1;
@@ -445,7 +445,7 @@ void ui::EditLineMenu()
 			break;
 		}
 
-		if (tempstr == "0");
+		if (tempstr == "0")
 		{
 			if (tempstops.size() < 2)
 			{
@@ -470,7 +470,8 @@ void ui::EditLineMenu()
 
 	vector<unsigned int> temptimebetweenstops;
 
-	cout << "\n Perfect! Now please insert the time it takes to travel between the following stops (minutes) (leave blank to not edit if you didn't edit stops): ";
+	if(altered) cout << "\n Now please insert the time it takes to travel between the following stops (minutes): ";
+	else cout << "\n Now please insert the time it takes to travel between the following stops (minutes)\n (leave blank if you don't wish to make changes): ";
 	cout << endl;
 
 	bool test = 1;
@@ -1027,7 +1028,6 @@ void ui::CreateBusMenu() {
 		break;
 	}
 	Buses.InsertBus(tempstr);
-	Buses.SaveToFile();
 	cout << "\n   Bus created, Press any key to continue...";
 	cin.get();
 	return;
@@ -1115,7 +1115,6 @@ void ui::RemoveBusMenu() {
 		break;
 	}
 	Buses.RemoveBus(tempstr);
-	Buses.SaveToFile();
 	cout << "\n   Bus removed, Press any key to continue...";
 	cin.get();
 	return;
@@ -1206,6 +1205,65 @@ void ui::FindShortestTrip() {
 		}
 	}
 	// LEVEL 1
+	for (Line* line1 : bus_stop1->GetLines())
+	{
+		for (const string& bus_stop_line1_name : line1->GetBus_Stops()) {
+			auto bus_stop2_obj = Bus_Stops.FindBus_StopByName(bus_stop_line1_name);
+			for (Line* line2 : bus_stop2_obj->GetLines()) {
+				if (line1->GetID() == line2->GetID()) continue;
+				if (bus_stop1 == bus_stop2_obj) continue;
+				bool containsSecondBus_Stop = find(line2->GetBus_Stops().begin(), line2->GetBus_Stops().end(), bus_stop2->GetName()) != line2->GetBus_Stops().end();
+				if (!containsSecondBus_Stop) continue;
+				for (const string& bus_stop_line2_name : line2->GetBus_Stops()) {
+					if (bus_stop_line1_name == bus_stop_line2_name && line1 != line2) { // Got a Match
+						//auto bus_stop3_obj = Bus_Stops.FindBus_StopByName(bus_stop_line2_name);
+						unsigned int bus_stop_1_line1_nr = Bus_Stop::GetBus_StopNumber(line1->GetBus_Stops(), bus_stop1->GetName());
+						unsigned int bus_stop_2_line1_nr = Bus_Stop::GetBus_StopNumber(line1->GetBus_Stops(), bus_stop2_obj->GetName());
+						unsigned int bus_stop_2_line2_nr = Bus_Stop::GetBus_StopNumber(line2->GetBus_Stops(), bus_stop2_obj->GetName());
+						unsigned int bus_stop_3_line2_nr = Bus_Stop::GetBus_StopNumber(line2->GetBus_Stops(), bus_stop2->GetName());
+
+						if (bus_stop_1_line1_nr == bus_stop_2_line1_nr || bus_stop_2_line2_nr == bus_stop_3_line2_nr) break;
+						// the code that lays ahead may not be pretty, but it gets the job done. no time for refactoring
+						unsigned int tripTime = abs(Bus_Stop::CalculateOffset(line1->GetTimeBetweenStops(), bus_stop_1_line1_nr) - Bus_Stop::CalculateOffset(line1->GetTimeBetweenStops(), bus_stop_2_line1_nr))
+							+ abs(Bus_Stop::CalculateOffset(line2->GetTimeBetweenStops(), bus_stop_2_line2_nr) - Bus_Stop::CalculateOffset(line2->GetTimeBetweenStops(), bus_stop_3_line2_nr));
+
+						Viagem trip;
+						trip.lines.push_back(line1);
+						trip.lines.push_back(line2);
+
+						if (bus_stop_1_line1_nr < bus_stop_2_line1_nr) {
+							for (size_t i = bus_stop_1_line1_nr; i <= bus_stop_2_line1_nr; i++) {
+								trip.bus_stops.push_back(line1->GetBus_Stops()[i] + "[" + line1->GetID() + "]");
+							}
+						}
+						else {
+							for (size_t i = bus_stop_1_line1_nr; i >= bus_stop_2_line1_nr && i <= bus_stop_1_line1_nr; i--) {	// O uso do tipo int nesta linha face ao size_t ?com o intuito de prevenir casos de overflow que surgiram durante o teste do programa
+								trip.bus_stops.push_back(line1->GetBus_Stops()[i] + "[" + line1->GetID() + "]");
+							}
+						}
+						// lets make the intersection of the lines obvious to the user:
+						trip.bus_stops[trip.bus_stops.size() - 1].pop_back(); // delete last char
+						trip.bus_stops[trip.bus_stops.size() - 1] += "|" + line2->GetID() + "]";
+
+						// build the rest of the trip bus stops: 
+						if (bus_stop_2_line2_nr < bus_stop_3_line2_nr) {
+							bus_stop_2_line2_nr++;
+							for (size_t i = bus_stop_2_line2_nr; i <= bus_stop_3_line2_nr; i++) {
+								trip.bus_stops.push_back(line2->GetBus_Stops()[i] + "[" + line2->GetID() + "]");
+							}
+						}
+						else {
+							bus_stop_2_line2_nr--;
+							for (size_t i = bus_stop_2_line2_nr; i >= bus_stop_3_line2_nr && i <= bus_stop_2_line2_nr; i--) {	// O uso do tipo int nesta linha face ao size_t ?com o intuito de prevenir casos de overflow que surgiram durante o teste do programa
+								trip.bus_stops.push_back(line2->GetBus_Stops()[i] + "[" + line2->GetID() + "]");
+							}
+						}
+						mmapTrips.insert(pair<unsigned int, Viagem>(tripTime, trip));
+					}
+				}
+			}
+		}
+	}
 
 	// DISPLAY RESULTS
 	int x = 1;
@@ -1213,8 +1271,8 @@ void ui::FindShortestTrip() {
 		cout << "-----> Trip " << x << endl;;
 		cout << "--> Trip Time: " << iterator->first << " minutes" << endl;
 		cout << "--> Lines: ";
+		bool firstIteration = true;
 		for (Line* line : iterator->second.lines) {
-			static bool firstIteration = true;
 			if (firstIteration) {
 				cout << line->GetID();
 				firstIteration = false;
@@ -1222,10 +1280,10 @@ void ui::FindShortestTrip() {
 			}
 			cout << ", " << line->GetID();
 		}
+		firstIteration = true;
 		cout << endl;
 		cout << "--> Bus Stops: ";
 		for (const string& bus_stop_name : iterator->second.bus_stops) {
-			static bool firstIteration = true;
 			if (firstIteration) {
 				cout << bus_stop_name;
 				firstIteration = false;
@@ -1233,7 +1291,8 @@ void ui::FindShortestTrip() {
 			}
 			cout << ", " << bus_stop_name;
 		}
-
+		cout << endl << endl;
+		x++;
 
 	}
 

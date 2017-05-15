@@ -31,7 +31,7 @@ unsigned int Line::GetFreq() const
 	return freq;
 }
 
-const vector<string> Line::GetBus_Stops() const
+const vector<string>& Line::GetBus_Stops() const
 {
 	return bus_stops;
 }

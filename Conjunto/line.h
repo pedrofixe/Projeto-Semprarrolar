@@ -23,7 +23,7 @@ class Line {
 
 		string GetID() const;
 		unsigned int GetFreq() const;
-		const vector<string> GetBus_Stops() const;
+		const vector<string>& GetBus_Stops() const;
 		vector<unsigned int> GetTimeBetweenStops() const;
 
 
