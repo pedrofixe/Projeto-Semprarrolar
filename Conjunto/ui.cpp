@@ -19,9 +19,9 @@ void ui::PreMenu()
 			cout << "File doesn't exist!";
 			continue;
 		}
+		Bus_Stops.RebuildBus_Stops(Lines.GetLines()); // build bus stops cache
 		break;
 	}
-
 	cout << "\n";
 
 	while (1)
@@ -69,7 +69,7 @@ void ui::PreMenu()
 		}
 		break;
 	}
-	
+
 	cout << "\n\n All files have been loaded with success. Press enter to continue...";
 	getchar();
 
@@ -110,9 +110,10 @@ void ui::MainMenu()
 		cout << " 1- Line management\n";
 		cout << " 2- Driver management\n";
 		cout << " 3- Bus management\n";
-		cout << " 4- Shift management\n";
+		cout << " 4- Shift management [NOT DONE YET]\n";
 		cout << " 5- Calculate shortest trip\n";
 		cout << " 6- Visualize Schedules\n";
+		cout << " 7- Search Bus Lines by Bus Stop\n";
 		cout << " 0- Quit\n";
 		cout << "\n";
 
@@ -151,7 +152,17 @@ void ui::MainMenu()
 
 			else if (input == "5")
 			{
-				cout << "Menu5";
+				FindShortestTrip();
+				break;
+			}
+			else if (input == "6")
+			{
+				SchedulesMenu();
+				break;
+			}
+			else if (input == "7")
+			{
+				FindBusLineByBusStop();
 				break;
 			}
 
@@ -318,6 +329,7 @@ void ui::CreateLineMenu()
 	cin.get();
 
 	Lines.AddBusLine(templine);
+	Bus_Stops.RebuildBus_Stops(Lines.GetLines()); // rebuild bus stops cache
 
 	return;
 }
@@ -384,7 +396,7 @@ void ui::RemoveLineMenu()
 		cout << "\nEnter 0 if you wish to go back to the previous menu.\n";
 	}
 
-
+	Bus_Stops.RebuildBus_Stops(Lines.GetLines()); // rebuild bus stops cache
 	cout << "\n  Line removed, Press any key to continue...";
 	cin.get();
 
@@ -644,7 +656,8 @@ void ui::BusManagementMenu() {
 		cout << endl << endl;
 		cout << " 1- Create bus\n";
 		cout << " 2- List buses\n";
-		cout << " 3- Remove bus\n";
+		cout << " 3- List bus shifts\n";
+		cout << " 4- Remove bus\n";
 		cout << " 9- Return to previous menu\n";
 		cout << "\n";
 
@@ -669,8 +682,17 @@ void ui::BusManagementMenu() {
 			}
 			else if (input == "3")
 			{
+				ListBusShiftsMenu();
+				break;
+			}
+			else if (input == "4")
+			{
 				RemoveBusMenu();
 				break;
+			}
+			else if (input == "9")
+			{
+				return;
 			}
 			else {
 				cout << "\nInvalid Input";
@@ -734,6 +756,36 @@ void ui::ListBusesMenu() {
 
 }
 
+void ui::ListBusShiftsMenu() {
+	ui_utilities::SetWindow(ConsoleWidth, ConsoleHeight);
+	ui_utilities::ClearScreen();
+	PrintBanner();
+
+	string tempstr;
+
+	cout << " - LIST BUS SHIFTS MENU -";
+	cout << endl;
+
+	while (1)
+	{
+		cout << "\n Insert bus ID :";
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (Buses.BusExists(tempstr))
+			break;
+
+		cout << "\nBus not found!";
+	}
+
+	cout << endl;
+
+	Shifts_InterfaceClass::ListShifts( Buses.GetShifts(tempstr) );
+
+	cout << endl << endl << "\n       Press any key to continue...";
+	cin.get();
+}
+
 void ui::RemoveBusMenu() {
 	ui_utilities::SetWindow(ConsoleWidth, ConsoleHeight);
 	ui_utilities::ClearScreen();
@@ -772,6 +824,297 @@ void ui::RemoveBusMenu() {
 
 }
 
+void ui::FindShortestTrip() {
+	ui_utilities::SetWindow(ConsoleWidth, 500);
+	ui_utilities::ClearScreen();
+	PrintBanner();
+
+	string tempstr;
+
+	Driver tempdriver;
+
+	cout << " - FIND SHORTEST TRIP MENU -"
+		<< "\n Please select two of the following bus stops:";
+
+	Bus_Stops.PrintAllBus_Stops_Names();
+	cout << endl;
+
+	while (1)
+	{
+		cout << "\n Insert Bus Stop 1 Name: ";
+
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (!Bus_Stops.FindBus_StopByName(tempstr)) {
+			cout << "\nSorry but no Bus Stop was found with that name! Try again.";
+			continue;
+		}
+		break;
+	}
+
+	Bus_Stop* bus_stop1 = Bus_Stops.FindBus_StopByName(tempstr);
+
+	while (1)
+	{
+		cout << "\n Insert Bus Stop 2 Name: ";
+
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (!Bus_Stops.FindBus_StopByName(tempstr)) {
+			cout << "\nSorry but no Bus Stop was found with that name! Try again.";
+			continue;
+		}
+		break;
+	}
+
+	Bus_Stop* bus_stop2 = Bus_Stops.FindBus_StopByName(tempstr);
+
+	cout << endl;
+
+	//// ONLY GO 1 LEVEL DEEP, AS REQUESTED BY THE PROJECT SPECIFICATION
+	struct Viagem {
+		vector<Line*> lines;
+		vector<string> bus_stops;
+
+	};
+	multimap<unsigned int, Viagem> mmapTrips; // first element is the duration, the second one is the trip struct
+	// LEVEL 0
+	for (Line* line1 : bus_stop1->GetLines()) 
+	{
+		for (Line* line2 : bus_stop2->GetLines())
+		{ // we can directly compare the pointers for better performance
+			if (line1 == line2) {
+				unsigned int bus_stop_1_nr = Bus_Stop::GetBus_StopNumber(line1->GetBus_Stops(), bus_stop1->GetName());
+				unsigned int bus_stop_2_nr = Bus_Stop::GetBus_StopNumber(line1->GetBus_Stops(), bus_stop2->GetName());
+				unsigned int tripTime = abs(Bus_Stop::CalculateOffset(line1->GetTimeBetweenStops(), bus_stop_1_nr) - Bus_Stop::CalculateOffset(line1->GetTimeBetweenStops(), bus_stop_2_nr));
+				
+				Viagem trip;
+				trip.lines.push_back(line1);
+
+				if (bus_stop_1_nr < bus_stop_2_nr) {
+					for (size_t i = bus_stop_1_nr; i <= bus_stop_2_nr; i++) {
+						trip.bus_stops.push_back(line1->GetBus_Stops()[i] + "[" + line1->GetID() + "]");
+					}
+				}
+				else {
+					for (size_t i = bus_stop_1_nr; i >= bus_stop_2_nr && i <= bus_stop_1_nr; i--) {	// O uso do tipo int nesta linha face ao size_t é com o intuito de prevenir casos de overflow que surgiram durante o teste do programa
+						trip.bus_stops.push_back(line1->GetBus_Stops()[i] + "[" + line1->GetID() + "]");
+					}
+				}
+				mmapTrips.insert(pair<unsigned int, Viagem>(tripTime, trip));
+			}
+		}
+	}
+	// LEVEL 1
+
+	// DISPLAY RESULTS
+	int x = 1;
+	for (auto iterator = mmapTrips.begin(); iterator != mmapTrips.end(); iterator++) {
+		cout << "-----> Trip " << x << endl;;
+		cout << "--> Trip Time: " << iterator->first << " minutes" << endl;
+		cout << "--> Lines: ";
+		for (Line* line : iterator->second.lines) {
+			static bool firstIteration = true;
+			if (firstIteration) {
+				cout << line->GetID();
+				firstIteration = false;
+				continue;
+			}
+			cout << ", " << line->GetID();
+		}
+		cout << endl;
+		cout << "--> Bus Stops: ";
+		for (const string& bus_stop_name : iterator->second.bus_stops) {
+			static bool firstIteration = true;
+			if (firstIteration) {
+				cout << bus_stop_name;
+				firstIteration = false;
+				continue;
+			}
+			cout << ", " << bus_stop_name;
+		}
+
+
+	}
+
+	if (mmapTrips.empty()) {
+		cout << " There are no connections between those 2 bus stops";
+	}
+
+	cout << endl;
+
+	cout << "\n   Press any key to continue...";
+	cin.get();
+}
+
+void ui::SchedulesMenu() {
+	while (true) {
+
+		ui_utilities::SetWindow(ConsoleWidth, ConsoleHeight);
+		ui_utilities::ClearScreen();
+		PrintBanner();
+
+		cout << " - VIEW SCHEDULES MENU -";
+		cout << "\n Currently there are " << Bus_Stops.getVecBusStops().size() << " different bus stops.";
+		cout << endl << endl;
+		cout << " 1- View Line Schedule\n";
+		cout << " 2- View Bus Stop Schedule\n";
+		cout << " 9- Return to previous menu\n";
+		cout << "\n";
+
+		string input;
+
+		while (1)
+		{
+			cout << "Select an option: ";
+
+			getline(cin, input);
+			cout << "\n";
+
+			if (input == "1")
+			{
+				ViewLineScheduleMenu();
+				break;
+			}
+			else if (input == "2")
+			{
+				ViewBus_StopScheduleMenu();
+				break;
+			}
+			else if (input == "9")
+			{
+				return;
+			}
+			else {
+				cout << "\nInvalid Input";
+			}
+		}
+	}
+}
+
+void ui::ViewLineScheduleMenu() {
+	ui_utilities::SetWindow(ConsoleWidth, 500);
+	ui_utilities::ClearScreen();
+	PrintBanner();
+
+	string tempstr;
+
+	Driver tempdriver;
+
+	cout << " - VIEW LINE SCHEDULE MENU -"
+		<< "\n Please select one of the following bus lines:";
+
+	Lines.PrintLinesNames();
+	cout << endl << endl;
+
+	while (1)
+	{
+		cout << "\n Insert Line: ";
+
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (!Lines.LineExists(tempstr)) {
+			cout << "\nSorry but no Bus Line was found with that ID! Try again.";
+			continue;
+		}
+		break;
+	}
+
+	cout << endl;
+
+	Line* line = Lines.FindLine(tempstr);
+
+	line->ShowSchedule();
+
+	cout << "\n   Press any key to continue...";
+	cin.get();
+}
+
+void ui::ViewBus_StopScheduleMenu() {
+	ui_utilities::SetWindow(ConsoleWidth, 500);
+	ui_utilities::ClearScreen();
+	PrintBanner();
+
+	string tempstr;
+
+	Driver tempdriver;
+
+	cout << " - VIEW BUS STOP SCHEDULE MENU -"
+		<< "\n Please select one of the following bus stops:";
+
+	Bus_Stops.PrintAllBus_Stops_Names();
+	cout << endl << endl;
+
+	while (1)
+	{
+		cout << "\n Insert Bus Stop Name: ";
+
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (!Bus_Stops.FindBus_StopByName(tempstr)) {
+			cout << "\nSorry but no Bus Stop was found with that name! Try again.";
+			continue;
+		}
+		break;
+	}
+
+	Bus_Stop* bus_stop = Bus_Stops.FindBus_StopByName(tempstr);
+
+	bus_stop->ShowSchedule();
+
+	cout << "\n   Press any key to continue...";
+	cin.get();
+}
+
+void ui::FindBusLineByBusStop() 
+{
+	ui_utilities::SetWindow(ConsoleWidth, 500);
+	ui_utilities::ClearScreen();
+	PrintBanner();
+
+	string tempstr;
+
+	Driver tempdriver;
+
+	cout << " - SEARCH BUS LINES BY BUS STOP SCHEDULE MENU -"
+		<< "\n Please select one of the following bus stops:";
+
+	Bus_Stops.PrintAllBus_Stops_Names();
+	cout << endl << endl;
+
+	while (1)
+	{
+		cout << "\n Insert Bus Stop Name: ";
+
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (!Bus_Stops.FindBus_StopByName(tempstr)) {
+			cout << "\nSorry but no Bus Stop was found with that name! Try again.";
+			continue;
+		}
+		break;
+	}
+
+	Bus_Stop* bus_stop = Bus_Stops.FindBus_StopByName(tempstr);
+
+	cout << endl << " The following bus lines include that bus stop in their trip: " << endl;
+	for (Line *line : bus_stop->GetLines()) {
+		cout << "  -" << line->GetID() << endl;
+	}
+
+	cout << endl;
+	cout << "\n   Press any key to continue...";
+	cin.get();
+}
+
+///////////////////////////////////////////////7
+///////// FORBIDDEN LAND LAYS AHEAD ///////////7
+///////////////////////////////////////////////7
 
 void ui::StartMenu()
 {

@@ -135,10 +135,6 @@ bool LinesClass::LoadFromFile(const string& argFilename)
 		lines.push_back(templine); // Add templine to global line vector
 	}
 	lines_file.close();
-
-	// rebuild bus stops cache
-	Bus_Stops.RebuildBus_Stops(lines);
-
 	return true;
 }
 
@@ -283,13 +279,13 @@ bool DriversClass::RemoveDriverByID(const string& argDriverID)
 
 }
 
-bool DriversClass::CanAddShiftToDriver(const string & argDriverID, const Shift& argShift)
+int DriversClass::CanAddShiftToDriver(const string & argDriverID, const Shift& argShift)
 {
 	Driver* driver = FindDriver(argDriverID);
 	if (driver) {
 		return driver->CanAddShift(argShift);
 	}
-	return false;
+	return -1;
 }
 
 void DriversClass::AddShiftToDriver(const string & argDriverID, const Shift& argShift)
@@ -468,7 +464,7 @@ void Bus_StopsClass::RebuildBus_Stops(vector<Line>& vecLines)
 
 void Bus_StopsClass::RemoveBusStop(const string & arg_Bus_Stop_Name)
 {
-	for (auto iterator = vecBusStops.cbegin(); iterator != vecBusStops.cend(); iterator++) {
+	for (auto iterator = vecBusStops.begin(); iterator != vecBusStops.end(); iterator++) {
 		if (iterator->GetName() == arg_Bus_Stop_Name) { // found
 			vecBusStops.erase(iterator);
 			return;
@@ -476,7 +472,7 @@ void Bus_StopsClass::RemoveBusStop(const string & arg_Bus_Stop_Name)
 	}
 }
 
-const vector<Bus_Stop> Bus_StopsClass::getVecBusStops() const
+const vector<Bus_Stop>& Bus_StopsClass::getVecBusStops() const
 {
 	return vecBusStops;
 }
@@ -553,7 +549,8 @@ const set<Shift>& Buses_Class::GetShifts(const string & BusID) const
 	if (iterator != mapBusesIDs.end()) {
 		return iterator->second;
 	}
-	return set<Shift>(); // return empty set if the busID passed as argument isnt associated with a bus
+	static auto emptySet = set<Shift>();
+	return emptySet; // return empty set if the busID passed as argument isnt associated with a bus
 
 }
 

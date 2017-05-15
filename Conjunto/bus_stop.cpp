@@ -40,16 +40,19 @@ void Bus_Stop::ShowSchedule() const
 		const unsigned int number_of_bus_stops = line->GetBus_Stops().size();
 		// Mostrar no sentido de ida
 		if (this->GetName() != line->GetBus_Stops()[number_of_bus_stops - 1]) { // is not the last stop
+			cout << endl;
 			cout << setw(5) << "Schedule of the Line " << line->GetID() << " in the direction " << line->GetBus_Stops()[0] << " -> " << line->GetBus_Stops()[number_of_bus_stops - 1] << " :" << endl;
 			PrintSpecificSchedule(SCHEDULE_START, SCHEDULE_END, offset, freq);
+			cout << endl;
 		}
 
 		if (this->GetName() != line->GetBus_Stops()[0]) { // is not the first stop
-			cout << endl << endl;
+			cout << endl;
 			// Mostrar no sentido de volta
 			const unsigned int tempoViagemTotal = CalculateOffset(line->GetTimeBetweenStops(), number_of_bus_stops - 1);
-			cout << setw(5) << "Horario da linha " << line->GetID() << " no sentido " << line->GetBus_Stops()[number_of_bus_stops - 1] << " -> " << line->GetBus_Stops()[0] << " :" << endl;
+			cout << setw(5) << "Schedule of the Line " << line->GetID() << " in the direction " << line->GetBus_Stops()[number_of_bus_stops - 1] << " -> " << line->GetBus_Stops()[0] << " :" << endl;
 			PrintSpecificSchedule(SCHEDULE_START, SCHEDULE_END, tempoViagemTotal + (tempoViagemTotal - offset), freq);
+			cout << endl;
 		}
 	}
 }

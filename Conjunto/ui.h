@@ -48,7 +48,16 @@ private:
 	void BusManagementMenu();
 	void CreateBusMenu();
 	void ListBusesMenu();
+	void ListBusShiftsMenu();
 	void RemoveBusMenu();
+
+	void FindShortestTrip();
+
+	void SchedulesMenu();
+	void ViewLineScheduleMenu();
+	void ViewBus_StopScheduleMenu();
+
+	void FindBusLineByBusStop();
 
 
 };

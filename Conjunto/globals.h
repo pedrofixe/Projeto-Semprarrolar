@@ -50,7 +50,7 @@ class DriversClass {
 		bool RemoveDriver(const Driver&);
 		bool RemoveDriverByID(const string&);
 
-		bool CanAddShiftToDriver(const string& DriverID, const Shift&);
+		int CanAddShiftToDriver(const string& DriverID, const Shift&);
 		void AddShiftToDriver(const string& DriverID, const Shift&);
 		void RemoveShiftFromDriver(const string& DriverID, const Shift&);
 		void RemoveAllShiftsWithLineID(const string& LineID);
@@ -79,7 +79,7 @@ class Bus_StopsClass {
 		void PrintAllBus_Stops_Names() const;
 		void RebuildBus_Stops(vector<Line>&);
 		void RemoveBusStop(const string&);
-		const vector<Bus_Stop> getVecBusStops() const;
+		const vector<Bus_Stop>& getVecBusStops() const;
 	private:
 		vector<Bus_Stop> vecBusStops;
 };

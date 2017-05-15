@@ -28,9 +28,10 @@ class Bus_Stop {
 		// Constructor:
 		Bus_Stop(const string& argBus_StopName);
 
-	private:
-		static int GetBus_StopNumber(const vector<string> &vec_Bus_Stops, const string& Bus_Stop_Name);		
+		static int GetBus_StopNumber(const vector<string> &vec_Bus_Stops, const string& Bus_Stop_Name);
 		static int CalculateOffset(const vector<unsigned int> timeBetweenStops, const unsigned int &Bus_Stop_Number);
+
+	private:
 		static void PrintSpecificSchedule(const unsigned int &Start, const unsigned int &End, const unsigned int &offset, const unsigned int &freq);
 		string name;
 		vector<Line*> linesAtStop;
