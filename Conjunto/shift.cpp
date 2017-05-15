@@ -60,12 +60,12 @@ bool operator<(const Shift &left, const Shift &right)
 	else if (left.GetStartHour() < right.GetStartHour()) {
 		return true;
 	}
-	else if (left.GetLineID() < right.GetLineID()) {
+	else if (left.GetLineID().c_str() < right.GetLineID().c_str()) {
 		return true;
 	}
 	else if (left.GetBusID() < right.GetBusID()) {
 		return true;
-	}
+	} 
 	return false;
 }
 
