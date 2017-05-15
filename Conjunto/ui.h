@@ -42,6 +42,7 @@ private:
 
 	void DriverManagementMenu();
 	void CreateDriverMenu();
+	void EditDriverMenu();
 	void ListDriversMenu();
 	void ListDriverShiftsMenu();
 	void RemoveDriverMenu();

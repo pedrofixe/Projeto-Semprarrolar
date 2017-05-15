@@ -58,12 +58,14 @@ class DriversClass {
 		bool LoadFromFile(const string&);
 		void SaveToFile() const;
 
+		void PrintLinesNames() const;
 		void ListDrivers() const;	
 		bool DriverExists(const string&) const;
+		int SearchDriver(const string&) const;
 
 		Driver* FindDriver(const string& DriverID); // returns a pointer to the specified driver or nullptr if it doesnt exist
 
-		const vector<Driver>& GetDrivers() const; // n sei se vai ser usado
+		vector<Driver>& GetDrivers(); // n sei se vai ser usado
 	private:
 		string filename;
 		vector<Driver> drivers;

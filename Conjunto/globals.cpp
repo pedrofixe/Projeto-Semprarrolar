@@ -33,16 +33,16 @@ bool LinesClass::RemoveBusLine(const Line& inputLine)
 
 bool LinesClass::RemoveBusLineByID(const string& argIdentifier)
 {
-	 for (auto iterator = lines.begin(); iterator != lines.end(); iterator++) {
+	for (auto iterator = lines.begin(); iterator != lines.end(); iterator++) {
 	 	if (iterator->GetID() == argIdentifier) { // found
 	 		lines.erase(iterator);
 	 		// rebuild bus stops cache
 	 		Bus_Stops.RebuildBus_Stops(lines);
 			// remove all associated shifts
-			Shifts_Interface.RemoveLineShifts(argIdentifier);
-			Drivers.RemoveAllShiftsWithLineID(argIdentifier);
-			Buses.RemoveShiftsByLineID(argIdentifier);
-			SaveToFile();
+	 		Shifts_Interface.RemoveLineShifts(argIdentifier);
+	 		Drivers.RemoveAllShiftsWithLineID(argIdentifier);
+	 		Buses.RemoveShiftsByLineID(argIdentifier);
+	 		SaveToFile();
 	 		return true;
 	 	}
 	 }
@@ -69,68 +69,68 @@ bool LinesClass::RemoveBusLineByID(const string& argIdentifier)
 		}
 	}
 	return false; */
-}
-
-bool LinesClass::LoadFromFile(const string& argFilename)
-{
-	filename = argFilename;
-	ifstream lines_file(filename);
-
-	if (lines_file.fail()) 
-	{
-		lines_file.close();
-		return false;
 	}
 
+	bool LinesClass::LoadFromFile(const string& argFilename)
+	{
+		filename = argFilename;
+		ifstream lines_file(filename);
+
+		if (lines_file.fail()) 
+		{
+			lines_file.close();
+			return false;
+		}
+
 	// Load lines
-	string tempstr;
-	while (getline(lines_file, tempstr)) {
+		string tempstr;
+		while (getline(lines_file, tempstr)) {
 		// Take line from file to tempstr
-		tempstr += ";";
-		istringstream line_stream(tempstr);
-		Line templine;
-		string newtempstr;
-		vector<string> stop_vector;
-		vector<unsigned int> time_vector;
+			tempstr += ";";
+			istringstream line_stream(tempstr);
+			Line templine;
+			string newtempstr;
+			vector<string> stop_vector;
+			vector<unsigned int> time_vector;
 
 
 		// Store line ID
-		getline(line_stream, tempstr, ';');
-		utilities::trimString(tempstr);
-		templine.SetID(tempstr);
+			getline(line_stream, tempstr, ';');
+			utilities::trimString(tempstr);
+			templine.SetID(tempstr);
 
 		// Store line freq
-		getline(line_stream, tempstr, ';');
-		utilities::trimString(tempstr);
-		templine.SetFreq(stoi(tempstr));
+			getline(line_stream, tempstr, ';');
+			utilities::trimString(tempstr);
+			templine.SetFreq(stoi(tempstr));
 
 		// Store line's stops
-		getline(line_stream, tempstr, ';');
-		utilities::trimString(tempstr);
-		tempstr += ',';
-		istringstream Bus_Stop_stream(tempstr);
-
-		while (getline(Bus_Stop_stream, tempstr, ','))
-		{
+			getline(line_stream, tempstr, ';');
 			utilities::trimString(tempstr);
-			stop_vector.push_back(tempstr);
+			tempstr += ',';
+			istringstream Bus_Stop_stream(tempstr);
 
-		}
-		templine.SetBus_Stops(stop_vector);
+			while (getline(Bus_Stop_stream, tempstr, ','))
+			{
+				utilities::trimString(tempstr);
+				stop_vector.push_back(tempstr);
+
+			}
+			templine.SetBus_Stops(stop_vector);
 
 		// Store line's time between stops
-		getline(line_stream, tempstr, ';');
-		utilities::trimString(tempstr);
-		tempstr += ',';
-		istringstream time_stream(tempstr);
-
-		while (getline(time_stream, tempstr, ','))
-		{
+			getline(line_stream, tempstr, ';');
 			utilities::trimString(tempstr);
-			time_vector.push_back(stoi(tempstr));
+			tempstr += ',';
+			istringstream time_stream(tempstr);
 
-		}
-		templine.SetTimeBetweenStops(time_vector);
+			while (getline(time_stream, tempstr, ','))
+			{
+				utilities::trimString(tempstr);
+				time_vector.push_back(stoi(tempstr));
+
+			}
+			templine.SetTimeBetweenStops(time_vector);
 
 		lines.push_back(templine); // Add templine to global line vector
 	}
@@ -363,6 +363,20 @@ void DriversClass::SaveToFile() const
 	hFile_Drivers.close();
 }
 
+void DriversClass::PrintLinesNames() const
+{
+	bool firstIteration = true;
+	for (const Driver &driver : drivers) {
+		if (firstIteration) {
+			(firstIteration = false);
+		}
+		else (std::cout << ",");
+		std::cout << " " << driver.GetID();
+	}
+
+}
+
+
 void DriversClass::ListDrivers() const
 {
 	cout << setw(2) << "" << setw(15) << left << "Identifier" << setw(30) << "Name" << setw(25) << "Hours per Shift" << setw(25) << "Weekly Load" << setw(20) << "Rest Hours" << endl;
@@ -380,6 +394,16 @@ bool DriversClass::DriverExists(const string& argIdentifier) const
 	return false;
 }
 
+int DriversClass::SearchDriver(const string& argIdentifier) const
+{
+	for (int i = 0; i < drivers.size(); ++i)
+	{
+		if (drivers[i].GetID() == argIdentifier)
+			return i;
+	}
+	return -1;
+}
+
 Driver * DriversClass::FindDriver(const string & DriverID)
 {
 	for (auto& driver : drivers) {
@@ -390,7 +414,7 @@ Driver * DriversClass::FindDriver(const string & DriverID)
 	return nullptr;
 }
 
-const vector<Driver>& DriversClass::GetDrivers() const
+vector<Driver>& DriversClass::GetDrivers()
 {
 	return drivers;
 }

@@ -386,7 +386,7 @@ void ui::EditLineMenu()
 
 	while(1)
 	{
-		cout << "\n Insert line's new ID(leave blank to not edit) :";
+		cout << "\n Insert line's new ID (leave blank to not edit) :";
 		getline(cin,tempstr);
 		utilities::trimString(tempstr);
 
@@ -408,7 +408,7 @@ void ui::EditLineMenu()
 
 	while(1)
 	{
-		cout << "\n Insert line's frequency of service(leave blank to not edit): ";
+		cout << "\n Insert line's new frequency of service (leave blank to not edit): ";
 		getline(cin, tempstr);
 		utilities::trimString(tempstr);
 
@@ -430,7 +430,7 @@ void ui::EditLineMenu()
 
 	vector<string> tempstops;
 
-	cout << "\n Insert line's bus stops (press enter after you type each one and to stop insert 0) (leave blank to not edit):";
+	cout << "\n Insert line's new bus stops (press enter after you type each one and to stop insert 0) (leave blank to not edit):";
 	cout << endl;
 
 	bool altered = 1;
@@ -562,10 +562,10 @@ void ui::DriverManagementMenu()
 		cout << "\n Currently there are " << Drivers.GetDrivers().size() << " drivers employed at SEMPRARROLAR.";
 		cout << endl << endl;
 		cout << " 1- Create driver\n";
-		cout << " 2- List drivers\n";
-		cout << " 3- List driver shifts\n";
-		cout << " 4- Edit driver [NOT DONE YET]\n";
-		cout << " 5- Remove driver\n";
+		cout << " 2- Edit driver\n";
+		cout << " 3- Remove driver\n";
+		cout << " 4- List drivers\n";
+		cout << " 5- List driver shifts\n";
 		cout << " 9- Return to previous menu\n";
 		cout << "\n";
 
@@ -586,25 +586,25 @@ void ui::DriverManagementMenu()
 
 			else if (input == "2")
 			{
-				ListDriversMenu();
+				EditDriverMenu();
 				break;
 			}
 
 			else if (input == "3")
 			{
-				ListDriverShiftsMenu();
+				RemoveDriverMenu();
 				break;
 			}
 
 			else if (input == "4")
 			{
-				//EditDriversMenu();
+				ListDriversMenu();
 				break;
 			}
 
 			else if (input == "5")
 			{
-				RemoveDriverMenu();
+				ListDriverShiftsMenu();
 				break;
 			}
 
@@ -710,7 +710,154 @@ void ui::CreateDriverMenu()
 	tempdriver.SetMinHoursRest(stoi(tempstr));
 
 	Drivers.AddDriver(tempdriver);
-	cout << "\n    Driver created, Press any key to continue...";
+	cout << "\n\n  Driver created, Press any key to continue...";
+	cin.get();
+
+	return;
+}
+
+void ui::EditDriverMenu()
+{
+	ui_utilities::SetWindow(ConsoleWidth, ConsoleHeight);
+	ui_utilities::ClearScreen();
+	PrintBanner();
+
+	string tempstr;
+	int driverindex;
+
+	cout << "\n - EDIT DRIVER MENU -"
+	<< "\n\n Please select one of the following drivers:";
+
+	Drivers.PrintLinesNames();
+	cout << endl << endl;
+
+	while (1)
+	{
+		cout << " Driver: ";
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (tempstr == "0") return;
+
+		if (Drivers.DriverExists(tempstr))
+			break;
+
+		cout << "\nDriver not found!";
+		cout << "\nEnter 0 if you wish to go back to the previous menu.\n";
+	}
+	driverindex = Drivers.SearchDriver(tempstr);
+
+	while(1)
+	{
+		cout << "\n Insert driver's new ID (leave blank to not edit) :";
+		getline(cin,tempstr);
+		utilities::trimString(tempstr);
+
+		if (tempstr == "")
+			break;
+
+		if (Drivers.DriverExists(tempstr)) {
+			cout << "\nSorry but that ID isn't valid! It seems that driver already exists.";
+			continue;
+		}
+		else if (tempstr.length() < 3) {
+			cout << "\nSorry but the ID you inserted is too short. Please try again!";
+			continue;
+		}
+
+		Drivers.GetDrivers()[driverindex].SetID(tempstr);
+		break;
+	}
+
+	while(1)
+	{
+		cout << "\n Insert driver's new name (leave blank to not edit): ";
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (tempstr == "")
+			break;
+
+		bool test = 1;
+		for (int i = 0; i < tempstr.size(); ++i)
+		{
+			if (tempstr[i] >= '0' && tempstr[i]<= '9')
+			{
+				test = 0;
+				break;
+			}
+		}
+
+		if (test)
+		{
+			Drivers.GetDrivers()[driverindex].SetName(tempstr);
+			break;
+		}
+		else
+		{
+			cout << "\nSorry but a name has no numbers!";
+			continue;
+		}
+
+	}
+
+	while(1)
+	{
+		cout << "\n Insert driver's new maximum hours per shift (leave blank to not edit): ";
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (tempstr == "")
+			break;
+
+		if (utilities::isNumeric(tempstr) && stoi(tempstr) > 0)
+		{
+			Drivers.GetDrivers()[driverindex].SetMaxHoursShift(stoi(tempstr));
+			break;
+		}
+
+		cout << "\nSorry but you need to insert a number!";
+	}
+
+	while(1)
+	{
+		cout << "\n Insert driver's new maximum hours per week (leave blank to not edit): ";
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (tempstr == "")
+			break;
+
+		if (utilities::isNumeric(tempstr) && stoi(tempstr) > 0)
+		{
+			Drivers.GetDrivers()[driverindex].SetMaxHoursWeek(stoi(tempstr));
+			break;
+		}
+
+		cout << "\nSorry but you need to insert a number!";
+	}
+
+	while(1)
+	{
+		cout << "\n Insert driver's new minimum rest hours (leave blank to not edit): ";
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (tempstr == "")
+			break;
+
+		if (utilities::isNumeric(tempstr) && stoi(tempstr) > 0)
+		{
+			Drivers.GetDrivers()[driverindex].SetMinHoursRest(stoi(tempstr));
+			break;
+		}
+
+		cout << "\nSorry but you need to insert a number!";
+	}
+	
+
+
+	cout << "\n\n  Driver Edited, Press any key to continue...";
 	cin.get();
 
 	return;
