@@ -404,6 +404,16 @@ int DriversClass::SearchDriver(const string& argIdentifier) const
 	return -1;
 }
 
+void DriversClass::ListAvailableDrivers() const
+{
+	for (Driver driver : drivers) {
+		unsigned int workingHours = driver.GetNrWorkingHours();
+		if (workingHours <= driver.GetMaxHoursWeek()) {
+			cout << " --> " << driver.GetName() << " : \t\t\t Available to work more " << driver.GetMaxHoursWeek() - workingHours << " hours." << endl;
+		}
+	}
+}
+
 Driver * DriversClass::FindDriver(const string & DriverID)
 {
 	for (auto& driver : drivers) {
@@ -678,7 +688,7 @@ bool Shifts_InterfaceClass::LoadFromFile(const string& argFilename)
 		getline(sstreamFileLine, busID, ',');
 		getline(sstreamFileLine, lineID, ',');
 		Shift newShift(day, startHour, endHour, driverID, busID, lineID);
-		InsertShift(newShift);
+		InsertShift(newShift, false);
 		
 	}
 	shifts_file.close();
@@ -707,15 +717,15 @@ void Shifts_InterfaceClass::SaveToFile() const
 }
 
 
-void Shifts_InterfaceClass::InsertShift(const Shift &argShift)
+void Shifts_InterfaceClass::InsertShift(const Shift &argShift, bool saveToFile)
 {
 	setShifts.insert(argShift);
-
 	// but we will also have to add the shift to the corresponding driver and bus..
 	// first to the buses
 	Buses.AddShift(argShift.GetBusID(), argShift);
 	// then to the moon... I mean, the corresponding driver;
 	Drivers.AddShiftToDriver(argShift.GetDriverID(), argShift);
+	if(saveToFile) SaveToFile();
 }
 
 void Shifts_InterfaceClass::RemoveShift(const Shift& argShift)
@@ -727,6 +737,7 @@ void Shifts_InterfaceClass::RemoveShift(const Shift& argShift)
 	// but we also have to remove the shift from the corresponding driver and bus object
 	Buses.RemoveShift(argShift.GetBusID(), argShift);
 	Drivers.RemoveShiftFromDriver(argShift.GetDriverID(), argShift);
+	SaveToFile();
 }
 
 void Shifts_InterfaceClass::RemoveLineShifts(const string & LineID)

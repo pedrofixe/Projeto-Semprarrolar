@@ -5,6 +5,7 @@
 #include <sstream>
 #include <fstream>
 #include <set>
+#include <iostream>
 #include "utilities.h"
 #include "shift.h"
 
@@ -39,6 +40,10 @@ public:
 	void RemoveShift(const Shift&);
 	void RemoveAllLineShifts(const string& LineID);
 	const set<Shift>& GetDriverShifts() const;
+
+	void ShowWorkSchedule() const;
+	void DisplaySpecificDay(int day, const string& spacer) const;
+	unsigned int GetNrWorkingHours() const;
 
 private:
 	string ID;

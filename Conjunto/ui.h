@@ -53,6 +53,12 @@ private:
 	void ListBusShiftsMenu();
 	void RemoveBusMenu();
 
+	void ShiftManagementMenu();
+	void VisualizeDriverWorkScheduleMenu();
+	void ListAvailableDriversMenu();
+	void ListAllShiftsMenu();
+	void VisualizeBusServiceScheduleMenu();
+
 	void FindShortestTrip();
 
 	void SchedulesMenu();

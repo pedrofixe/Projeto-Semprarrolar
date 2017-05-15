@@ -20,7 +20,7 @@ class Line;
 class Bus_Stop;
 
 #define SCHEDULE_START 8
-#define SCHEDULE_END 22
+#define SCHEDULE_END 23
 
 using namespace std;
 
@@ -62,6 +62,7 @@ class DriversClass {
 		void ListDrivers() const;	
 		bool DriverExists(const string&) const;
 		int SearchDriver(const string&) const;
+		void ListAvailableDrivers() const;
 
 		Driver* FindDriver(const string& DriverID); // returns a pointer to the specified driver or nullptr if it doesnt exist
 
@@ -82,6 +83,7 @@ class Bus_StopsClass {
 		void RebuildBus_Stops(vector<Line>&);
 		void RemoveBusStop(const string&);
 		const vector<Bus_Stop>& getVecBusStops() const;
+		//static void PrintTripBetweenBus_Stops(Bus_Stop* bus_stop1, Bus_Stop* bus_stop2);
 	private:
 		vector<Bus_Stop> vecBusStops;
 };
@@ -110,7 +112,7 @@ class Shifts_InterfaceClass {
 	public:
 		bool LoadFromFile(const string&);
 		void SaveToFile() const;
-		void InsertShift(const Shift&);
+		void InsertShift(const Shift&, bool saveToFile = true);
 		const set<Shift>& GetShifts() const;
 		static void ListShifts(const set<Shift>&);
 		void RemoveShift(const Shift&);

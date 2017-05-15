@@ -1,4 +1,5 @@
-#include "driver.h"
+﻿#include "driver.h"
+#include "globals.h"
 
 void Driver::SetID(const string& input)
 {
@@ -103,3 +104,54 @@ const set<Shift>& Driver::GetDriverShifts() const
 	return driverShifts;
 }
 
+void Driver::ShowWorkSchedule() const
+{
+	static string blankFiller = "                ";
+	cout << blankFiller << string(60, '#') << endl;
+	size_t nameLengthLeft = name.length();
+	size_t nameLengthRight = name.length() % 2 == 1 ? (name.length() + 1) : name.length();
+	cout << blankFiller << "#" << string(28 - nameLengthLeft / 2, '#') << " " + name + " " << string(28 - nameLengthRight / 2, '#') << "#" << endl;
+	cout << blankFiller << "############# 8:00                    20:00 ################" << endl;
+	
+	for (int i = 0; i < 7; i++) {
+		DisplaySpecificDay(i, blankFiller);
+	}
+	cout << blankFiller << string(60, '#') << endl;
+	cout << blankFiller << "        W- Working | R- Rest Hours | N- Not working";
+}
+
+
+void Driver::DisplaySpecificDay(int day, const string& blankFiller) const {
+
+	const string dayName = utilities::DayNumberToString(day);
+	unsigned int nrSpaces = 9 - dayName.length();
+
+	cout << blankFiller << "# " + dayName + string(nrSpaces, ' ') + " | ";
+
+	for (unsigned int i = 8; i < SCHEDULE_END; i++) {
+		Shift tempShift(day, i, i + 1, "", "", "");
+		switch (CanAddShift(tempShift)) {
+			case NOT_AVAILABLE:
+				cout << "W";
+				break;
+			case MUST_RESPECT_REST_TIME:
+				cout << "R";
+				break;
+			default:
+				cout << "N";
+		}
+		cout << " ";
+	}
+
+	cout << "################";
+	cout << endl;
+}
+
+unsigned int Driver::GetNrWorkingHours() const
+{
+	unsigned int acumulator = 0;
+	for (auto shift : driverShifts) {
+		acumulator += shift.GetDuration();
+	}
+	return acumulator;
+}

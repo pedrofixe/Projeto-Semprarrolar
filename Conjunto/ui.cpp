@@ -110,7 +110,7 @@ void ui::MainMenu()
 		cout << " 1- Line management\n";
 		cout << " 2- Driver management\n";
 		cout << " 3- Bus management\n";
-		cout << " 4- Shift management [NOT DONE YET]\n";
+		cout << " 4- Shift management\n";
 		cout << " 5- Calculate shortest trip\n";
 		cout << " 6- Visualize Schedules\n";
 		cout << " 7- Search Bus Lines by Bus Stop\n";
@@ -147,7 +147,7 @@ void ui::MainMenu()
 
 			else if (input == "4")
 			{
-				cout << "Menu4";
+				ShiftManagementMenu();
 				break;
 			}
 
@@ -190,7 +190,7 @@ void ui::LineManagementMenu()
 		Lines.PrintLinesNames();
 		cout << endl << endl;
 		cout << " 1- Create line\n";
-		cout << " 2- Edit line [NOT FINISHED YET]\n";
+		cout << " 2- Edit line \n";
 		cout << " 3- Remove line\n";
 		cout << " 9- Return to previous menu\n";
 		cout << "\n";
@@ -387,7 +387,7 @@ void ui::EditLineMenu()
 
 	while(1)
 	{
-		cout << "\n Insert line's new ID (leave blank to not edit) :";
+		cout << "\n Insert line's new ID (leave blank to not edit): ";
 		getline(cin,tempstr);
 		utilities::trimString(tempstr);
 
@@ -728,7 +728,7 @@ void ui::EditDriverMenu()
 	PrintBanner();
 
 	string tempstr;
-	int driverindex;
+	Driver* driver;
 
 	cout << "\n - EDIT DRIVER MENU -"
 	<< "\n\n Please select one of the following drivers:";
@@ -750,7 +750,8 @@ void ui::EditDriverMenu()
 		cout << "\nDriver not found!";
 		cout << "\nEnter 0 if you wish to go back to the previous menu.\n";
 	}
-	driverindex = Drivers.SearchDriver(tempstr);
+
+	driver = Drivers.FindDriver(tempstr);
 
 	while(1)
 	{
@@ -770,7 +771,7 @@ void ui::EditDriverMenu()
 			continue;
 		}
 
-		Drivers.GetDrivers()[driverindex].SetID(tempstr);
+		driver->SetID(tempstr);
 		break;
 	}
 
@@ -795,7 +796,7 @@ void ui::EditDriverMenu()
 
 		if (test)
 		{
-			Drivers.GetDrivers()[driverindex].SetName(tempstr);
+			driver->SetName(tempstr);
 			break;
 		}
 		else
@@ -817,7 +818,7 @@ void ui::EditDriverMenu()
 
 		if (utilities::isNumeric(tempstr) && stoi(tempstr) > 0)
 		{
-			Drivers.GetDrivers()[driverindex].SetMaxHoursShift(stoi(tempstr));
+			driver->SetMaxHoursShift(stoi(tempstr));
 			break;
 		}
 
@@ -835,7 +836,7 @@ void ui::EditDriverMenu()
 
 		if (utilities::isNumeric(tempstr) && stoi(tempstr) > 0)
 		{
-			Drivers.GetDrivers()[driverindex].SetMaxHoursWeek(stoi(tempstr));
+			driver->SetMaxHoursWeek(stoi(tempstr));
 			break;
 		}
 
@@ -853,7 +854,7 @@ void ui::EditDriverMenu()
 
 		if (utilities::isNumeric(tempstr) && stoi(tempstr) > 0)
 		{
-			Drivers.GetDrivers()[driverindex].SetMinHoursRest(stoi(tempstr));
+			driver->SetMinHoursRest(stoi(tempstr));
 			break;
 		}
 
@@ -1121,6 +1122,193 @@ void ui::RemoveBusMenu() {
 
 }
 
+void ui::ShiftManagementMenu() {
+	while (true) {
+
+		ui_utilities::SetWindow(ConsoleWidth, ConsoleHeight);
+		ui_utilities::ClearScreen();
+		PrintBanner();
+
+		cout << " - MANAGE SHIFTS MENU -";
+		cout << "\n Currently there are " << Shifts_Interface.GetShifts().size() << " work shifts at SEMPRARROLAR.";
+		cout << endl << endl;
+		cout << " 1- Create Shift\n";
+		cout << " 2- Edit Shift\n";
+		cout << " 3- List all shifts\n";
+		cout << " 4- Remove Shift\n";
+		cout << " 5- Visualize driver work schedule\n";
+		cout << " 6- List drivers who haven't reached their weekly work limit\n";
+		cout << " 7- Visualize bus service schedule\n";
+		cout << " 9- Return to previous menu\n";
+		cout << "\n";
+
+		string input;
+
+		while (1)
+		{
+			cout << "Select an option: ";
+
+			getline(cin, input);
+			cout << "\n";
+
+			if (input == "1")
+			{
+				CreateBusMenu();
+				break;
+			}
+			else if (input == "2")
+			{
+				ListBusesMenu();
+				break;
+			}
+			else if (input == "3")
+			{
+				ListAllShiftsMenu();
+				break;
+			}
+			else if (input == "5")
+			{
+				VisualizeDriverWorkScheduleMenu();
+				break;
+			}
+			else if (input == "6")
+			{
+				ListAvailableDriversMenu();
+				break;
+			}
+			else if (input == "7")
+			{
+				VisualizeBusServiceScheduleMenu();
+				break;
+			}
+			else if (input == "9")
+			{
+				return;
+			}
+			else {
+				cout << "\nInvalid Input";
+			}
+		}
+	}
+}
+
+void ui::VisualizeDriverWorkScheduleMenu() {
+	ui_utilities::SetWindow(ConsoleWidth, ConsoleHeight);
+	ui_utilities::ClearScreen();
+	PrintBanner();
+
+	string tempstr;
+	Driver* driver;
+
+	cout << "\n - VIEW DRIVER SCHEDULE MENU -"
+		<< "\n\n Please select one of the following drivers:";
+
+	Drivers.PrintLinesNames();
+	cout << endl << endl;
+
+	while (1)
+	{
+		cout << " Driver: ";
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (tempstr == "0") return;
+
+		if (Drivers.DriverExists(tempstr))
+			break;
+
+		cout << "\nDriver not found!";
+		cout << "\nEnter 0 if you wish to go back to the previous menu.\n";
+	}
+	
+	driver = Drivers.FindDriver(tempstr);
+
+	driver->ShowWorkSchedule();
+
+	cout << endl;
+
+	cout << "\n   Press any key to continue...";
+	cin.get();
+}
+
+void ui::ListAvailableDriversMenu() {
+	ui_utilities::SetWindow(ConsoleWidth, ConsoleHeight);
+	ui_utilities::ClearScreen();
+	PrintBanner();
+
+	string tempstr;
+	Driver* driver;
+
+	cout << "\n - LIST AVAILABLE DRIVERS MENU -" << endl << endl;
+
+	Drivers.ListAvailableDrivers();
+
+	cout << endl;
+
+	cout << endl;
+
+	cout << "\n   Press any key to continue...";
+	cin.get();
+}
+
+void ui::ListAllShiftsMenu()
+{
+	ui_utilities::SetWindow(ConsoleWidth, ConsoleHeight);
+	ui_utilities::ClearScreen();
+	PrintBanner();
+
+	string tempstr;
+
+	cout << " - LIST ALL SHIFTS MENU -";
+	cout << endl;
+
+	cout << endl;
+
+	Shifts_InterfaceClass::ListShifts( Shifts_Interface.GetShifts() );
+
+	cout << endl << endl << "\n       Press any key to continue...";
+	cin.get();
+}
+
+void ui::VisualizeBusServiceScheduleMenu()
+{
+	ui_utilities::SetWindow(ConsoleWidth, ConsoleHeight);
+	ui_utilities::ClearScreen();
+	PrintBanner();
+
+	string tempstr;
+
+	Driver tempdriver;
+
+	cout << " - VISUALIZE BUS SERVICE SCHEDULE MENU -"
+		<< "\n Please select one of the following buses:";
+
+	Buses.ListBuses();
+
+	cout << endl << endl;
+
+	while (1)
+	{
+		cout << "\n Insert Bus ID: ";
+
+		getline(cin, tempstr);
+		utilities::trimString(tempstr);
+
+		if (!Buses.BusExists(tempstr)) {
+			cout << "\nSorry but no Bus was found with that ID! Try again.";
+			continue;
+		}
+		break;
+	}
+	
+
+
+	cout << "\n   Press any key to continue...";
+	cin.get();
+	return;
+}
+
+
 void ui::FindShortestTrip() {
 	ui_utilities::SetWindow(ConsoleWidth, 500);
 	ui_utilities::ClearScreen();
@@ -1170,6 +1358,7 @@ void ui::FindShortestTrip() {
 
 	cout << endl;
 
+
 	//// ONLY GO 1 LEVEL DEEP, AS REQUESTED BY THE PROJECT SPECIFICATION
 	struct Viagem {
 		vector<Line*> lines;
@@ -1177,8 +1366,8 @@ void ui::FindShortestTrip() {
 
 	};
 	multimap<unsigned int, Viagem> mmapTrips; // first element is the duration, the second one is the trip struct
-	// LEVEL 0
-	for (Line* line1 : bus_stop1->GetLines()) 
+											  // LEVEL 0
+	for (Line* line1 : bus_stop1->GetLines())
 	{
 		for (Line* line2 : bus_stop2->GetLines())
 		{ // we can directly compare the pointers for better performance
@@ -1186,7 +1375,7 @@ void ui::FindShortestTrip() {
 				unsigned int bus_stop_1_nr = Bus_Stop::GetBus_StopNumber(line1->GetBus_Stops(), bus_stop1->GetName());
 				unsigned int bus_stop_2_nr = Bus_Stop::GetBus_StopNumber(line1->GetBus_Stops(), bus_stop2->GetName());
 				unsigned int tripTime = abs(Bus_Stop::CalculateOffset(line1->GetTimeBetweenStops(), bus_stop_1_nr) - Bus_Stop::CalculateOffset(line1->GetTimeBetweenStops(), bus_stop_2_nr));
-				
+
 				Viagem trip;
 				trip.lines.push_back(line1);
 
@@ -1216,7 +1405,7 @@ void ui::FindShortestTrip() {
 				if (!containsSecondBus_Stop) continue;
 				for (const string& bus_stop_line2_name : line2->GetBus_Stops()) {
 					if (bus_stop_line1_name == bus_stop_line2_name && line1 != line2) { // Got a Match
-						//auto bus_stop3_obj = Bus_Stops.FindBus_StopByName(bus_stop_line2_name);
+																						//auto bus_stop3_obj = Bus_Stops.FindBus_StopByName(bus_stop_line2_name);
 						unsigned int bus_stop_1_line1_nr = Bus_Stop::GetBus_StopNumber(line1->GetBus_Stops(), bus_stop1->GetName());
 						unsigned int bus_stop_2_line1_nr = Bus_Stop::GetBus_StopNumber(line1->GetBus_Stops(), bus_stop2_obj->GetName());
 						unsigned int bus_stop_2_line2_nr = Bus_Stop::GetBus_StopNumber(line2->GetBus_Stops(), bus_stop2_obj->GetName());
@@ -1231,13 +1420,15 @@ void ui::FindShortestTrip() {
 						trip.lines.push_back(line1);
 						trip.lines.push_back(line2);
 
+						// direct direction
 						if (bus_stop_1_line1_nr < bus_stop_2_line1_nr) {
 							for (size_t i = bus_stop_1_line1_nr; i <= bus_stop_2_line1_nr; i++) {
 								trip.bus_stops.push_back(line1->GetBus_Stops()[i] + "[" + line1->GetID() + "]");
 							}
 						}
+						// reverse direction
 						else {
-							for (size_t i = bus_stop_1_line1_nr; i >= bus_stop_2_line1_nr && i <= bus_stop_1_line1_nr; i--) {	// O uso do tipo int nesta linha face ao size_t ?com o intuito de prevenir casos de overflow que surgiram durante o teste do programa
+							for (size_t i = bus_stop_1_line1_nr; i >= bus_stop_2_line1_nr && i <= bus_stop_1_line1_nr; i--) {
 								trip.bus_stops.push_back(line1->GetBus_Stops()[i] + "[" + line1->GetID() + "]");
 							}
 						}
@@ -1245,16 +1436,18 @@ void ui::FindShortestTrip() {
 						trip.bus_stops[trip.bus_stops.size() - 1].pop_back(); // delete last char
 						trip.bus_stops[trip.bus_stops.size() - 1] += "|" + line2->GetID() + "]";
 
-						// build the rest of the trip bus stops: 
+						// build the rest of the trip bus stops after the mutual stop:
+						// forward direction
 						if (bus_stop_2_line2_nr < bus_stop_3_line2_nr) {
 							bus_stop_2_line2_nr++;
 							for (size_t i = bus_stop_2_line2_nr; i <= bus_stop_3_line2_nr; i++) {
 								trip.bus_stops.push_back(line2->GetBus_Stops()[i] + "[" + line2->GetID() + "]");
 							}
 						}
+						// reverse direction
 						else {
 							bus_stop_2_line2_nr--;
-							for (size_t i = bus_stop_2_line2_nr; i >= bus_stop_3_line2_nr && i <= bus_stop_2_line2_nr; i--) {	// O uso do tipo int nesta linha face ao size_t ?com o intuito de prevenir casos de overflow que surgiram durante o teste do programa
+							for (size_t i = bus_stop_2_line2_nr; i >= bus_stop_3_line2_nr && i <= bus_stop_2_line2_nr; i--) {
 								trip.bus_stops.push_back(line2->GetBus_Stops()[i] + "[" + line2->GetID() + "]");
 							}
 						}
@@ -1426,6 +1619,7 @@ void ui::ViewBus_StopScheduleMenu() {
 	cout << "\n   Press any key to continue...";
 	cin.get();
 }
+
 
 void ui::FindBusLineByBusStop() 
 {
