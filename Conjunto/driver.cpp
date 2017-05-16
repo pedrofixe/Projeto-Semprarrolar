@@ -51,13 +51,13 @@ unsigned int Driver::GetMinHoursRest() const
 	return minhoursrest;
 }
 
-int Driver::CanAddShift(const Shift& argShift) const
+int Driver::CanAddShift(const Shift& argShift, const set<Shift>& setShifts) const
 {
 	// First we'll have to check if the driver is free at the specified time. Since we're looping the set we might as well count the work hours of the driver.
 	// We'll also have to check if the resting hours are respected.
 	unsigned int workHours = 0;
-	for (const auto& shift : driverShifts) {
-		if (shift.GetDay() == argShift.GetDay() && shift.GetStartHour() >= argShift.GetStartHour() && argShift.GetStartHour() < shift.GetEndHour()) {
+	for (const auto& shift : setShifts) {
+		if (shift.GetDay() == argShift.GetDay() && argShift.GetStartHour() >= shift.GetStartHour() && argShift.GetStartHour() < shift.GetEndHour()) {
 			return NOT_AVAILABLE;
 		}
 		if (shift.GetDay() == argShift.GetDay() && (shift.GetEndHour() + GetMinHoursRest()) >= argShift.GetStartHour()) {
@@ -101,10 +101,19 @@ void Driver::RemoveAllLineShifts(const string & LineID)
 
 const set<Shift>& Driver::GetDriverShifts() const
 {
-	return driverShifts;
+	//return driverShifts;
+	static set<Shift> tempShift;
+	tempShift.clear();
+	for (auto shift : Shifts_Interface.GetShifts()) {
+		if (shift.GetDriverID() == ID) {
+			tempShift.insert(shift);
+		}
+	}
+	cout << Shifts_Interface.GetShifts().size();
+	return tempShift;
 }
 
-void Driver::ShowWorkSchedule() const
+void Driver::ShowWorkSchedule(const set<Shift>& setShifts) const
 {
 	static string blankFiller = "                ";
 	cout << blankFiller << string(60, '#') << endl;
@@ -114,14 +123,14 @@ void Driver::ShowWorkSchedule() const
 	cout << blankFiller << "############# 8:00                    20:00 ################" << endl;
 	
 	for (int i = 0; i < 7; i++) {
-		DisplaySpecificDay(i, blankFiller);
+		DisplaySpecificDay(i, blankFiller, setShifts);
 	}
 	cout << blankFiller << string(60, '#') << endl;
 	cout << blankFiller << "        W- Working | R- Rest Hours | N- Not working";
 }
 
 
-void Driver::DisplaySpecificDay(int day, const string& blankFiller) const {
+void Driver::DisplaySpecificDay(int day, const string& blankFiller, const set<Shift>& setShifts) const {
 
 	const string dayName = utilities::DayNumberToString(day);
 	unsigned int nrSpaces = 9 - dayName.length();
@@ -130,7 +139,7 @@ void Driver::DisplaySpecificDay(int day, const string& blankFiller) const {
 
 	for (unsigned int i = 8; i < SCHEDULE_END; i++) {
 		Shift tempShift(day, i, i + 1, "", "", "");
-		switch (CanAddShift(tempShift)) {
+		switch (CanAddShift(tempShift, setShifts)) {
 			case NOT_AVAILABLE:
 				cout << "W";
 				break;
@@ -147,10 +156,10 @@ void Driver::DisplaySpecificDay(int day, const string& blankFiller) const {
 	cout << endl;
 }
 
-unsigned int Driver::GetNrWorkingHours() const
+unsigned int Driver::GetNrWorkingHours(const set<Shift>& setShifts) const
 {
 	unsigned int acumulator = 0;
-	for (auto shift : driverShifts) {
+	for (auto shift : setShifts) {
 		acumulator += shift.GetDuration();
 	}
 	return acumulator;

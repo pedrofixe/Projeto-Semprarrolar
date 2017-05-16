@@ -35,14 +35,14 @@ public:
 	unsigned int GetMaxHoursWeek() const;
 	unsigned int GetMinHoursRest() const;
 
-	int CanAddShift(const Shift&) const;
+	int CanAddShift(const Shift&, const set<Shift>& setShifts) const;
 	void AddShift(const Shift&);
 	void RemoveShift(const Shift&);
 	void RemoveAllLineShifts(const string& LineID);
 	const set<Shift>& GetDriverShifts() const;
 
-	void ShowWorkSchedule() const;
-	unsigned int GetNrWorkingHours() const;
+	void ShowWorkSchedule(const set<Shift>& setShifts) const;
+	unsigned int GetNrWorkingHours(const set<Shift>& setShifts) const;
 
 private:
 	string ID;
@@ -52,7 +52,7 @@ private:
 	unsigned int minhoursrest;
 	set<Shift> driverShifts;
 
-	void DisplaySpecificDay(int day, const string& spacer) const;
+	void DisplaySpecificDay(int day, const string& spacer, const set<Shift>& setShifts) const;
 
 };
 

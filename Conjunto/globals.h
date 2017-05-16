@@ -18,6 +18,7 @@
 // header file being included just above. 
 class Line;
 class Bus_Stop;
+class Driver;
 
 #define SCHEDULE_START 8
 #define SCHEDULE_END 23
@@ -50,7 +51,7 @@ class DriversClass {
 		bool RemoveDriver(const Driver&);
 		bool RemoveDriverByID(const string&);
 
-		int CanAddShiftToDriver(const string& DriverID, const Shift&);
+		//int CanAddShiftToDriver(const string& DriverID, const Shift&);
 		void AddShiftToDriver(const string& DriverID, const Shift&);
 		void RemoveShiftFromDriver(const string& DriverID, const Shift&);
 		void RemoveAllShiftsWithLineID(const string& LineID);
@@ -62,7 +63,7 @@ class DriversClass {
 		void ListDrivers() const;	
 		bool DriverExists(const string&) const;
 		int SearchDriver(const string&) const;
-		void ListAvailableDrivers() const;
+		void ListAvailableDrivers(const set<Shift>& setShifts) const;
 
 		Driver* FindDriver(const string& DriverID); // returns a pointer to the specified driver or nullptr if it doesnt exist
 		vector<Driver>& GetDrivers(); // removed const qualifier because the compiler gods were not pleased.
@@ -103,7 +104,7 @@ class Buses_Class {
 		void RemoveShiftsByLineID(const string& LineID);
 		unsigned int GetNumberOfBuses() const;
 		void ListBuses() const;
-		void ShowServiceSchedule(const string& BusID) const;
+		void ShowServiceSchedule(const string& BusID, const set<Shift>&) const;
 	private:
 		string filename;
 		map<string, set<Shift> > mapBusesIDs;
@@ -115,7 +116,7 @@ class Shifts_InterfaceClass {
 		bool LoadFromFile(const string&);
 		void SaveToFile() const;
 		void InsertShift(const Shift&, bool saveToFile = true);
-		const set<Shift>& GetShifts() const;
+		const set<Shift> GetShifts() const;
 		static void ListShifts(const set<Shift>&, vector<Driver>& DriverVector, bool showIndexColumn = false);
 		void RemoveShift(const Shift&);
 		void RemoveShiftByIndex(unsigned int Index);
@@ -123,7 +124,7 @@ class Shifts_InterfaceClass {
 		void RemoveBus_Shifts(const string& BusID);
 	private:
 		set<Shift> setShifts;
-		string filename;
+		string filename = "turnos.txt";
 };
 
 static LinesClass	 Lines;

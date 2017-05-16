@@ -1,4 +1,5 @@
 #include "utilities.h"
+#include "globals.h"
 
 template <class T>
 
@@ -82,3 +83,73 @@ int utilities::DayStringToNumber(const string& dayName)
 	}
 	else return -1;
 }
+
+void utilities::InsertShift(const Shift & argShift, bool saveToFile)
+{
+	Shifts_Interface.InsertShift(argShift, saveToFile);
+	// but we will also have to add the shift to the corresponding driver and bus..
+	// first to the buses
+	Buses.AddShift(argShift.GetBusID(), argShift);
+	// then to the moon... I mean, the corresponding driver;
+	Drivers.AddShiftToDriver(argShift.GetDriverID(), argShift);
+}
+
+bool utilities::LoadShiftsFile(const string & argFilename)
+{
+	ifstream shifts_file(argFilename);
+
+	if (shifts_file.fail())
+	{
+		shifts_file.close();
+		return false;
+	}
+
+	// Load shifts
+	string tempstr;
+	while (getline(shifts_file, tempstr)) {
+		utilities::trimString(tempstr);
+		istringstream sstreamFileLine(tempstr);
+		unsigned int day, startHour, endHour;
+		string driverID, busID, lineID;
+		getline(sstreamFileLine, tempstr, ',');
+		day = stoi(tempstr);
+		getline(sstreamFileLine, tempstr, ',');
+		startHour = stoi(tempstr);
+		getline(sstreamFileLine, tempstr, ',');
+		endHour = stoi(tempstr);
+		//
+		getline(sstreamFileLine, driverID, ',');
+		getline(sstreamFileLine, busID, ',');
+		getline(sstreamFileLine, lineID, ',');
+		Shift newShift(day, startHour, endHour, driverID, busID, lineID);
+		utilities::InsertShift(newShift, false);
+
+	}
+	shifts_file.close();
+	return true;
+}
+
+const set<Shift>& utilities::GetShiftsFromDriver(const set<Shift>& setShifts, const string & driverid)
+{
+	static set<Shift> tempShift;
+	tempShift.clear();
+	for (auto shift : setShifts) {
+		if (shift.GetDriverID() == driverid) {
+			tempShift.insert(shift);
+		}
+	}
+	return tempShift;
+}
+
+const set<Shift>& utilities::GetShiftsFromBusID(const set<Shift>& setShifts, const string & busid)
+{
+	static set<Shift> tempShift;
+	tempShift.clear();
+	for (auto shift : setShifts) {
+		if (shift.GetBusID() == busid) {
+			tempShift.insert(shift);
+		}
+	}
+	return tempShift;
+}
+
